@@ -1,0 +1,18 @@
+
+public void generateModulesFile(File mfile, Set<Project> subprojects) {
+	def modulesFile = file("${mfile.getAbsolutePath()}/modules.xml")
+	def header = '<?xml version="1.0" encoding="UTF-8"?>\n<project version="4">\n	<component name="ProjectModuleManager">\n		<modules>'
+    def footer = '</modules></component></project>'
+	modulesFile.text = header + '\n'
+	
+ 	subprojects.each { subproject -> 
+		def imlPath = subproject.getProjectDir().getAbsolutePath() + '/' + subproject.name + '.iml'
+		if (!subproject.name.equals('jenkins')) {
+        	modulesFile.text += '<module fileurl="file://'+imlPath+'" filepath="'+imlPath+'" />\n'
+        }
+	}
+
+    modulesFile.text += '\n' + footer
+}
+
+ext.generateIdeaModulesFile = this.&generateModulesFile 

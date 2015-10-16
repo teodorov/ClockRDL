@@ -1,0 +1,84 @@
+library sdf_pam {
+    library sdf {
+        relation actor
+            clock start execute stop
+            var current:=0
+            const cycles
+        {
+            [current = -1] { start } [ current += 1 ]
+            [current != -1 & current < cycles] { execute } [ current += 1 ]
+            [current >= cycles] { stop } [ current := -1 ]
+
+        }
+
+        relation link
+            clock read write
+            var size
+            const outRate inRate capacity
+        {
+            [size >= inRate] { read } [ size -= inRate ]
+            [capacity < 0 | capacity - size > outRate] { write } [ size += outRate ]
+        }
+    }
+
+    relation link(initial)
+        clock from to start stop
+        var size := initial
+        const outRate inRate capacity
+    {
+        sdf.link
+            (write: from read: to outRate: outRate size: size inRate: inRate capacity: capacity)
+        kernel.coincidence(stop from)
+        kernel.coincidence(start to)
+    }
+
+    relation PAM1
+        clock
+            signalProvider_s signalProvider signalProvider_e
+            displayIn_s displayIn displayIn_e
+            nFFT_s nFFT nFFT_e
+            avg_s avg avg_e
+            threshold_s threshold threshold_e
+            displayOut_s displayOut displayOut_e
+
+            push1 pop1
+            push2 pop2
+            push3 pop3
+            push4 pop4
+            push5 pop5
+            push6 pop6
+    {
+        sdf.actor (cycles: 1 start: signalProvider_s execute: signalProvider stop: signalProvider_e)
+        sdf.actor (cycles: 1 start: displayIn_s execute: displayIn execute: displayIn stop: displayIn_e)
+        sdf.actor (cycles: 1 start: nFFT_s execute: nFFT stop: nFFT_e)
+        sdf.actor (cycles: 1 start: avg_s execute: avg stop: avg_e)
+        sdf.actor (cycles: 1 start: threshold_s execute: threshold stop: threshold_e)
+        sdf.actor (cycles: 1 start: displayOut_s execute: displayOut stop: displayOut_e)
+
+        link (
+            from: push1 stop: signalProvider_e
+            to: pop1 start: displayIn_s
+            outRate: 1 initial: 0 inRate: 1 capacity: 1)
+        link (
+            from: push2 stop: signalProvider_e
+            to: pop2 start: nFFT_s
+            outRate: 1 initial: 0 inRate: 16 capacity: 16)
+        link (
+            from: push3 stop: nFFT_e
+            to: pop3 start: avg_s
+            outRate: 16 initial: 16 inRate: 8 capacity: 16)
+        link (
+            from: push4 stop: avg_e
+            to: pop4 start: nFFT_s
+            outRate: 8 initial: 0 inRate: 16 capacity: 16)
+        link (
+            from: push5 stop: nFFT_e
+            to: pop5 start: threshold_s
+            outRate: 16 initial: 0 inRate: 4 capacity: 16)
+        link (
+            from: push6 stop: threshold_e
+            to: pop6 start: displayOut_s
+            outRate: 1 initial: 0 inRate: 1 capacity: 1)
+    }
+
+}

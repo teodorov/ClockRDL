@@ -1,0 +1,12 @@
+apply plugin: 'groovy'
+
+repositories { 
+	mavenCentral()
+}
+
+dependencies {
+	compile 'org.eclipse.xtext:org.eclipse.xtext.xtext:2.7.3'
+	compile 'org.eclipse.xtext:org.eclipse.xtext.standalone:2.4.3'
+	compile gradleApi()
+	compile localGroovy()
+}

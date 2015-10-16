@@ -1,0 +1,9 @@
+
+public String antlr4OutputPath(String path) {
+  if (System.properties['os.name'].replaceAll(' ', '').toLowerCase().contains('win')) {
+    return file(path + '/grammar')
+  }
+  return file(path)
+}
+
+ext.antlr4OutputPath = this.&antlr4OutputPath 

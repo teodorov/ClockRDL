@@ -1,0 +1,268 @@
+library ccsl_kernel {
+	relation alternates
+		clock a b
+		var state := true
+	{
+		[state] 	{a} [state := ! state]
+		[! state] {b} [state := ! state]
+	}
+
+	relation coincidence
+		clock a b
+	{
+		{a b}
+	}
+
+	relation coincidence3
+		clock a b c
+	{
+		{a b c}
+	}
+
+	relation exclusion
+		clock a b
+	{
+		{a}
+		{b}
+	}
+
+	relation subclocking
+		clock a b
+	{
+		{b}
+		{a b}
+	}
+
+	//the following relation implements precedence, strict precedence, and bounded precedence
+	relation precedence
+		clock a b
+		var state := 0
+		const bound := -1 isStrict := false
+	{
+		[! isStrict] {a b} //the precedence allows coincidence always
+		[(bound<0 | bound > state) & state=0] { a } [ state += 1]
+
+
+		[(bound<0 | bound > state) & state!=0] { a } [ state += 1]
+		[(bound<0 | bound >= state) & state!=0] { b } [ state -= 1]
+	}
+
+	//the awaiting clock expression a^n ticks in coincidence with the next nth strictly future tick of a, and then dies
+	relation awaits(n)
+		clock a c
+		var state := n
+	{
+		[ state=0 ] { a } //this says that this relation does not stop clock a from ticking
+		[ state=1 ] {a c} [state := 0] //the awaiting clock dies
+		[ state!=1 ] {a} [state -= 1]
+	}
+
+	relation filtering
+		clock baseClock filtered
+		var state := 0 //I think that the filtering clock starts at 0
+		const binaryWord offset
+	
+		def doesFilteredTicks {
+			if state + 1 <= binaryWord.size() & binaryWord[state+1] = 1 {
+				return true
+			}
+			return false 
+		}
+
+		def nextState {
+			if ! (offset = binaryWord.size() & state + 1 > offset) { 
+				if state + 1 = binaryWord.size() {
+					state := offset
+				} else {
+					state += 1
+				}
+			} 
+		}
+	
+	{
+		[state + 1 <= offset & doesFilteredTicks() ] { baseClock filtered } [ state += 1 ]
+		[state + 1 <= offset & ! doesFilteredTicks() ] { baseClock } [ state += 1 ]
+
+		[state + 1 > offset & doesFilteredTicks() ] { baseClock filtered } [ nextState() ]
+		[state + 1 > offset & ! doesFilteredTicks() ] { baseClock } [ nextState() ]
+
+	}
+
+	relation union
+		clock a b c
+	{
+		{a c}
+		{b c}
+		{a b c}
+	}
+
+	relation intersection
+		clock a b c
+	{
+		{a}
+		{b}
+		{a b c}
+	}
+
+	relation deferred
+		clock a b c
+		var state:=0 ns
+
+		def sync { 
+			var i:=0
+			while i<state {
+				if ns[i] = 1 {return true}
+				i += 1
+			} 
+			return false
+		}
+
+		def advance {
+			var i:=0
+			while i<state {
+				if ns[i] > 0 { ns[i] -= 1 }
+				i+=1
+			}
+		}
+	
+	{
+		[state=0] {b}
+		[state=0] {a} 	[state := state + 2]
+		[state=0] {a b} [state := state + 2]
+
+		[state!=0 & sync() ] { b c } [ advance() ]
+		[state!=0 & ! sync() ] { b } [ advance() ]
+
+		[state!=0] { a } [ if ns.size >= state {state := state + 1} ]
+
+		[state!=0 & sync() ] { a b c } [ advance ]
+		[state!=0 & ! sync() ] { a b } [ advance ]
+	}
+
+	relation supremum
+		clock a b c 
+		var state := 0
+
+	{
+		[state=0] { a b c }
+		[state=0] {a} [state += 1]
+		[state=0] {b} [state -= 1]
+
+		[state>0] { a b c }
+		[state>0] {a} [state += 1]
+		[state>0] {b c} [state -=1]
+
+		[state<0] { a b c }
+		[state<0] {a c} [state += 1]
+		[state<0] {b} [state -= 1]
+	}
+
+	relation infimum
+		clock a b c
+		var state := 0
+
+	{
+		[state=0] { a b c }
+		[state=0] {a c} [state += 1]
+		[state=0] {b c} [state -= 1]
+
+		[state>0] { a b c }
+		[state>0] {a c} [state += 1]
+		[state>0] {b} [state -=1]
+
+		[state<0] { a b c }
+		[state<0] {a} [state += 1]
+		[state<0] {b c} [state -= 1]
+	}
+
+	//the sampling ticks in coincidence with the tick of the base clock 
+	//immediately following a tick of the trigger clock, and then dies. 
+	//The sampling tick may be coincident with the trigger
+	relation sampling
+		clock trigger baseClock sampled
+		var state := 0
+	{
+		[state=0] { baseClock }
+		[state=0] {trigger baseClock sampled} [state += 2] //sampled dies
+		[state=0] { trigger } [ state += 1]
+
+		[state=1] { trigger }
+		[state=1] {baseClock sampled} [state += 1]//sampled dies
+
+		[state>1] { trigger baseClock }
+		[state>1] {trigger}
+		[state>1] {baseClock}
+	}
+
+	//the sampling ticks in coincidence with the tick of the base clock 
+	//immediately following a tick of the trigger clock, and then dies. 
+	//The sampling tick is not allowed to be coincident with the trigger
+	relation strictSampling
+		clock trigger baseClock sampled
+		var state := 0
+	{
+		[state=0] { baseClock }
+		[state=0] { trigger } [ state += 1]
+
+		[state=1] { trigger }
+		[state=1] {baseClock sampled} [state += 1]//sampled dies
+
+		[state>1] { trigger baseClock }
+		[state>1] {trigger}
+		[state>1] {baseClock}
+	}
+
+	relation samplingOn
+		clock trigger base sampled
+		var state := true
+	{
+		[state] { base }
+		[state] {base trigger sampled}
+		[state] {trigger}
+
+		[! state] {trigger}
+		[! state] {base trigger sampled}
+		[! state] {base sampled} [state-=1]
+	}
+
+	//the preemption expression behaves as "a" while b does not tick.
+	//when "b" ticks the "c" clock dies
+	relation preemption
+		clock a b c
+		var alive := true
+	{
+		[alive] {a c}
+		[alive] { b } [alive := ! alive]
+		[alive] { a b } [alive := ! alive]
+
+		[! alive] { a b }
+		[! alive] { a }
+		[! alive] { b }
+	}
+
+	relation forceOne
+		clock one
+		var alive := true
+	{
+		[alive] { one } [ alive := ! alive ] //the clock dies
+	}
+
+	//after n ticks of the base clock, the base clock and the delayed one become synchronous forever 
+	relation delay(n)
+		clock base delayed
+		var countdown := n
+
+	{
+		[countdown<1] { base delayed }
+		[countdown>1] { base } [ countdown -= 1]
+	}
+
+	// this is a clock that is never allowed to tick
+	//primitive clock never 
+	// this is a clock is always tick no matter what
+	//primitive clock always 
+	//the forceZero clock makes sense only if we consider concatenation
+	//primitive clock forceZero
+	//the concatenation relation makes sense only if we consider clock death
+	//primitive relation concatenation
+}

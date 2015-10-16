@@ -1,0 +1,91 @@
+//import "ccsl-kernel.crd" as kernel
+library PAM_SDF {
+    library sdf {
+        relation link
+            clock read write
+            var size
+            const outRate inRate capacity
+        {
+            [size >= inRate] { read } [ size -= inRate ]
+            [capacity < 0 | capacity - size > outRate] { write } [ size += outRate ]
+        }
+    }
+
+    relation PAM0
+        clock a b c d e f
+    {
+        sdf.link
+            (write: a read: b outRate: 1 size: 0 inRate: 1 capacity: 1)
+        sdf.link
+            (write: a read: c outRate: 1 size: 0 inRate: 16 capacity: 16)
+        sdf.link
+            (write: c read: d outRate: 16 size: 16 inRate: 8 capacity: 16)
+        sdf.link
+            (write: d read: c outRate: 8 size: 0 inRate: 16 capacity: 16)
+        sdf.link
+            (write: c read: e outRate: 16 size: 0 inRate: 4 capacity: 16)
+        sdf.link
+            (write: e read: f outRate: 1 size: 0 inRate: 1 capacity: 1)
+    }
+
+    relation PAM1
+        clock signalProvider displayIn nFFT avg threshold displayOut
+    {
+        sdf.link
+            (write: signalProvider read: displayIn outRate: 1 size: 0 inRate: 1 capacity: 1)
+        sdf.link
+            (write: signalProvider read: nFFT outRate: 1 size: 0 inRate: 16 capacity: 16)
+        sdf.link
+            (write: nFFT read: avg outRate: 16 size: 16 inRate: 8 capacity: 16)
+        sdf.link
+            (write: avg read: nFFT outRate: 8 size: 0 inRate: 16 capacity: 16)
+        sdf.link
+            (write: nFFT read: threshold outRate: 16 size: 0 inRate: 4 capacity: 16)
+        sdf.link
+            (write: threshold read: displayOut outRate: 1 size: 0 inRate: 1 capacity: 1)
+    }
+
+    relation PAM1_sequentialPlatform
+        clock signalProvider displayIn nFFT avg threshold displayOut
+    {
+        kernel.allExclusive
+            (signalProvider displayIn nFFT avg threshold displayOut)
+
+        sdf.link
+            (write: signalProvider read: displayIn outRate: 1 size: 0 inRate: 1 capacity: 1)
+        sdf.link
+            (write: signalProvider read: nFFT outRate: 1 size: 0 inRate: 16 capacity: 16)
+        sdf.link
+            (write: nFFT read: avg outRate: 16 size: 16 inRate: 8 capacity: 16)
+        sdf.link
+            (write: avg read: nFFT outRate: 8 size: 0 inRate: 16 capacity: 16)
+        sdf.link
+            (write: nFFT read: threshold outRate: 16 size: 0 inRate: 4 capacity: 16)
+        sdf.link
+            (write: threshold read: displayOut outRate: 1 size: 0 inRate: 1 capacity: 1)
+    }
+
+    relation PAM2
+        clock a b c d e f
+    {
+    	/*sdf.link
+    	    clocks: a b
+    	    variables: 0
+    	    constants: 1 1 1
+    	sdf.link
+    	    clocks: a c
+    	    variables: 0
+    	    constants: 1 16 16
+    	sdf.link
+            clocks: c d
+            variables: 16
+            constants: 16 8 16*/
+        sdf.link
+            (read: d write: c outRate: 8 size: 0 inRate: 16 capacity: 16)
+        sdf.link
+            (read: c write: e outRate: 16 size: 0 inRate: 4 capacity: 16)
+        sdf.link
+            (read: e write: f outRate: 1 size: 0 inRate: 1 capacity: 1)
+    }
+
+}

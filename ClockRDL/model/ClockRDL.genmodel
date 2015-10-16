@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/ClockRDL/generated" modelPluginID="ClockRDL" modelName="ClockRDL"
+    modelPluginClass="" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    importerID="org.eclipse.emf.importer.ecore" bundleManifest="false" complianceLevel="7.0"
+    copyrightFields="false" operationReflection="true" importOrganizing="true">
+  <foreignModel>ClockRDL.ecore</foreignModel>
+  <genPackages prefix="ClockRDL" disposableProviderFactory="true" ecorePackage="ClockRDL.ecore#/0">
+    <nestedGenPackages prefix="Model" basePackage="ClockRDL" disposableProviderFactory="true"
+        ecorePackage="ClockRDL.ecore#/0/model">
+      <nestedGenPackages prefix="Kernel" basePackage="ClockRDL.model" disposableProviderFactory="true"
+          ecorePackage="ClockRDL.ecore#/0/model/kernel">
+        <genClasses image="false" ecoreClass="ClockRDL.ecore#/0/model/kernel/Element"/>
+        <genClasses image="false" ecoreClass="ClockRDL.ecore#/0/model/kernel/NamedElement">
+          <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ClockRDL.ecore#/0/model/kernel/NamedElement/name"/>
+        </genClasses>
+        <genClasses image="false" ecoreClass="ClockRDL.ecore#/0/model/kernel/Declaration"/>
+        <genClasses image="false" ecoreClass="ClockRDL.ecore#/0/model/kernel/NamedDeclaration"/>
+        <genClasses image="false" ecoreClass="ClockRDL.ecore#/0/model/kernel/Statement"/>
+        <genClasses image="false" ecoreClass="ClockRDL.ecore#/0/model/kernel/Expression"/>
+      </nestedGenPackages>
+      <nestedGenPackages prefix="Expressions" basePackage="ClockRDL.model" disposableProviderFactory="true"
+          ecorePackage="ClockRDL.ecore#/0/model/expressions">
+        <genEnums typeSafeEnumCompatible="false" ecoreEnum="ClockRDL.ecore#/0/model/expressions/UnaryOperator">
+          <genEnumLiterals ecoreEnumLiteral="ClockRDL.ecore#/0/model/expressions/UnaryOperator/UNOT"/>
+          <genEnumLiterals ecoreEnumLiteral="ClockRDL.ecore#/0/model/expressions/UnaryOperator/UMINUS"/>
+          <genEnumLiterals ecoreEnumLiteral="ClockRDL.ecore#/0/model/expressions/UnaryOperator/UPLUS"/>
+        </genEnums>
+        <genEnums typeSafeEnumCompatible="false" ecoreEnum="ClockRDL.ecore#/0/model/expressions/BinaryOperator">
+          <genEnumLiterals ecoreEnumLiteral="ClockRDL.ecore#/0/model/expressions/BinaryOperator/BOR"/>
+          <genEnumLiterals ecoreEnumLiteral="ClockRDL.ecore#/0/model/expressions/BinaryOperator/BAND"/>
+          <genEnumLiterals ecoreEnumLiteral="ClockRDL.ecore#/0/model/expressions/BinaryOperator/BEQ"/>
+          <genEnumLiterals ecoreEnumLiteral="ClockRDL.ecore#/0/model/expressions/BinaryOperator/BNE"/>
+          <genEnumLiterals ecoreEnumLiteral="ClockRDL.ecore#/0/model/expressions/BinaryOperator/BLT"/>
+          <genEnumLiterals ecoreEnumLiteral="ClockRDL.ecore#/0/model/expressions/BinaryOperator/BGT"/>
+          <genEnumLiterals ecoreEnumLiteral="ClockRDL.ecore#/0/model/expressions/BinaryOperator/BLE"/>
+          <genEnumLiterals ecoreEnumLiteral="ClockRDL.ecore#/0/model/expressions/BinaryOperator/BGE"/>
+          <genEnumLiterals ecoreEnumLiteral="ClockRDL.ecore#/0/model/expressions/BinaryOperator/BPLUS"/>
+          <genEnumLiterals ecoreEnumLiteral="ClockRDL.ecore#/0/model/expressions/BinaryOperator/BMINUS"/>
+          <genEnumLiterals ecoreEnumLiteral="ClockRDL.ecore#/0/model/expressions/BinaryOperator/BMUL"/>
+          <genEnumLiterals ecoreEnumLiteral="ClockRDL.ecore#/0/model/expressions/BinaryOperator/BDIV"/>
+          <genEnumLiterals ecoreEnumLiteral="ClockRDL.ecore#/0/model/expressions/BinaryOperator/BMOD"/>
+          <genEnumLiterals ecoreEnumLiteral="ClockRDL.ecore#/0/model/expressions/BinaryOperator/BNOR"/>
+          <genEnumLiterals ecoreEnumLiteral="ClockRDL.ecore#/0/model/expressions/BinaryOperator/BNAND"/>
+          <genEnumLiterals ecoreEnumLiteral="ClockRDL.ecore#/0/model/expressions/BinaryOperator/BXOR"/>
+        </genEnums>
+        <genClasses ecoreClass="ClockRDL.ecore#/0/model/expressions/ParenExp">
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ClockRDL.ecore#/0/model/expressions/ParenExp/exp"/>
+        </genClasses>
+        <genClasses image="false" ecoreClass="ClockRDL.ecore#/0/model/expressions/PrefixedExp">
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ClockRDL.ecore#/0/model/expressions/PrefixedExp/prefix"/>
+        </genClasses>
+        <genClasses ecoreClass="ClockRDL.ecore#/0/model/expressions/IndexedExp">
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ClockRDL.ecore#/0/model/expressions/IndexedExp/index"/>
+        </genClasses>
+        <genClasses ecoreClass="ClockRDL.ecore#/0/model/expressions/SelectedExp">
+          <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ClockRDL.ecore#/0/model/expressions/SelectedExp/selector"/>
+        </genClasses>
+        <genClasses ecoreClass="ClockRDL.ecore#/0/model/expressions/FunctionCallExp">
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ClockRDL.ecore#/0/model/expressions/FunctionCallExp/arguments"/>
+        </genClasses>
+        <genClasses ecoreClass="ClockRDL.ecore#/0/model/expressions/ReferenceExp">
+          <genFeatures notify="false" createChild="false" propertySortChoices="true"
+              ecoreFeature="ecore:EReference ClockRDL.ecore#/0/model/expressions/ReferenceExp/ref"/>
+        </genClasses>
+        <genClasses ecoreClass="ClockRDL.ecore#/0/model/expressions/ClockReference"/>
+        <genClasses ecoreClass="ClockRDL.ecore#/0/model/expressions/UnaryExp">
+          <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ClockRDL.ecore#/0/model/expressions/UnaryExp/operator"/>
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ClockRDL.ecore#/0/model/expressions/UnaryExp/operand"/>
+        </genClasses>
+        <genClasses ecoreClass="ClockRDL.ecore#/0/model/expressions/BinaryExp">
+          <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ClockRDL.ecore#/0/model/expressions/BinaryExp/operator"/>
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ClockRDL.ecore#/0/model/expressions/BinaryExp/lhs"/>
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ClockRDL.ecore#/0/model/expressions/BinaryExp/rhs"/>
+        </genClasses>
+        <genClasses ecoreClass="ClockRDL.ecore#/0/model/expressions/ConditionalExp">
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ClockRDL.ecore#/0/model/expressions/ConditionalExp/condition"/>
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ClockRDL.ecore#/0/model/expressions/ConditionalExp/trueBranch"/>
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ClockRDL.ecore#/0/model/expressions/ConditionalExp/falseBranch"/>
+        </genClasses>
+        <nestedGenPackages prefix="Literals" basePackage="ClockRDL.model.expressions"
+            disposableProviderFactory="true" ecorePackage="ClockRDL.ecore#/0/model/expressions/literals">
+          <genClasses image="false" ecoreClass="ClockRDL.ecore#/0/model/expressions/literals/Literal"/>
+          <genClasses ecoreClass="ClockRDL.ecore#/0/model/expressions/literals/IntegerLiteral">
+            <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ClockRDL.ecore#/0/model/expressions/literals/IntegerLiteral/value"/>
+          </genClasses>
+          <genClasses ecoreClass="ClockRDL.ecore#/0/model/expressions/literals/BooleanLiteral">
+            <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ClockRDL.ecore#/0/model/expressions/literals/BooleanLiteral/value"/>
+          </genClasses>
+          <genClasses ecoreClass="ClockRDL.ecore#/0/model/expressions/literals/ArrayLiteral">
+            <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ClockRDL.ecore#/0/model/expressions/literals/ArrayLiteral/value"/>
+          </genClasses>
+          <genClasses ecoreClass="ClockRDL.ecore#/0/model/expressions/literals/FieldLiteral">
+            <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ClockRDL.ecore#/0/model/expressions/literals/FieldLiteral/value"/>
+          </genClasses>
+          <genClasses ecoreClass="ClockRDL.ecore#/0/model/expressions/literals/RecordLiteral">
+            <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ClockRDL.ecore#/0/model/expressions/literals/RecordLiteral/value"/>
+          </genClasses>
+          <genClasses ecoreClass="ClockRDL.ecore#/0/model/expressions/literals/QueueLiteral">
+            <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ClockRDL.ecore#/0/model/expressions/literals/QueueLiteral/value"/>
+          </genClasses>
+        </nestedGenPackages>
+      </nestedGenPackages>
+      <nestedGenPackages prefix="Statements" basePackage="ClockRDL.model" disposableProviderFactory="true"
+          ecorePackage="ClockRDL.ecore#/0/model/statements">
+        <genEnums typeSafeEnumCompatible="false" ecoreEnum="ClockRDL.ecore#/0/model/statements/AssignmentOperator">
+          <genEnumLiterals ecoreEnumLiteral="ClockRDL.ecore#/0/model/statements/AssignmentOperator/ASSIGN"/>
+          <genEnumLiterals ecoreEnumLiteral="ClockRDL.ecore#/0/model/statements/AssignmentOperator/MINUSASSIGN"/>
+          <genEnumLiterals ecoreEnumLiteral="ClockRDL.ecore#/0/model/statements/AssignmentOperator/PLUSASSIGN"/>
+          <genEnumLiterals ecoreEnumLiteral="ClockRDL.ecore#/0/model/statements/AssignmentOperator/MULTASSIGN"/>
+          <genEnumLiterals ecoreEnumLiteral="ClockRDL.ecore#/0/model/statements/AssignmentOperator/MODASSIGN"/>
+          <genEnumLiterals ecoreEnumLiteral="ClockRDL.ecore#/0/model/statements/AssignmentOperator/DIVASSIGN"/>
+          <genEnumLiterals ecoreEnumLiteral="ClockRDL.ecore#/0/model/statements/AssignmentOperator/ORASSIGN"/>
+          <genEnumLiterals ecoreEnumLiteral="ClockRDL.ecore#/0/model/statements/AssignmentOperator/ANDASSIGN"/>
+        </genEnums>
+        <genClasses ecoreClass="ClockRDL.ecore#/0/model/statements/AssignmentStmt">
+          <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ClockRDL.ecore#/0/model/statements/AssignmentStmt/operator"/>
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ClockRDL.ecore#/0/model/statements/AssignmentStmt/lhs"/>
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ClockRDL.ecore#/0/model/statements/AssignmentStmt/rhs"/>
+        </genClasses>
+        <genClasses ecoreClass="ClockRDL.ecore#/0/model/statements/ConditionalStmt">
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ClockRDL.ecore#/0/model/statements/ConditionalStmt/condition"/>
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ClockRDL.ecore#/0/model/statements/ConditionalStmt/trueBranch"/>
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ClockRDL.ecore#/0/model/statements/ConditionalStmt/falseBranch"/>
+        </genClasses>
+        <genClasses ecoreClass="ClockRDL.ecore#/0/model/statements/LoopStmt">
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ClockRDL.ecore#/0/model/statements/LoopStmt/condition"/>
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ClockRDL.ecore#/0/model/statements/LoopStmt/body"/>
+        </genClasses>
+        <genClasses ecoreClass="ClockRDL.ecore#/0/model/statements/ReturnStmt">
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ClockRDL.ecore#/0/model/statements/ReturnStmt/exp"/>
+        </genClasses>
+        <genClasses ecoreClass="ClockRDL.ecore#/0/model/statements/BlockStmt">
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ClockRDL.ecore#/0/model/statements/BlockStmt/declarations"/>
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ClockRDL.ecore#/0/model/statements/BlockStmt/statements"/>
+        </genClasses>
+      </nestedGenPackages>
+      <nestedGenPackages prefix="Declarations" basePackage="ClockRDL.model" disposableProviderFactory="true"
+          ecorePackage="ClockRDL.ecore#/0/model/declarations">
+        <genClasses ecoreClass="ClockRDL.ecore#/0/model/declarations/ClockDecl"/>
+        <genClasses ecoreClass="ClockRDL.ecore#/0/model/declarations/VariableDecl">
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ClockRDL.ecore#/0/model/declarations/VariableDecl/initial"/>
+        </genClasses>
+        <genClasses ecoreClass="ClockRDL.ecore#/0/model/declarations/ConstantDecl"/>
+        <genClasses ecoreClass="ClockRDL.ecore#/0/model/declarations/ArgumentDecl"/>
+        <genClasses ecoreClass="ClockRDL.ecore#/0/model/declarations/FunctionDecl">
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ClockRDL.ecore#/0/model/declarations/FunctionDecl/parameters"/>
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ClockRDL.ecore#/0/model/declarations/FunctionDecl/body"/>
+        </genClasses>
+        <genClasses ecoreClass="ClockRDL.ecore#/0/model/declarations/ParameterDecl"/>
+        <genClasses ecoreClass="ClockRDL.ecore#/0/model/declarations/TransitionDecl">
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ClockRDL.ecore#/0/model/declarations/TransitionDecl/guard"/>
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ClockRDL.ecore#/0/model/declarations/TransitionDecl/vector"/>
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ClockRDL.ecore#/0/model/declarations/TransitionDecl/action"/>
+        </genClasses>
+        <genClasses ecoreClass="ClockRDL.ecore#/0/model/declarations/AbstractRelationDecl">
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ClockRDL.ecore#/0/model/declarations/AbstractRelationDecl/arguments"/>
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ClockRDL.ecore#/0/model/declarations/AbstractRelationDecl/declarations"/>
+        </genClasses>
+        <genClasses ecoreClass="ClockRDL.ecore#/0/model/declarations/PrimitiveRelationDecl">
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ClockRDL.ecore#/0/model/declarations/PrimitiveRelationDecl/transitions"/>
+        </genClasses>
+        <genClasses ecoreClass="ClockRDL.ecore#/0/model/declarations/CompositeRelationDecl">
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ClockRDL.ecore#/0/model/declarations/CompositeRelationDecl/internalClocks"/>
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ClockRDL.ecore#/0/model/declarations/CompositeRelationDecl/instances"/>
+        </genClasses>
+        <genClasses ecoreClass="ClockRDL.ecore#/0/model/declarations/RelationInstanceDecl">
+          <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ClockRDL.ecore#/0/model/declarations/RelationInstanceDecl/qualifiedName"/>
+          <genFeatures notify="false" createChild="false" propertySortChoices="true"
+              ecoreFeature="ecore:EReference ClockRDL.ecore#/0/model/declarations/RelationInstanceDecl/relation"/>
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ClockRDL.ecore#/0/model/declarations/RelationInstanceDecl/argumentMap"/>
+        </genClasses>
+        <genClasses ecoreClass="ClockRDL.ecore#/0/model/declarations/FormalToActualMapEntry">
+          <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ClockRDL.ecore#/0/model/declarations/FormalToActualMapEntry/key"/>
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ClockRDL.ecore#/0/model/declarations/FormalToActualMapEntry/value"/>
+          <genFeatures notify="false" createChild="false" propertySortChoices="true"
+              ecoreFeature="ecore:EReference ClockRDL.ecore#/0/model/declarations/FormalToActualMapEntry/formalDecl"/>
+        </genClasses>
+        <genClasses image="false" ecoreClass="ClockRDL.ecore#/0/model/declarations/LibraryItemDecl">
+          <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference ClockRDL.ecore#/0/model/declarations/LibraryItemDecl/library"/>
+        </genClasses>
+        <genClasses ecoreClass="ClockRDL.ecore#/0/model/declarations/Repository">
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ClockRDL.ecore#/0/model/declarations/Repository/items"/>
+        </genClasses>
+        <genClasses ecoreClass="ClockRDL.ecore#/0/model/declarations/LibraryDecl"/>
+      </nestedGenPackages>
+    </nestedGenPackages>
+  </genPackages>
+  <genPackages prefix="PrimitiveTypes" ecorePackage="ClockRDL.ecore#/1">
+    <genDataTypes ecoreDataType="ClockRDL.ecore#/1/Boolean"/>
+    <genDataTypes ecoreDataType="ClockRDL.ecore#/1/Double"/>
+    <genDataTypes ecoreDataType="ClockRDL.ecore#/1/Integer"/>
+    <genDataTypes ecoreDataType="ClockRDL.ecore#/1/String"/>
+  </genPackages>
+</genmodel:GenModel>

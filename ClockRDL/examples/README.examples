@@ -1,0 +1,2 @@
+In the .xmi files I need to add the path to the ecore model:
+xsi:schemaLocation="RDL/model/declarations ../model/ClockRDL.ecore#/0/model/declarations RDL/model/expressions ../model/ClockRDL.ecore#/0/model/expressions RDL/model/expressions/literals ../model/ClockRDL.ecore#/0/model/expressions/literals RDL/model/statements ../model/ClockRDL.ecore#/0/model/statements"

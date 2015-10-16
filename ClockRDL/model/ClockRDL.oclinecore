@@ -1,0 +1,220 @@
+package ClockRDL : ClockRelationDefinitionLanguage = 'RDL'
+{
+	package model : model = 'RDL/model'
+	{
+		package kernel : kernel = 'RDL/model/kernel'
+		{
+			abstract class Element;
+			abstract class NamedElement extends Element { interface }
+			{
+				attribute name : String[1];
+			}
+			abstract class Declaration extends Element;
+			abstract class NamedDeclaration extends Declaration,NamedElement;
+			abstract class Statement extends Element { interface };
+			abstract class Expression extends Element,Statement;
+		}
+		package expressions : expressions = 'RDL/model/expressions'
+		{
+			package literals : literals = 'RDL/model/expressions/literals'
+			{
+				abstract class Literal extends ClockRDL::model::kernel::Expression;
+				class IntegerLiteral extends Literal
+				{
+					attribute value : Integer[?];
+				}
+				class BooleanLiteral extends Literal
+				{
+					attribute value : Boolean[?];
+				}
+				class ArrayLiteral extends Literal
+				{
+					property value : ClockRDL::model::kernel::Expression[*] { ordered composes };
+				}
+				class FieldLiteral extends ClockRDL::model::kernel::NamedElement,Literal
+				{
+					property value : ClockRDL::model::kernel::Expression[1] { composes };
+				}
+				class RecordLiteral extends Literal
+				{
+					property value : FieldLiteral[*] { ordered composes };
+				}
+				class QueueLiteral extends Literal
+				{
+					property value : ClockRDL::model::kernel::Expression[*] { ordered composes };
+				}
+			}
+			class ParenExp extends ClockRDL::model::kernel::Expression
+			{
+				property exp : ClockRDL::model::kernel::Expression[1] { composes };
+			}
+			abstract class PrefixedExp extends ClockRDL::model::kernel::Expression
+			{
+				property prefix : ClockRDL::model::kernel::Expression[1] { composes };
+			}
+			class IndexedExp extends PrefixedExp
+			{
+				property index : ClockRDL::model::kernel::Expression[1] { composes };
+			}
+			class SelectedExp extends PrefixedExp
+			{
+				attribute selector : String[1];
+			}
+			class FunctionCallExp extends PrefixedExp
+			{
+				property arguments : ClockRDL::model::kernel::Expression[*] { ordered composes };
+			}
+			class ReferenceExp extends ClockRDL::model::kernel::Expression
+			{
+				property ref : ClockRDL::model::kernel::NamedElement[1];
+			}
+			class ClockReference extends ReferenceExp;
+			enum UnaryOperator { serializable }
+			{
+				literal UNOT = 1;
+				literal UMINUS = 2;
+				literal UPLUS = 3;
+			}
+			enum BinaryOperator { serializable }
+			{
+				literal BOR = 1;
+				literal BAND = 2;
+				literal BEQ = 3;
+				literal BNE = 4;
+				literal BLT = 5;
+				literal BGT = 6;
+				literal BLE = 7;
+				literal BGE = 8;
+				literal BPLUS = 9;
+				literal BMINUS = 10;
+				literal BMUL = 11;
+				literal BDIV = 12;
+				literal BMOD = 13;
+				literal BNOR = 14;
+				literal BNAND = 15;
+				literal BXOR = 16;
+			}
+			class UnaryExp extends ClockRDL::model::kernel::Expression
+			{
+				attribute operator : UnaryOperator[1];
+				property operand : ClockRDL::model::kernel::Expression[1] { composes };
+			}
+			class BinaryExp extends ClockRDL::model::kernel::Expression
+			{
+				attribute operator : BinaryOperator[1];
+				property lhs : ClockRDL::model::kernel::Expression[?] { composes };
+				property rhs : ClockRDL::model::kernel::Expression[?] { composes };
+			}
+			class ConditionalExp extends ClockRDL::model::kernel::Expression
+			{
+				property condition : ClockRDL::model::kernel::Expression[1] { composes };
+				property trueBranch : ClockRDL::model::kernel::Expression[1] { composes };
+				property falseBranch : ClockRDL::model::kernel::Expression[1] { composes };
+			}
+		}
+		package statements : statements = 'RDL/model/statements'
+		{
+			enum AssignmentOperator { serializable }
+			{
+				literal ASSIGN = 1;
+				literal MINUSASSIGN = 2;
+				literal PLUSASSIGN = 3;
+				literal MULTASSIGN = 4;
+				literal MODASSIGN = 5;
+				literal DIVASSIGN = 6;
+				literal ORASSIGN = 7;
+				literal ANDASSIGN = 8;
+			}
+			class AssignmentStmt extends ClockRDL::model::kernel::Statement
+			{
+				attribute operator : AssignmentOperator[1];
+				property lhs : ClockRDL::model::kernel::Expression[1] { composes };
+				property rhs : ClockRDL::model::kernel::Expression[1] { composes };
+			}
+			class ConditionalStmt extends ClockRDL::model::kernel::Statement
+			{
+				property condition : ClockRDL::model::kernel::Expression[1] { composes };
+				property trueBranch : BlockStmt[1] { composes };
+				property falseBranch : BlockStmt[?] { composes };
+			}
+			class LoopStmt extends ClockRDL::model::kernel::Statement
+			{
+				property condition : ClockRDL::model::kernel::Expression[1] { composes };
+				property body : BlockStmt[1] { composes };
+			}
+			class ReturnStmt extends ClockRDL::model::kernel::Statement
+			{
+				property exp : ClockRDL::model::kernel::Expression[1] { composes };
+			}
+			class BlockStmt extends ClockRDL::model::kernel::Statement
+			{
+				property declarations : ClockRDL::model::kernel::Declaration[*] { composes };
+				property statements : ClockRDL::model::kernel::Statement[*] { composes };
+			}
+		}
+		package declarations : declarations = 'RDL/model/declarations'
+		{
+			class ClockDecl extends ClockRDL::model::kernel::NamedDeclaration;
+			class VariableDecl extends ClockRDL::model::kernel::NamedDeclaration
+			{
+				property initial : ClockRDL::model::kernel::Expression[?] { composes };
+			}
+			class ConstantDecl extends VariableDecl;
+			class ArgumentDecl extends ClockRDL::model::kernel::NamedDeclaration;
+			class FunctionDecl extends ClockRDL::model::kernel::NamedDeclaration
+			{
+				property parameters : ParameterDecl[*] { ordered composes };
+				property body : ClockRDL::model::statements::BlockStmt[1] { composes };
+			}
+			class ParameterDecl extends ClockRDL::model::kernel::NamedDeclaration;
+			class TransitionDecl extends ClockRDL::model::kernel::Declaration
+			{
+				property guard : ClockRDL::model::kernel::Expression[?] { composes };
+				property vector : ClockRDL::model::expressions::ClockReference[*] { ordered composes };
+				property action : ClockRDL::model::kernel::Statement[?] { composes };
+			}
+			class AbstractRelationDecl extends ClockRDL::model::kernel::NamedDeclaration,LibraryItemDecl
+			{
+				property arguments : ArgumentDecl[*] { composes };
+				property declarations : ClockRDL::model::kernel::Declaration[*] { composes };
+			}
+			class PrimitiveRelationDecl extends AbstractRelationDecl
+			{
+				property transitions : TransitionDecl[*] { ordered composes };
+			}
+			class CompositeRelationDecl extends AbstractRelationDecl
+			{
+				property internalClocks : ClockDecl[*] { ordered composes };
+				property instances : RelationInstanceDecl[*] { ordered composes };
+			}
+			class RelationInstanceDecl extends ClockRDL::model::kernel::NamedDeclaration
+			{
+				attribute qualifiedName : String[+];
+				property relation : AbstractRelationDecl[?];
+				property argumentMap : FormalToActualMapEntry[*] { ordered composes };
+			}
+			class FormalToActualMapEntry : 'java.util.Map$Entry'
+			{
+				attribute key : String[1];
+				property value : ClockRDL::model::kernel::Expression[1] { composes };
+				property formalDecl : ClockRDL::model::kernel::Declaration[?];
+			}
+			abstract class LibraryItemDecl extends ClockRDL::model::kernel::Declaration { interface }
+			{
+				property library#items : Repository[1];
+			}
+			class Repository extends ClockRDL::model::kernel::NamedDeclaration
+			{
+				property items#library : LibraryItemDecl[*] { ordered composes };
+			}
+			class LibraryDecl extends Repository,LibraryItemDecl;
+		} 
+	}
+}
+package PrimitiveTypes : pt = 'ClockRDL-PrimitiveTypes'
+{
+	primitive datatype _'Boolean' : 'boolean' { serializable };
+	datatype Double : 'double' { serializable };
+	primitive datatype _'Integer' : 'int' { serializable };
+	primitive datatype _'String' : 'java.lang.String' { serializable };
+}
