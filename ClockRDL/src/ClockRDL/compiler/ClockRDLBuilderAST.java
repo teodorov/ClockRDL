@@ -19,7 +19,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 
 public class ClockRDLBuilderAST extends ClockRDLBaseListener {
-    ParseTreeProperty<Object> values = new ParseTreeProperty<>();
+    public ParseTreeProperty<Object> values = new ParseTreeProperty<>();
     ParseTreeProperty<Scope> scopes = new ParseTreeProperty<>();
 
     Scope<NamedDeclaration> currentScope;
@@ -674,7 +674,7 @@ public class ClockRDLBuilderAST extends ClockRDLBaseListener {
         List<ConstantDecl> constants = getValue(ctx.constantDecl(), List.class);
         if (constants != null) decl.getDeclarations().addAll(constants);
 
-        List<Declaration> decls = decl.getDeclarations();
+        List<NamedDeclaration> decls = decl.getDeclarations();
         for (ClockRDLParser.FunctionDeclContext fctCtx : ctx.functionDecl()) {
             FunctionDecl f = getValue(fctCtx, FunctionDecl.class);
             decls.add(f);

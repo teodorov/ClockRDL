@@ -85,7 +85,6 @@ blockDecl : variableDecl
 
 LIBRARY: 'library';
 RELATION: 'relation';
-PRIMITIVE: 'primitive';
 VARIABLE: 'var';
 CLOCK: 'clock';
 CONST: 'const';

@@ -18,6 +18,7 @@
         <eClassifiers xsi:type="ecore:EClass" name="Expression" abstract="true" eSuperTypes="#/0/model/kernel/Element #/0/model/kernel/Statement"/>
       </eSubpackages>
       <eSubpackages name="expressions" nsURI="RDL/model/expressions" nsPrefix="expressions">
+        <eClassifiers xsi:type="ecore:EClass" name="Literal" abstract="true" eSuperTypes="#/0/model/kernel/Expression"/>
         <eClassifiers xsi:type="ecore:EClass" name="ParenExp" eSuperTypes="#/0/model/kernel/Expression">
           <eStructuralFeatures xsi:type="ecore:EReference" name="exp" lowerBound="1"
               eType="#/0/model/kernel/Expression" containment="true"/>
@@ -40,7 +41,7 @@
         </eClassifiers>
         <eClassifiers xsi:type="ecore:EClass" name="ReferenceExp" eSuperTypes="#/0/model/kernel/Expression">
           <eStructuralFeatures xsi:type="ecore:EReference" name="ref" lowerBound="1"
-              eType="#/0/model/kernel/NamedElement"/>
+              eType="#/0/model/kernel/NamedDeclaration"/>
         </eClassifiers>
         <eClassifiers xsi:type="ecore:EClass" name="ClockReference" eSuperTypes="#/0/model/expressions/ReferenceExp"/>
         <eClassifiers xsi:type="ecore:EEnum" name="UnaryOperator">
@@ -89,26 +90,25 @@
               eType="#/0/model/kernel/Expression" containment="true"/>
         </eClassifiers>
         <eSubpackages name="literals" nsURI="RDL/model/expressions/literals" nsPrefix="literals">
-          <eClassifiers xsi:type="ecore:EClass" name="Literal" abstract="true" eSuperTypes="#/0/model/kernel/Expression"/>
-          <eClassifiers xsi:type="ecore:EClass" name="IntegerLiteral" eSuperTypes="#/0/model/expressions/literals/Literal">
+          <eClassifiers xsi:type="ecore:EClass" name="IntegerLiteral" eSuperTypes="#/0/model/expressions/Literal">
             <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="#/1/Integer"/>
           </eClassifiers>
-          <eClassifiers xsi:type="ecore:EClass" name="BooleanLiteral" eSuperTypes="#/0/model/expressions/literals/Literal">
+          <eClassifiers xsi:type="ecore:EClass" name="BooleanLiteral" eSuperTypes="#/0/model/expressions/Literal">
             <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="#/1/Boolean"/>
           </eClassifiers>
-          <eClassifiers xsi:type="ecore:EClass" name="ArrayLiteral" eSuperTypes="#/0/model/expressions/literals/Literal">
+          <eClassifiers xsi:type="ecore:EClass" name="ArrayLiteral" eSuperTypes="#/0/model/expressions/Literal">
             <eStructuralFeatures xsi:type="ecore:EReference" name="value" upperBound="-1"
                 eType="#/0/model/kernel/Expression" containment="true"/>
           </eClassifiers>
-          <eClassifiers xsi:type="ecore:EClass" name="FieldLiteral" eSuperTypes="#/0/model/kernel/NamedElement #/0/model/expressions/literals/Literal">
+          <eClassifiers xsi:type="ecore:EClass" name="FieldLiteral" eSuperTypes="#/0/model/kernel/NamedElement #/0/model/expressions/Literal">
             <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1"
                 eType="#/0/model/kernel/Expression" containment="true"/>
           </eClassifiers>
-          <eClassifiers xsi:type="ecore:EClass" name="RecordLiteral" eSuperTypes="#/0/model/expressions/literals/Literal">
+          <eClassifiers xsi:type="ecore:EClass" name="RecordLiteral" eSuperTypes="#/0/model/expressions/Literal">
             <eStructuralFeatures xsi:type="ecore:EReference" name="value" upperBound="-1"
                 eType="#/0/model/expressions/literals/FieldLiteral" containment="true"/>
           </eClassifiers>
-          <eClassifiers xsi:type="ecore:EClass" name="QueueLiteral" eSuperTypes="#/0/model/expressions/literals/Literal">
+          <eClassifiers xsi:type="ecore:EClass" name="QueueLiteral" eSuperTypes="#/0/model/expressions/Literal">
             <eStructuralFeatures xsi:type="ecore:EReference" name="value" upperBound="-1"
                 eType="#/0/model/kernel/Expression" containment="true"/>
           </eClassifiers>
@@ -185,7 +185,7 @@
           <eStructuralFeatures xsi:type="ecore:EReference" name="arguments" ordered="false"
               upperBound="-1" eType="#/0/model/declarations/ArgumentDecl" containment="true"/>
           <eStructuralFeatures xsi:type="ecore:EReference" name="declarations" ordered="false"
-              upperBound="-1" eType="#/0/model/kernel/Declaration" containment="true"/>
+              upperBound="-1" eType="#/0/model/kernel/NamedDeclaration" containment="true"/>
         </eClassifiers>
         <eClassifiers xsi:type="ecore:EClass" name="PrimitiveRelationDecl" eSuperTypes="#/0/model/declarations/AbstractRelationDecl">
           <eStructuralFeatures xsi:type="ecore:EReference" name="transitions" upperBound="-1"

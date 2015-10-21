@@ -1,4 +1,4 @@
-package ClockRDL.grammar.test;
+package ClockRDL.grammar.tests;
 
 import static org.junit.Assert.assertTrue;
 

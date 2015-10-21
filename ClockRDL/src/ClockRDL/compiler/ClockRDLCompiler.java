@@ -36,8 +36,8 @@ public class ClockRDLCompiler {
         return instance.compile(fs);
     }
 
-    public static Repository compile(String dveProgram) {
-        ANTLRInputStream is = new ANTLRInputStream(dveProgram);
+    public static Repository compile(String program) {
+        ANTLRInputStream is = new ANTLRInputStream(program);
 
         return instance.compile(is);
     }
