@@ -1,11 +1,6 @@
 package ClockRDL.interpreter.values;
 
 import ClockRDL.interpreter.Value;
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Created by ciprian on 20/10/15.
  */

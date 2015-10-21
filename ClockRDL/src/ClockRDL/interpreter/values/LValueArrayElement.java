@@ -1,5 +1,7 @@
 package ClockRDL.interpreter.values;
 
+import ClockRDL.interpreter.Frame;
+import ClockRDL.interpreter.Value;
 import ClockRDL.model.kernel.NamedDeclaration;
 
 /**
@@ -12,5 +14,10 @@ public class LValueArrayElement extends LValue {
     public LValueArrayElement(ArrayValue prefix, IntegerValue index) {
         this.prefix = prefix;
         this.index = index;
+    }
+
+    @Override
+    public void assign(Value value, Frame env) {
+        prefix.data[index.data] = value;
     }
 }

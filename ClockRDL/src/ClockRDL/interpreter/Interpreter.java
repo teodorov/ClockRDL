@@ -1,8 +1,10 @@
 package ClockRDL.interpreter;
 
+import ClockRDL.interpreter.evaluators.ExpressionLValueEvaluator;
 import ClockRDL.interpreter.evaluators.LiteralEvaluator;
 import ClockRDL.interpreter.evaluators.ExpressionEvaluator;
 import ClockRDL.interpreter.values.FunctionValue;
+import ClockRDL.interpreter.values.LValue;
 import ClockRDL.interpreter.values.PrimitiveFunctionValue;
 import ClockRDL.model.expressions.Literal;
 import ClockRDL.model.kernel.Expression;
@@ -69,15 +71,44 @@ public class Interpreter {
 
     public Value eval(Expression exp, Frame env) {
         //TODO I should account for the environment here
-        return evaluate(exp);
+        return evaluate(exp, Value.class);
+    }
+
+    public <T extends Value> T evaluate(Expression exp, Class<T> type) {
+        ExpressionEvaluator evaluator = new ExpressionEvaluator(this);
+        Value value = evaluator.doSwitch(exp);
+        if (type.isAssignableFrom(value.getClass())) {
+            return type.cast(value);
+        }
+        throw new RuntimeException("Expected " + type.getSimpleName() + " but found " + value.getClass().getSimpleName());
+        //return null;
     }
 
     public Value evaluate(Expression exp) {
-        ExpressionEvaluator evaluator = new ExpressionEvaluator(this);
-        return evaluator.doSwitch(exp);
+        return evaluate(exp, Value.class);
     }
-    public Value evaluate(Literal exp) {
+
+    public <T extends Value> T evaluate(Literal exp, Class<T> type) {
         LiteralEvaluator evaluator = new LiteralEvaluator(this);
-        return evaluator.doSwitch(exp);
+        Value value = evaluator.doSwitch(exp);
+        if (type.isAssignableFrom(value.getClass())) {
+            return type.cast(value);
+        }
+        throw new RuntimeException("Expected " + type.getSimpleName() + " but found " + value.getClass().getSimpleName());
+        //return null;
+    }
+
+    public Value evaluate(Literal exp) {
+        return evaluate(exp, Value.class);
+    }
+
+    public LValue lvalue(Expression exp) {
+        ExpressionLValueEvaluator evaluator = new ExpressionLValueEvaluator(this);
+        Value value = evaluator.doSwitch(exp);
+        if (value instanceof LValue) {
+            return (LValue)value;
+        }
+        throw new RuntimeException("Expected an Lvalue but found " + value.getClass().getSimpleName());
+        //return null;
     }
 }

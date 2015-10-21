@@ -1,5 +1,7 @@
 package ClockRDL.interpreter.values;
 
+import ClockRDL.interpreter.Frame;
+import ClockRDL.interpreter.Value;
 import ClockRDL.model.kernel.NamedDeclaration;
 
 /**
@@ -12,4 +14,10 @@ public class LValueQueueElement extends LValue {
         this.prefix = prefix;
         this.index = index;
     }
+
+    @Override
+    public void assign(Value value, Frame env) {
+        prefix.data.set(index.data, value);
+    }
 }
+

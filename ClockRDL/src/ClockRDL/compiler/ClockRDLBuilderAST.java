@@ -125,6 +125,16 @@ public class ClockRDLBuilderAST extends ClockRDLBaseListener {
         setValue(ctx, fieldLiteral);
     }
 
+    @Override
+    public void exitClockLiteral(ClockRDLParser.ClockLiteralContext ctx) {
+        ClockLiteral clockLiteral = litFact.createClockLiteral();
+        String identifier = ctx.IDENTIFIER().getText();
+        clockLiteral.setName(identifier);
+        if (ctx.INTERNAL() != null) clockLiteral.setIsInternal(true);
+        else clockLiteral.setIsInternal(false);
+        setValue(ctx, clockLiteral);
+    }
+
     //Expressions
     ExpressionsFactory expFact = ExpressionsFactory.eINSTANCE;
 
@@ -446,15 +456,16 @@ public class ClockRDLBuilderAST extends ClockRDLBaseListener {
     @Override
     public void exitClockDecl(ClockRDLParser.ClockDeclContext ctx) {
 
-        List<ClockDecl> clocks = new ArrayList<>(ctx.IDENTIFIER().size());
-        for (TerminalNode id : ctx.IDENTIFIER()) {
+        List<ClockDecl> clocks = new ArrayList<>(ctx.initializedIdentifier().size());
+        for (ClockRDLParser.InitializedIdentifierContext id : ctx.initializedIdentifier()) {
             ClockDecl clockDecl = declFact.createClockDecl();
 
-            String name = id.getText();
+            String name = id.IDENTIFIER().getText();
             //add this clock to the current scope
             currentScope.define(name, clockDecl);
 
             clockDecl.setName(name);
+            if (id.expression() != null) clockDecl.setInitial(getValue(id.expression(), ClockLiteral.class));
 
             clocks.add(clockDecl);
         }
@@ -473,7 +484,7 @@ public class ClockRDLBuilderAST extends ClockRDLBaseListener {
             currentScope.define(name, varDecl);
 
             varDecl.setName(name);
-            varDecl.setInitial(getValue(id.expression(), Expression.class));
+            if (id.expression() != null) varDecl.setInitial(getValue(id.expression(), Expression.class));
 
             vars.add(varDecl);
         }

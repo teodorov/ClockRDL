@@ -13,7 +13,7 @@ libraryItem : relationDecl
 relationDecl: RELATION IDENTIFIER argumentDecl? clockDecl? variableDecl? constantDecl? functionDecl* LCURLY (primitiveRelationBody | compositeRelationBody) RCURLY;
 
 argumentDecl : LPAREN IDENTIFIER+ RPAREN;
-clockDecl : CLOCK IDENTIFIER+;
+clockDecl : CLOCK initializedIdentifier+;
 variableDecl : VARIABLE initializedIdentifier+;
 constantDecl : CONST initializedIdentifier+;
 initializedIdentifier : IDENTIFIER (ASSIGN expression)?;
@@ -37,6 +37,7 @@ literal : booleanLiteral
     | arrayLiteral
     | recordLiteral
     | queueLiteral          //maybe it is better to call this a dynamic array?
+    | clockLiteral
 ;
 
 booleanLiteral : TRUE | FALSE;
@@ -45,6 +46,7 @@ arrayLiteral : LSQUARE expression* RSQUARE ;
 recordLiteral : LCURLY fieldLiteral+ RCURLY;
 fieldLiteral : IDENTIFIER EQ expression;
 queueLiteral : LCURLYPIPE expression* RCURLYPIPE;
+clockLiteral : (INTERNAL)? CLOCK LSQUARE IDENTIFIER RSQUARE;
 
 //EXPRESSIONS
 expression :
@@ -95,6 +97,7 @@ WHILE: 'while';
 ELSE: 'else';
 RETURN: 'return';
 DEFINE: 'def';
+INTERNAL: 'internal';
 
 //special characters
 LPAREN : '(';

@@ -27,12 +27,10 @@ import static junit.framework.Assert.*;
  * Created by ciprian on 20/10/15.
  */
 public class InterpreterTests {
-
     Interpreter evaluator = new Interpreter();
 
-
     @Test
-    public void testArithmetics2Plus3() {
+    public void testArithmetic2Plus3() {
         Expression exp = compileExp("2+3");
         Value result = evaluator.eval(exp, null);
 
@@ -41,7 +39,7 @@ public class InterpreterTests {
     }
 
     @Test
-    public void testArithmetics2Minus3() {
+    public void testArithmetic2Minus3() {
         Expression exp = compileExp("2-3");
         Value result = evaluator.eval(exp, null);
 
@@ -50,7 +48,7 @@ public class InterpreterTests {
     }
 
     @Test
-    public void testArithmetics2Mult3() {
+    public void testArithmetic2Mult3() {
         Expression exp = compileExp("2*3");
         Value result = evaluator.eval(exp, null);
 
@@ -59,7 +57,7 @@ public class InterpreterTests {
     }
 
     @Test
-    public void testArithmetics2Mod3() {
+    public void testArithmetic2Mod3() {
         Expression exp = compileExp("2%3");
         Value result = evaluator.eval(exp, null);
 
@@ -68,7 +66,7 @@ public class InterpreterTests {
     }
 
     @Test
-    public void testArithmetics2Div3() {
+    public void testArithmetic2Div3() {
         Expression exp = compileExp("2/3");
         Value result = evaluator.eval(exp, null);
 

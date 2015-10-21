@@ -112,6 +112,10 @@
             <eStructuralFeatures xsi:type="ecore:EReference" name="value" upperBound="-1"
                 eType="#/0/model/kernel/Expression" containment="true"/>
           </eClassifiers>
+          <eClassifiers xsi:type="ecore:EClass" name="ClockLiteral" eSuperTypes="#/0/model/expressions/Literal">
+            <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="#/1/String"/>
+            <eStructuralFeatures xsi:type="ecore:EAttribute" name="isInternal" eType="#/1/Boolean"/>
+          </eClassifiers>
         </eSubpackages>
       </eSubpackages>
       <eSubpackages name="statements" nsURI="RDL/model/statements" nsPrefix="statements">
@@ -159,7 +163,10 @@
         </eClassifiers>
       </eSubpackages>
       <eSubpackages name="declarations" nsURI="RDL/model/declarations" nsPrefix="declarations">
-        <eClassifiers xsi:type="ecore:EClass" name="ClockDecl" eSuperTypes="#/0/model/kernel/NamedDeclaration"/>
+        <eClassifiers xsi:type="ecore:EClass" name="ClockDecl" eSuperTypes="#/0/model/kernel/NamedDeclaration">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="initial" eType="#/0/model/expressions/literals/ClockLiteral"
+              containment="true"/>
+        </eClassifiers>
         <eClassifiers xsi:type="ecore:EClass" name="VariableDecl" eSuperTypes="#/0/model/kernel/NamedDeclaration">
           <eStructuralFeatures xsi:type="ecore:EReference" name="initial" eType="#/0/model/kernel/Expression"
               containment="true"/>

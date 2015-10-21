@@ -7,6 +7,7 @@ import ClockRDL.model.expressions.literals.*;
 import ClockRDL.model.expressions.literals.util.LiteralsSwitch;
 import ClockRDL.model.kernel.Expression;
 
+import java.time.Clock;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -71,6 +72,11 @@ public class LiteralEvaluator extends LiteralsSwitch<Value> {
         }
 
         return rV;
+    }
+
+    @Override
+    public Value caseClockLiteral(ClockLiteral object) {
+        return new ClockValue(object);
     }
 
     @Override
