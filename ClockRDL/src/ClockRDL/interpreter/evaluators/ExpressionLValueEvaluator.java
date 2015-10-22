@@ -1,5 +1,6 @@
 package ClockRDL.interpreter.evaluators;
 
+import ClockRDL.interpreter.Frame;
 import ClockRDL.interpreter.Interpreter;
 import ClockRDL.interpreter.Value;
 import ClockRDL.interpreter.values.*;
@@ -11,8 +12,8 @@ import ClockRDL.model.expressions.SelectedExp;
  * Created by ciprian on 21/10/15.
  */
 public class ExpressionLValueEvaluator extends ExpressionEvaluator {
-    public ExpressionLValueEvaluator(Interpreter interpreter) {
-        super(interpreter);
+    public ExpressionLValueEvaluator(Interpreter interpreter, Frame env) {
+        super(interpreter, env);
     }
 
     @Override

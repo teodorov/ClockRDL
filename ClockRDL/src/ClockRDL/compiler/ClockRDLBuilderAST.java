@@ -72,8 +72,7 @@ public class ClockRDLBuilderAST extends ClockRDLBaseListener {
                 value = false;
                 break;
             default:
-                System.err.println("unexpected boolean literal (line: "+ ctx.getStart().getLine() +")\n");
-                return;
+                throw new RuntimeException("unexpected boolean literal (line: "+ ctx.getStart().getLine() +")\n");
         }
         BooleanLiteral literal = litFact.createBooleanLiteral();
         literal.setValue(value);
@@ -202,7 +201,7 @@ public class ClockRDLBuilderAST extends ClockRDLBaseListener {
 
         NamedDeclaration referenced = currentScope.resolve(name);
         if (referenced == null) {
-            System.err.println("The identifier " + name + " is not defined in the current scope (line: " + ctx.getStart().getLine() + ")");
+            throw new RuntimeException("The identifier " + name + " is not defined in the current scope (line: " + ctx.getStart().getLine() + ")");
         }
         exp.setRef(referenced);
 
@@ -227,8 +226,7 @@ public class ClockRDLBuilderAST extends ClockRDLBaseListener {
                 exp.setOperator(UnaryOperator.UMINUS);
                 break;
             default:
-                System.err.println("unexpected unary operator: " + ctx.operator.getText() + " (line: "+ ctx.getStart().getLine() +")\n");
-                return;
+                throw new RuntimeException("unexpected unary operator: " + ctx.operator.getText() + " (line: "+ ctx.getStart().getLine() +")\n");
         }
 
         setValue(ctx, exp);
@@ -293,8 +291,7 @@ public class ClockRDLBuilderAST extends ClockRDLBaseListener {
                 exp.setOperator(BinaryOperator.BXOR);
                 break;
             default:
-                System.err.println("unexpected binary operator: " + ctx.operator.getText() + " (line: "+ ctx.getStart().getLine() +")\n");
-                return;
+                throw new RuntimeException("unexpected binary operator: " + ctx.operator.getText() + " (line: "+ ctx.getStart().getLine() +")\n");
         }
         setValue(ctx, exp);
     }
@@ -356,8 +353,7 @@ public class ClockRDLBuilderAST extends ClockRDLBaseListener {
                 stmt.setOperator(AssignmentOperator.ANDASSIGN);
                 break;
             default:
-                System.err.println("unexpected assignment operator: " + ctx.operator.getText() + " (line: "+ ctx.getStart().getLine() +")\n");
-                return;
+                throw new RuntimeException("unexpected assignment operator: " + ctx.operator.getText() + " (line: "+ ctx.getStart().getLine() +")\n");
         }
         setValue(ctx, stmt);
     }
@@ -412,9 +408,9 @@ public class ClockRDLBuilderAST extends ClockRDLBaseListener {
         //reset the current scope
         currentScope = currentScope.getEnclosingScope();
 
-        List<Declaration> items = stmt.getDeclarations();
+        List<NamedDeclaration> items = stmt.getDeclarations();
         for (ClockRDLParser.BlockDeclContext itemCtx : ctx.blockDecl()) {
-            List<Declaration> bItems = getValue(itemCtx, List.class);
+            List<NamedDeclaration> bItems = getValue(itemCtx, List.class);
             items.addAll(bItems);
         }
 
@@ -557,7 +553,7 @@ public class ClockRDLBuilderAST extends ClockRDLBaseListener {
 
             NamedDeclaration referenced = currentScope.resolve(id.getText());
             if (!(referenced instanceof ClockDecl)) {
-                System.err.println("invalid clock name: " + id.getText() + "(line: "+ ctx.getStart().getLine() +")\n");
+                throw new RuntimeException("invalid clock name: " + id.getText() + "(line: "+ ctx.getStart().getLine() +")\n");
             }
             cRef.setRef(referenced);
 

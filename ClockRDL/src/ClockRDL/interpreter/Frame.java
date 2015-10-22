@@ -14,6 +14,7 @@ public class Frame extends Value {
     Map<NamedDeclaration, Value> mapping = new IdentityHashMap<>();
 
     public Frame(String name, Frame env) {
+        this.name = name;
         this.enclosingEnvironment = env;
     }
 
@@ -23,6 +24,23 @@ public class Frame extends Value {
 
     public Frame(String name) {
         this(name, null);
+    }
+
+    public Frame getEnclosingEnvironment() {
+        return enclosingEnvironment;
+    }
+
+    public void update(NamedDeclaration decl, Value value) {
+        boolean isHere = mapping.get(decl) != null;
+        if (isHere) {
+            mapping.put(decl, value);
+            return;
+        }
+        if (enclosingEnvironment != null) {
+            this.enclosingEnvironment.update(decl, value);
+            return;
+        }
+        throw new RuntimeException("Could not find " + decl.getName() + " in the environment\n");
     }
 
     public void bind(NamedDeclaration decl, Value value) {

@@ -2,18 +2,18 @@ package ClockRDL.compiler;
 
 import ClockRDL.grammar.ClockRDLLexer;
 import ClockRDL.grammar.ClockRDLParser;
-import ClockRDL.model.declarations.DeclarationsFactory;
-import ClockRDL.model.declarations.LibraryDecl;
-import ClockRDL.model.declarations.Repository;
-import ClockRDL.model.kernel.Declaration;
-import ClockRDL.model.kernel.NamedDeclaration;
-import org.antlr.v4.runtime.ANTLRFileStream;
-import org.antlr.v4.runtime.ANTLRInputStream;
-import org.antlr.v4.runtime.CommonTokenStream;
+import ClockRDL.model.declarations.*;
+
+import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.*;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
@@ -21,6 +21,7 @@ import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
 
 /**
@@ -52,9 +53,14 @@ public class ClockRDLCompiler {
         ClockRDLParser parser = new ClockRDLParser(tokens);
         ParseTree tree = parser.libraryDecl();
         ParseTreeWalker walker = new ParseTreeWalker();
-        ClockRDLBuilderAST builder = new ClockRDLBuilderAST(new Scope<NamedDeclaration>("global"));
+        ClockRDLBuilderAST builder = new ClockRDLBuilderAST(new GlobalScope());
         Repository topLib = DeclarationsFactory.eINSTANCE.createRepository();
         topLib.setName("root");
+
+
+        //TODO define a clear error handling strategy for Parsing
+        parser.removeErrorListeners();
+        parser.addErrorListener(new ErrorHandler());
 
         try {
             walker.walk(builder, tree);
@@ -77,6 +83,13 @@ public class ClockRDLCompiler {
         r.getContents().add(lib);
         r.save(Collections.emptyMap());
         return r.getURI();
+    }
+
+    public static class ErrorHandler extends BaseErrorListener {
+        @Override
+        public void syntaxError(Recognizer<?, ?> rec, Object offendingSymbol, int line, int column, String msg, RecognitionException e) {
+            throw new RuntimeException(e.getLocalizedMessage());
+        }
     }
 
 }

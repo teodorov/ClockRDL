@@ -30,4 +30,16 @@ public class ArrayValue extends Value {
         ArrayValue aV = (ArrayValue) obj;
         return Arrays.equals(data, aV.data);
     }
+
+    @Override
+    public String toString() {
+        String s = "[";
+        boolean space = false;
+        for (Value v:data) {
+            if (space) s += " ";
+            s += v.toString();
+            space = true;
+        }
+        return s+"]";
+    }
 }

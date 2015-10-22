@@ -15,6 +15,6 @@ public class LValueReference extends LValue {
     }
 
     public void assign(Value value, Frame env) {
-        env.bind(lvalue, value);
+        env.update(lvalue, value);
     }
 }

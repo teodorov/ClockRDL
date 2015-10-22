@@ -12,4 +12,9 @@ public class NulValue extends Value {
     public boolean isNulValue() {
         return true;
     }
+
+    @Override
+    public String toString() {
+        return "null";
+    }
 }

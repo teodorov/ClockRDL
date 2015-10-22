@@ -1,13 +1,13 @@
 package ClockRDL.interpreter;
 
-import ClockRDL.interpreter.evaluators.ExpressionLValueEvaluator;
-import ClockRDL.interpreter.evaluators.LiteralEvaluator;
-import ClockRDL.interpreter.evaluators.ExpressionEvaluator;
+import ClockRDL.interpreter.evaluators.*;
 import ClockRDL.interpreter.values.FunctionValue;
 import ClockRDL.interpreter.values.LValue;
 import ClockRDL.interpreter.values.PrimitiveFunctionValue;
 import ClockRDL.model.expressions.Literal;
 import ClockRDL.model.kernel.Expression;
+import ClockRDL.model.kernel.NamedDeclaration;
+import ClockRDL.model.statements.BlockStmt;
 
 import java.util.List;
 import java.util.Set;
@@ -17,46 +17,6 @@ import java.util.Set;
  */
 public class Interpreter {
 
-    Frame environment;
-
-    /**
-     * Building the initial configurations for the model associated with this language runtime.
-     * Typically there is only one initial configuration. But generally there can be more than one (e.g. TLA+)
-     * */
-    public Set<Configuration> initialConfigurations() {
-        return null;
-    }
-    /**
-     * Computes the next state relations from a given configuration
-     * */
-    public Set<Configuration> nextStatesFrom(Configuration configuration) {
-        return null;
-    }
-    /**
-     * Evaluates the truth value of an atomic predicate expressed in the language this runtime implements
-     * */
-    public boolean evaluateAtomicPredicate(Predicate predicate, Configuration configuration) {
-        return false;
-    }
-
-    public Value evaluate(FunctionValue closure, List<Value> args) {
-        //TODO
-        return null;
-    }
-
-    public Value evaluate(Expression exp, Frame env) {
-        //TODO
-        return null;
-    }
-
-    /**
-     * Mostly for diagnostics, asks the language runtime for what happened during the source->target transition
-     * It returns a list of ITransitions, which can represent the events that happened, the code that was executed, etc.
-     * */
-    public List<Object> transitions(Configuration source, Configuration target) {
-        return null;
-    }
-
     public Value evaluatePrimitive(PrimitiveFunctionValue opaqueValue, List<Value> argList) {
         if (argList.size() == 0) {
             return (Value)opaqueValue.fct.apply(new Object());
@@ -65,17 +25,12 @@ public class Interpreter {
         return (Value) opaqueValue.fct.apply(argList);
     }
 
-    public Frame getEnvironment() {
-        return environment;
+    public Value applyClosure(FunctionValue closure, Frame env, List<Value> argList) {
+        throw new RuntimeException("Feature mission");
     }
 
-    public Value eval(Expression exp, Frame env) {
-        //TODO I should account for the environment here
-        return evaluate(exp, Value.class);
-    }
-
-    public <T extends Value> T evaluate(Expression exp, Class<T> type) {
-        ExpressionEvaluator evaluator = new ExpressionEvaluator(this);
+    public <T extends Value> T evaluate(Expression exp, Frame env, Class<T> type) {
+        ExpressionEvaluator evaluator = new ExpressionEvaluator(this, env);
         Value value = evaluator.doSwitch(exp);
         if (type.isAssignableFrom(value.getClass())) {
             return type.cast(value);
@@ -84,12 +39,12 @@ public class Interpreter {
         //return null;
     }
 
-    public Value evaluate(Expression exp) {
-        return evaluate(exp, Value.class);
+    public Value evaluate(Expression exp, Frame env) {
+        return evaluate(exp, env, Value.class);
     }
 
-    public <T extends Value> T evaluate(Literal exp, Class<T> type) {
-        LiteralEvaluator evaluator = new LiteralEvaluator(this);
+    public <T extends Value> T evaluate(Literal exp, Frame env, Class<T> type) {
+        LiteralEvaluator evaluator = new LiteralEvaluator(this, env);
         Value value = evaluator.doSwitch(exp);
         if (type.isAssignableFrom(value.getClass())) {
             return type.cast(value);
@@ -98,17 +53,39 @@ public class Interpreter {
         //return null;
     }
 
-    public Value evaluate(Literal exp) {
-        return evaluate(exp, Value.class);
+    public Value evaluate(Literal exp, Frame env) {
+        return evaluate(exp, env, Value.class);
     }
 
-    public LValue lvalue(Expression exp) {
-        ExpressionLValueEvaluator evaluator = new ExpressionLValueEvaluator(this);
+    public LValue lvalue(Expression exp, Frame env) {
+        ExpressionLValueEvaluator evaluator = new ExpressionLValueEvaluator(this, env);
         Value value = evaluator.doSwitch(exp);
         if (value instanceof LValue) {
             return (LValue)value;
         }
         throw new RuntimeException("Expected an Lvalue but found " + value.getClass().getSimpleName());
-        //return null;
     }
+
+    public Value evaluate(NamedDeclaration decl, Frame env) {
+        DeclarationEvaluator evaluator = new DeclarationEvaluator(this, env);
+
+        return evaluator.doSwitch(decl);
+    }
+
+    public void evaluate(BlockStmt block, Frame env) {
+        StatementEvaluator evaluator = new StatementEvaluator(this, env);
+
+        evaluator.doSwitch(block);
+    }
+
+    //TODO hardcode a simple relation execution
+    /*
+    * relation
+    * clock a b;
+    * variable x:=1;
+    * {
+    * [x<10]{a b}[x +=1]
+    * [x>=10] {a b} [ x := 1]
+    * }
+    * */
 }

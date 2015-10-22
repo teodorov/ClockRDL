@@ -27,4 +27,16 @@ public class RecordValue extends Value {
 
         return data.equals(rV.data);
     }
+
+    @Override
+    public String toString() {
+        String s = "{";
+        boolean space = false;
+        for (Map.Entry<String, Value> v : data.entrySet()) {
+            if (space) s += " ";
+            s += v.getKey() + " = " + v.getValue().toString();
+            space = true;
+        }
+        return s+"}";
+    }
 }

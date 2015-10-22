@@ -1,5 +1,6 @@
 package ClockRDL.interpreter.evaluators;
 
+import ClockRDL.interpreter.Frame;
 import ClockRDL.interpreter.Interpreter;
 import ClockRDL.interpreter.Value;
 import ClockRDL.interpreter.values.*;
@@ -16,9 +17,11 @@ import java.util.List;
 public class ExpressionEvaluator extends ExpressionsSwitch<Value> {
 
     Interpreter interpreter;
+    Frame currentFrame;
 
-    public ExpressionEvaluator(Interpreter interpreter) {
+    public ExpressionEvaluator(Interpreter interpreter, Frame env) {
         this.interpreter = interpreter;
+        this.currentFrame = env;
     }
 
     @Override
@@ -86,7 +89,7 @@ public class ExpressionEvaluator extends ExpressionsSwitch<Value> {
         Value result;
         if (opaqueValue.isFunctionValue()) {
             //interpret the functionDeclaration in the current environment extended with the functionFrame
-            result = interpreter.evaluate(((FunctionValue) opaqueValue), argList);
+            result = interpreter.applyClosure(((FunctionValue) opaqueValue), currentFrame, argList);
         } else {
             //primitive call
             result = interpreter.evaluatePrimitive((PrimitiveFunctionValue) opaqueValue, argList);
@@ -97,12 +100,12 @@ public class ExpressionEvaluator extends ExpressionsSwitch<Value> {
 
     @Override
     public Value caseReferenceExp(ReferenceExp object) {
-        return interpreter.getEnvironment().lookup(object.getRef());
+        return currentFrame.lookup(object.getRef());
     }
 
     @Override
     public Value caseClockReference(ClockReference object) {
-        return interpreter.getEnvironment().lookup(object.getRef());
+        return currentFrame.lookup(object.getRef());
     }
 
     @Override
@@ -283,6 +286,6 @@ public class ExpressionEvaluator extends ExpressionsSwitch<Value> {
 
     @Override
     public Value caseLiteral(Literal object) {
-        return interpreter.evaluate(object);
+        return interpreter.evaluate(object, currentFrame);
     }
 }

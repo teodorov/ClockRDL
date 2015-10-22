@@ -5,18 +5,12 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import ClockRDL.grammar.ClockRDLLexer;
 import ClockRDL.grammar.ClockRDLParser;
-import org.antlr.v4.runtime.ANTLRFileStream;
-import org.antlr.v4.runtime.ANTLRInputStream;
-import org.antlr.v4.runtime.BaseErrorListener;
-import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.Parser;
-import org.antlr.v4.runtime.RecognitionException;
-import org.antlr.v4.runtime.Recognizer;
+import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.junit.Test;
 
@@ -135,6 +129,20 @@ public class ClockRDLGrammarTest {
         assertParse("f(x x*2)");
         assertParse("a.f(x x*2)");
         assertParse("a[4].f(x x*2)");
+        assertParse("f(x=2)");
+    }
+
+    @Test
+    public void functionCallInBlock() {
+        setCurrentRule("statement");
+        assertParse("{assert(x=1)}");
+    }
+
+    @Test
+    public void functionCallInBlockWithVar() {
+        setCurrentRule("statement");
+        assertParse("{var x := 1; assert(1)}");
+        assertParse("{var x := 1; assert(x=1) }");
     }
 
     @Test
@@ -176,34 +184,34 @@ public class ClockRDLGrammarTest {
         setCurrentRule("blockStmt");
         assertParse("{}");
         assertParse("{a:=2}");
-        assertParse("{var x := 2}");
-        assertParse("{const y := 3}");
-        assertParse("{var z}");
-        assertParse("{var x x:=z+1}");
-        assertParse("{var x y := 5 const T x:=z+1*y/T}");
+        assertParse("{var x := 2;}");
+        assertParse("{const y := 3;}");
+        assertParse("{var z;}");
+        assertParse("{var x; x:=z+1}");
+        assertParse("{var x y := 5; const T; x:=z+1*y/T}");
     }
 
     @Test
     public void variableDecl() {
         setCurrentRule("variableDecl");
-        assertParse("var a");
-        assertParse("var b := 3");
-        assertParse("var a b:=3 c:=true d:=[1 2]");
+        assertParse("var a;");
+        assertParse("var b := 3;");
+        assertParse("var a b:=3 c:=true d:=[1 2];");
     }
 
     @Test
     public void constantDecl() {
         setCurrentRule("constantDecl");
-        assertParse("const a");
-        assertParse("const b := 3");
-        assertParse("const a b:=3 c:=true d:=[1 2]");
+        assertParse("const a;");
+        assertParse("const b := 3;");
+        assertParse("const a b:=3 c:=true d:=[1 2];");
     }
 
     @Test
     public void clockDecl() {
         setCurrentRule("clockDecl");
-        assertParse("clock a");
-        assertParse("clock a b");
+        assertParse("clock a;");
+        assertParse("clock a b;");
     }
 
     @Test
@@ -255,28 +263,56 @@ public class ClockRDLGrammarTest {
 	}
 	
 	public ParseTree parse(CharStream cs, String rule) {
-		ClockRDLLexer 		lexer 	= new ClockRDLLexer(cs);
+		ClockRDLLexer 		lexer 	= new ErrorThrowingLexer(cs);
 		CommonTokenStream 	tokens 	= new CommonTokenStream(lexer);
 		Parser 				parser 	= new ClockRDLParser(tokens);
 		NoErrorsForTest  	errorL  = new NoErrorsForTest();
 
-		//parser.removeErrorListeners();
+        //TODO define a clear error handling strategy for Parsing
+		parser.removeErrorListeners();
 		parser.addErrorListener(errorL);
+
+        parser.setErrorHandler(new ThrowErrorStrategy());
 		try {
 			Method mtd = parser.getClass().getMethod(rule);
 			ParseTree pt = (ParseTree)mtd.invoke(parser);
 			if (errorL.hasErrors()) return null;
 			return pt; 
-		} catch (Exception e) {
+		} catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
 			System.err.println("no matching method for rule: " + rule);
 			return null;
 		}
 	}
+
+    public static class ErrorThrowingLexer extends ClockRDLLexer {
+        public ErrorThrowingLexer(CharStream input) { super(input); }
+        public void recover(LexerNoViableAltException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static class ThrowErrorStrategy extends DefaultErrorStrategy {
+        //see The Definitive ANTLR4 Reference for more details on this class
+        @Override
+        public void recover(Parser recognizer, RecognitionException e) {
+            throw new RuntimeException(e);
+        }
+
+        @Override
+        public Token recoverInline(Parser recognizer) throws RecognitionException {
+            throw new RuntimeException(new InputMismatchException(recognizer));
+        }
+
+        @Override
+        public void sync(Parser recognizer) throws RecognitionException {}
+    }
+
 	public static class NoErrorsForTest extends BaseErrorListener {
 		private Boolean hasErrors = false;
 		@Override
 		public void syntaxError(Recognizer<?, ?> rec, Object offendingSymbol, int line, int column, String msg, RecognitionException e) {
 			hasErrors = true;
+            throw new RuntimeException(e.getLocalizedMessage());
 		}
 		public Boolean hasErrors() {
 			return hasErrors;

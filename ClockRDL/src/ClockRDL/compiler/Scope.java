@@ -31,7 +31,7 @@ public class Scope<T> {
     public void define(String sym, T value) {
         T previous;
         if ((previous = symbols.get(sym)) != null) {
-            System.err.println("Illegal redefinition of " + sym + "[" + previous.getClass().getSimpleName() + "] as " + value.getClass().getSimpleName());
+            throw new RuntimeException("Illegal redefinition of " + sym + "[" + previous.getClass().getSimpleName() + "] as " + value.getClass().getSimpleName());
         }
         symbols.put(sym, value);
     }
@@ -42,6 +42,7 @@ public class Scope<T> {
         if (enclosingScope != null) { // have an enclosing scope?
             return enclosingScope.resolve(name); // check enclosing scope
         }
-        return null; // not found in this scope or there's no scope above
+        throw new RuntimeException("Symbol " + name + " is not present in scope");
+        //return null; // not found in this scope or there's no scope above
     }
 }

@@ -1,9 +1,9 @@
 library sdf_pam {
     library sdf {
         relation actor
-            clock start execute stop
-            var current:=0
-            const cycles
+            clock start execute stop;
+            var current:=0;
+            const cycles;
         {
             [current = -1] { start } [ current += 1 ]
             [current != -1 & current < cycles] { execute } [ current += 1 ]
@@ -12,9 +12,9 @@ library sdf_pam {
         }
 
         relation link
-            clock read write
-            var size
-            const outRate inRate capacity
+            clock read write;
+            var size;
+            const outRate inRate capacity;
         {
             [size >= inRate] { read } [ size -= inRate ]
             [capacity < 0 | capacity - size > outRate] { write } [ size += outRate ]
@@ -22,9 +22,9 @@ library sdf_pam {
     }
 
     relation link(initial)
-        clock from to start stop
-        var size := initial
-        const outRate inRate capacity
+        clock from to start stop;
+        var size := initial;
+        const outRate inRate capacity;
     {
         sdf.link
             (write: from read: to outRate: outRate size: size inRate: inRate capacity: capacity)
@@ -46,7 +46,7 @@ library sdf_pam {
             push3 pop3
             push4 pop4
             push5 pop5
-            push6 pop6
+            push6 pop6;
     {
         sdf.actor (cycles: 1 start: signalProvider_s execute: signalProvider stop: signalProvider_e)
         sdf.actor (cycles: 1 start: displayIn_s execute: displayIn execute: displayIn stop: displayIn_e)

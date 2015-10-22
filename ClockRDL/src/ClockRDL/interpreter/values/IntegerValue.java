@@ -37,4 +37,9 @@ public class IntegerValue extends Value {
         IntegerValue aV = (IntegerValue) obj;
         return data == aV.data;
     }
+
+    @Override
+    public String toString() {
+        return Integer.toString(data);
+    }
 }

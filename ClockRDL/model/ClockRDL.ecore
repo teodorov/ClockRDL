@@ -35,7 +35,7 @@
           <eStructuralFeatures xsi:type="ecore:EAttribute" name="selector" lowerBound="1"
               eType="#/1/String"/>
         </eClassifiers>
-        <eClassifiers xsi:type="ecore:EClass" name="FunctionCallExp" eSuperTypes="#/0/model/expressions/PrefixedExp">
+        <eClassifiers xsi:type="ecore:EClass" name="FunctionCallExp" eSuperTypes="#/0/model/expressions/PrefixedExp #/0/model/kernel/Statement">
           <eStructuralFeatures xsi:type="ecore:EReference" name="arguments" upperBound="-1"
               eType="#/0/model/kernel/Expression" containment="true"/>
         </eClassifiers>
@@ -157,7 +157,7 @@
         </eClassifiers>
         <eClassifiers xsi:type="ecore:EClass" name="BlockStmt" eSuperTypes="#/0/model/kernel/Statement">
           <eStructuralFeatures xsi:type="ecore:EReference" name="declarations" ordered="false"
-              upperBound="-1" eType="#/0/model/kernel/Declaration" containment="true"/>
+              upperBound="-1" eType="#/0/model/kernel/NamedDeclaration" containment="true"/>
           <eStructuralFeatures xsi:type="ecore:EReference" name="statements" ordered="false"
               upperBound="-1" eType="#/0/model/kernel/Statement" containment="true"/>
         </eClassifiers>
@@ -173,9 +173,13 @@
         </eClassifiers>
         <eClassifiers xsi:type="ecore:EClass" name="ConstantDecl" eSuperTypes="#/0/model/declarations/VariableDecl"/>
         <eClassifiers xsi:type="ecore:EClass" name="ArgumentDecl" eSuperTypes="#/0/model/kernel/NamedDeclaration"/>
-        <eClassifiers xsi:type="ecore:EClass" name="FunctionDecl" eSuperTypes="#/0/model/kernel/NamedDeclaration">
+        <eClassifiers xsi:type="ecore:EClass" name="AbstractFunctionDecl" abstract="true"
+            eSuperTypes="#/0/model/kernel/NamedDeclaration">
           <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
               eType="#/0/model/declarations/ParameterDecl" containment="true"/>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="PrimitiveFunctionDecl" eSuperTypes="#/0/model/declarations/AbstractFunctionDecl"/>
+        <eClassifiers xsi:type="ecore:EClass" name="FunctionDecl" eSuperTypes="#/0/model/declarations/AbstractFunctionDecl">
           <eStructuralFeatures xsi:type="ecore:EReference" name="body" lowerBound="1"
               eType="#/0/model/statements/BlockStmt" containment="true"/>
         </eClassifiers>

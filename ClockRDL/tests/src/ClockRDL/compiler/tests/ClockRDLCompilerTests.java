@@ -18,8 +18,8 @@ public class ClockRDLCompilerTests {
 		assertString(
 				"library x {" +
 				"relation y " +
-				"clock a b " +
-				"var t " +
+				"clock a b; " +
+				"var t; " +
 				"def xx {t += 1} " +
 				"{ [true]{} }}");
 	}
@@ -29,10 +29,34 @@ public class ClockRDLCompilerTests {
 		assertString(
 				"library x {" +
 						"relation y " +
-						"clock a b " +
-						"var t " +
-						"def xx {var y = 3 t += y} " +
+						"clock a b; " +
+						"var t; " +
+						"def xx {var y := 3; t += y} " +
 						"{ [true]{} }}");
+	}
+
+	String blockStmt(String code) {
+		return "library xx { relation y { [true]{}["+code+"] }}";
+	}
+
+	@Test
+	public void testAssignInBlock1() {
+		assertString(blockStmt("{var x;}"));
+	}
+
+	@Test
+	public void testAssignInBlock2() {
+		assertString(blockStmt("{var x := 1; assert(x=1) }"));
+	}
+
+	@Test
+	public void testAssignInBlock3() {
+		assertString(blockStmt("{var x := 1; x := 2 assert(x=2)}"));
+	}
+
+	@Test
+	public void testAssignInBlock4() {
+		assertString(blockStmt("{var x := 1; x := 2+x assert(x=3) x += 2 assert(x=5)}"));
 	}
 
     @Test
@@ -86,7 +110,7 @@ public class ClockRDLCompilerTests {
 		Repository sys = null;
 		try {
 			sys = ClockRDLCompiler.compile(new File(filename));
-		} catch (Exception e) {
+		} catch (IOException e) {
 			java.lang.System.err.println("testing "+ filename);
 			e.printStackTrace();
 		}

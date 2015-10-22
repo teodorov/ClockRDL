@@ -2,9 +2,9 @@
 library PAM_SDF {
     library sdf {
         relation link
-            clock read write
-            var size
-            const outRate inRate capacity
+            clock read write;
+            var size;
+            const outRate inRate capacity;
         {
             [size >= inRate] { read } [ size -= inRate ]
             [capacity < 0 | capacity - size > outRate] { write } [ size += outRate ]
@@ -12,7 +12,7 @@ library PAM_SDF {
     }
 
     relation PAM0
-        clock a b c d e f
+        clock a b c d e f;
     {
         sdf.link
             (write: a read: b outRate: 1 size: 0 inRate: 1 capacity: 1)
@@ -29,7 +29,7 @@ library PAM_SDF {
     }
 
     relation PAM1
-        clock signalProvider displayIn nFFT avg threshold displayOut
+        clock signalProvider displayIn nFFT avg threshold displayOut;
     {
         sdf.link
             (write: signalProvider read: displayIn outRate: 1 size: 0 inRate: 1 capacity: 1)
@@ -46,7 +46,7 @@ library PAM_SDF {
     }
 
     relation PAM1_sequentialPlatform
-        clock signalProvider displayIn nFFT avg threshold displayOut
+        clock signalProvider displayIn nFFT avg threshold displayOut;
     {
         kernel.allExclusive
             (signalProvider displayIn nFFT avg threshold displayOut)
@@ -66,7 +66,7 @@ library PAM_SDF {
     }
 
     relation PAM2
-        clock a b c d e f
+        clock a b c d e f;
     {
     	/*sdf.link
     	    clocks: a b

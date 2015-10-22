@@ -29,4 +29,9 @@ public class BooleanValue extends Value {
         BooleanValue aV = (BooleanValue) obj;
         return data == aV.data;
     }
+
+    @Override
+    public String toString() {
+        return Boolean.toString(data);
+    }
 }

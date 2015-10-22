@@ -1,33 +1,33 @@
 library ccsl_kernel {
 	relation alternates
-		clock a b
-		var state := true
+		clock a b;
+		var state := true;
 	{
 		[state] 	{a} [state := ! state]
 		[! state] {b} [state := ! state]
 	}
 
 	relation coincidence
-		clock a b
+		clock a b;
 	{
 		{a b}
 	}
 
 	relation coincidence3
-		clock a b c
+		clock a b c;
 	{
 		{a b c}
 	}
 
 	relation exclusion
-		clock a b
+		clock a b;
 	{
 		{a}
 		{b}
 	}
 
 	relation subclocking
-		clock a b
+		clock a b;
 	{
 		{b}
 		{a b}
@@ -35,9 +35,9 @@ library ccsl_kernel {
 
 	//the following relation implements precedence, strict precedence, and bounded precedence
 	relation precedence
-		clock a b
-		var state := 0
-		const bound := -1 isStrict := false
+		clock a b;
+		var state := 0;
+		const bound := -1 isStrict := false;
 	{
 		[! isStrict] {a b} //the precedence allows coincidence always
 		[(bound<0 | bound > state) & state=0] { a } [ state += 1]
@@ -49,8 +49,8 @@ library ccsl_kernel {
 
 	//the awaiting clock expression a^n ticks in coincidence with the next nth strictly future tick of a, and then dies
 	relation awaits(n)
-		clock a c
-		var state := n
+		clock a c;
+		var state := n;
 	{
 		[ state=0 ] { a } //this says that this relation does not stop clock a from ticking
 		[ state=1 ] {a c} [state := 0] //the awaiting clock dies
@@ -58,9 +58,9 @@ library ccsl_kernel {
 	}
 
 	relation filtering
-		clock baseClock filtered
-		var state := 0 //I think that the filtering clock starts at 0
-		const binaryWord offset
+		clock baseClock filtered;
+		var state := 0; //I think that the filtering clock starts at 0
+		const binaryWord offset;
 	
 		def doesFilteredTicks {
 			if state + 1 <= binaryWord.size() & binaryWord[state+1] = 1 {
@@ -85,11 +85,10 @@ library ccsl_kernel {
 
 		[state + 1 > offset & doesFilteredTicks() ] { baseClock filtered } [ nextState() ]
 		[state + 1 > offset & ! doesFilteredTicks() ] { baseClock } [ nextState() ]
-
 	}
 
 	relation union
-		clock a b c
+		clock a b c;
 	{
 		{a c}
 		{b c}
@@ -97,7 +96,7 @@ library ccsl_kernel {
 	}
 
 	relation intersection
-		clock a b c
+		clock a b c;
 	{
 		{a}
 		{b}
@@ -105,11 +104,11 @@ library ccsl_kernel {
 	}
 
 	relation deferred
-		clock a b c
-		var state:=0 ns
+		clock a b c;
+		var state:=0 ns;
 
 		def sync { 
-			var i:=0
+			var i:=0;
 			while i<state {
 				if ns[i] = 1 {return true}
 				i += 1
@@ -118,7 +117,7 @@ library ccsl_kernel {
 		}
 
 		def advance {
-			var i:=0
+			var i:=0;
 			while i<state {
 				if ns[i] > 0 { ns[i] -= 1 }
 				i+=1
@@ -140,8 +139,8 @@ library ccsl_kernel {
 	}
 
 	relation supremum
-		clock a b c 
-		var state := 0
+		clock a b c;
+		var state := 0;
 
 	{
 		[state=0] { a b c }
@@ -158,8 +157,8 @@ library ccsl_kernel {
 	}
 
 	relation infimum
-		clock a b c
-		var state := 0
+		clock a b c;
+		var state := 0;
 
 	{
 		[state=0] { a b c }
@@ -179,8 +178,8 @@ library ccsl_kernel {
 	//immediately following a tick of the trigger clock, and then dies. 
 	//The sampling tick may be coincident with the trigger
 	relation sampling
-		clock trigger baseClock sampled
-		var state := 0
+		clock trigger baseClock sampled;
+		var state := 0;
 	{
 		[state=0] { baseClock }
 		[state=0] {trigger baseClock sampled} [state += 2] //sampled dies
@@ -198,8 +197,8 @@ library ccsl_kernel {
 	//immediately following a tick of the trigger clock, and then dies. 
 	//The sampling tick is not allowed to be coincident with the trigger
 	relation strictSampling
-		clock trigger baseClock sampled
-		var state := 0
+		clock trigger baseClock sampled;
+		var state := 0;
 	{
 		[state=0] { baseClock }
 		[state=0] { trigger } [ state += 1]
@@ -213,8 +212,8 @@ library ccsl_kernel {
 	}
 
 	relation samplingOn
-		clock trigger base sampled
-		var state := true
+		clock trigger base sampled;
+		var state := true;
 	{
 		[state] { base }
 		[state] {base trigger sampled}
@@ -228,8 +227,8 @@ library ccsl_kernel {
 	//the preemption expression behaves as "a" while b does not tick.
 	//when "b" ticks the "c" clock dies
 	relation preemption
-		clock a b c
-		var alive := true
+		clock a b c;
+		var alive := true;
 	{
 		[alive] {a c}
 		[alive] { b } [alive := ! alive]
@@ -241,16 +240,16 @@ library ccsl_kernel {
 	}
 
 	relation forceOne
-		clock one
-		var alive := true
+		clock one;
+		var alive := true;
 	{
 		[alive] { one } [ alive := ! alive ] //the clock dies
 	}
 
 	//after n ticks of the base clock, the base clock and the delayed one become synchronous forever 
 	relation delay(n)
-		clock base delayed
-		var countdown := n
+		clock base delayed;
+		var countdown := n;
 
 	{
 		[countdown<1] { base delayed }
