@@ -49,7 +49,10 @@ public class GlobalFrame extends Frame {
         Value result = primitives.get(name);
         if (result != null) return result;
 
-        throw new RuntimeException("Primitive function "+ name +" not found");
+        result = super.lookup(name);
+        if (result != null) return result;
+
+        throw new RuntimeException("Relation instace or Primitive function named "+ name +" not found");
     }
 
     public Value lookup(NamedDeclaration decl) {

@@ -4,13 +4,18 @@ import ClockRDL.interpreter.evaluators.*;
 import ClockRDL.interpreter.values.FunctionValue;
 import ClockRDL.interpreter.values.LValue;
 import ClockRDL.interpreter.values.PrimitiveFunctionValue;
+import ClockRDL.model.declarations.LibraryDecl;
+import ClockRDL.model.declarations.PrimitiveRelationDecl;
+import ClockRDL.model.declarations.RelationInstanceDecl;
+import ClockRDL.model.declarations.TransitionDecl;
 import ClockRDL.model.expressions.Literal;
+import ClockRDL.model.kernel.Declaration;
 import ClockRDL.model.kernel.Expression;
 import ClockRDL.model.kernel.NamedDeclaration;
+import ClockRDL.model.kernel.Statement;
 import ClockRDL.model.statements.BlockStmt;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by ciprian on 19/10/15.
@@ -72,20 +77,32 @@ public class Interpreter {
         return evaluator.doSwitch(decl);
     }
 
-    public void evaluate(BlockStmt block, Frame env) {
+    public void evaluate(Statement statement, Frame env) {
         StatementEvaluator evaluator = new StatementEvaluator(this, env);
 
-        evaluator.doSwitch(block);
+        evaluator.doSwitch(statement);
     }
 
-    //TODO hardcode a simple relation execution
-    /*
-    * relation
-    * clock a b;
-    * variable x:=1;
-    * {
-    * [x<10]{a b}[x +=1]
-    * [x>=10] {a b} [ x := 1]
-    * }
-    * */
+    public void initialize(RelationInstanceDecl instance,  Frame env) {
+        DeclarationEvaluator evaluator = new DeclarationEvaluator(this, env);
+        env.bind(instance, evaluator.doSwitch(instance));
+    }
+
+    public Set<FireableTransition> fireableTransitions(RelationInstanceDecl instance,  Frame env) {
+        TransitionCollector collector = new TransitionCollector();
+        return collector.collectTransitions(instance, env, this);
+    }
+
+    public void evaluate(FireableTransition fireableTransition) {
+        this.evaluate(fireableTransition.transition.getAction(), fireableTransition.executionContext);
+    }
+
+    //TODO clarify the difference between the Scope computed during parsing and the execution Frame
+    //Actually I think that during parsing we can build the SymbolTable
+    //in the SymbolTable we could add references to the memory representation which is a composed value of:
+    //<Clocks, Constants, Variables>
+    //The Variables component of the memory represents the configuration needed for exploration
+
+    //TODO the current implementation of functions should be implementable with static references to outerScope
+    //TODO implement Function CALL
 }

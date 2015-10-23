@@ -27,7 +27,7 @@ vector: '{' IDENTIFIER* '}';
 action: '[' statement ']';
 
 compositeRelationBody : clockDecl? instanceDecl+;
-instanceDecl: (IDENTIFIER COLON)? qualifiedName LPAREN formalToActual* RPAREN;
+instanceDecl: (IDENTIFIER COLON)? qualifiedName (LPAREN formalToActual* RPAREN)?;
 formalToActual: (IDENTIFIER ':')? expression;
 qualifiedName : IDENTIFIER ('.' IDENTIFIER)*;
 

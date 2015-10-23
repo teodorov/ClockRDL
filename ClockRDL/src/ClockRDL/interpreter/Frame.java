@@ -30,6 +30,10 @@ public class Frame extends Value {
         return enclosingEnvironment;
     }
 
+    public Map<NamedDeclaration, Value> getMapping() {
+        return mapping;
+    }
+
     public void update(NamedDeclaration decl, Value value) {
         boolean isHere = mapping.get(decl) != null;
         if (isHere) {

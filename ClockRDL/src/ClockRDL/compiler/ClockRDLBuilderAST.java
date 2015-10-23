@@ -13,6 +13,7 @@ import ClockRDL.model.kernel.Expression;
 import ClockRDL.model.kernel.NamedDeclaration;
 import ClockRDL.model.kernel.Statement;
 import ClockRDL.model.statements.*;
+import org.antlr.v4.codegen.model.decl.Decl;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
 import org.antlr.v4.runtime.tree.TerminalNode;
@@ -20,7 +21,6 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 public class ClockRDLBuilderAST extends ClockRDLBaseListener {
     public ParseTreeProperty<Object> values = new ParseTreeProperty<>();
-    ParseTreeProperty<Scope> scopes = new ParseTreeProperty<>();
 
     Scope<NamedDeclaration> currentScope;
 
@@ -28,8 +28,10 @@ public class ClockRDLBuilderAST extends ClockRDLBaseListener {
         this.currentScope = globalScope;
     }
 
-    public void saveScope(ParseTree node, Scope scope) {
-        scopes.put(node, scope);
+    //this is needed only for binding relation instances to their library definitions
+    Map<Declaration, Scope> decl2scope = new IdentityHashMap<>();
+    public void saveScope(Declaration node, Scope scope) {
+        decl2scope.put(node, scope);
     }
 
     //helper methods
@@ -397,7 +399,6 @@ public class ClockRDLBuilderAST extends ClockRDLBaseListener {
     public void enterBlockStmt(ClockRDLParser.BlockStmtContext ctx) {
         //create a local scope and set it as current for the children
         Scope<NamedDeclaration> scope = new Scope<>("local", currentScope);
-        saveScope(ctx, scope);
         currentScope = scope;
     }
 
@@ -509,7 +510,6 @@ public class ClockRDLBuilderAST extends ClockRDLBaseListener {
     public void enterFunctionDecl(ClockRDLParser.FunctionDeclContext ctx) {
         //create a function scope and set it as current for the children
         Scope<NamedDeclaration> scope = new Scope<>("fun " + ctx.IDENTIFIER(0).getText(), currentScope);
-        saveScope(ctx, scope);
         currentScope = scope;
     }
 
@@ -585,6 +585,26 @@ public class ClockRDLBuilderAST extends ClockRDLBaseListener {
         setValue(ctx, qualifiedPath);
     }
 
+    public <T extends Declaration> T lookup(List<String> qualifiedName, Class<T> type) {
+        Scope theScope = currentScope;
+
+        Declaration decl = null;
+
+        for (String selector : qualifiedName) {
+            decl = (Declaration)theScope.resolve(selector);
+            theScope = decl2scope.get(decl);
+        }
+
+        if (type.isAssignableFrom(decl.getClass())) {
+            return type.cast(decl);
+        }
+
+        if (decl==null)
+            throw new RuntimeException("Cannot resolve qualified name: " + qualifiedName);
+
+        throw new RuntimeException("Cannot resolve qualified name: " + qualifiedName + " (expected: " + type.getSimpleName() + " found: " + decl.getClass().getSimpleName() + ")");
+    }
+
     @Override
     public void exitInstanceDecl(ClockRDLParser.InstanceDeclContext ctx) {
         RelationInstanceDecl decl = declFact.createRelationInstanceDecl();
@@ -597,6 +617,7 @@ public class ClockRDLBuilderAST extends ClockRDLBaseListener {
         //TODO do I need to do a relation lookup here?
         List<String> qualifiedName = getValue(ctx.qualifiedName(), List.class);
         decl.getQualifiedName().addAll(qualifiedName);
+        decl.setRelation(lookup(qualifiedName, AbstractRelationDecl.class));
 
         Map<String, Expression> formalToActualMap = decl.getArgumentMap().map();
         int id = 0;
@@ -615,7 +636,6 @@ public class ClockRDLBuilderAST extends ClockRDLBaseListener {
     public void enterRelationDecl(ClockRDLParser.RelationDeclContext ctx) {
         //create a relation scope and set it as current for the children
         Scope<NamedDeclaration> relationScope = new Scope<>("rel " + ctx.IDENTIFIER().getText(), currentScope);
-        saveScope(ctx, relationScope);
         currentScope = relationScope;
     }
 
@@ -632,7 +652,6 @@ public class ClockRDLBuilderAST extends ClockRDLBaseListener {
     public void enterCompositeRelationBody(ClockRDLParser.CompositeRelationBodyContext ctx) {
         //create a scope for internal clocks and set it as current for the children
         Scope<NamedDeclaration> internalClocksScope = new Scope<>("internal clocks scope", currentScope);
-        saveScope(ctx, internalClocksScope);
         currentScope = internalClocksScope;
     }
 
@@ -664,6 +683,7 @@ public class ClockRDLBuilderAST extends ClockRDLBaseListener {
         String name = ctx.IDENTIFIER().getText();
 
         //add this relation to the enclosing scope
+        saveScope(decl, currentScope);
         currentScope = currentScope.getEnclosingScope();
         currentScope.define(name, decl);
 
@@ -706,7 +726,6 @@ public class ClockRDLBuilderAST extends ClockRDLBaseListener {
     public void enterLibraryDecl(ClockRDLParser.LibraryDeclContext ctx) {
         //create a library scope and set it as the current scope for the children
         Scope<NamedDeclaration> libScope = new Scope<>("lib " + ctx.IDENTIFIER().getText(), currentScope);
-        saveScope(ctx, libScope);
         currentScope = libScope;
     }
 
@@ -722,17 +741,15 @@ public class ClockRDLBuilderAST extends ClockRDLBaseListener {
         String name = ctx.IDENTIFIER().getText();
 
         //add this library to the global scope
+        saveScope(decl, currentScope);
         currentScope = currentScope.getEnclosingScope();
         currentScope.define(name, decl);
 
         decl.setName(name);
 
-        //List<LibraryItemDecl> items = decl.getItems();
         for (ClockRDLParser.LibraryItemContext relationCtx : ctx.libraryItem()) {
             LibraryItemDecl relation = getValue(relationCtx, LibraryItemDecl.class);
-            //items.add(relation);
             relation.setLibrary(decl);
-
         }
 
         setValue(ctx, decl);
