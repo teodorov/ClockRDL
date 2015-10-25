@@ -1,4 +1,4 @@
-library ccsl_kernel {
+library kernel {
 	relation alternates
 		clock a b;
 		var state := true;
@@ -19,11 +19,49 @@ library ccsl_kernel {
 		{a b c}
 	}
 
-	relation exclusion
+	relation exclusion2
 		clock a b;
 	{
 		{a}
 		{b}
+	}
+
+	relation exclusion3
+		clock a b c;
+	{
+		{a}
+		{b}
+		{c}
+	}
+
+	relation exclusion4
+		clock a b c d;
+	{
+		{a}
+		{b}
+		{c}
+		{d}
+	}
+
+	relation exclusion5
+		clock a b c d e;
+	{
+		{a}
+		{b}
+		{c}
+		{d}
+		{e}
+	}
+
+	relation exclusion6
+		clock a b c d e f;
+	{
+		{a}
+		{b}
+		{c}
+		{d}
+		{e}
+		{f}
 	}
 
 	relation subclocking

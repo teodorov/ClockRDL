@@ -2,7 +2,6 @@ package ClockRDL.interpreter.values;
 
 import ClockRDL.interpreter.Value;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**

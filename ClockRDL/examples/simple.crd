@@ -1,3 +1,4 @@
+import "file:///Users/ciprian/Playfield/repositories/plugmc-java/ClockSystem/ClockRDL/examples/ccsl-kernel.crd"
 library simple {
 
     relation alternates

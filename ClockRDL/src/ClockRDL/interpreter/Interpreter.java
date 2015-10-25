@@ -4,18 +4,14 @@ import ClockRDL.interpreter.evaluators.*;
 import ClockRDL.interpreter.values.FunctionValue;
 import ClockRDL.interpreter.values.LValue;
 import ClockRDL.interpreter.values.PrimitiveFunctionValue;
-import ClockRDL.model.declarations.LibraryDecl;
-import ClockRDL.model.declarations.PrimitiveRelationDecl;
 import ClockRDL.model.declarations.RelationInstanceDecl;
-import ClockRDL.model.declarations.TransitionDecl;
 import ClockRDL.model.expressions.Literal;
-import ClockRDL.model.kernel.Declaration;
 import ClockRDL.model.kernel.Expression;
 import ClockRDL.model.kernel.NamedDeclaration;
 import ClockRDL.model.kernel.Statement;
-import ClockRDL.model.statements.BlockStmt;
 
-import java.util.*;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by ciprian on 19/10/15.

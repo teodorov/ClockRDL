@@ -4,7 +4,6 @@ import ClockRDL.interpreter.Value;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by ciprian on 20/10/15.

@@ -12,7 +12,6 @@ import ClockRDL.model.declarations.util.DeclarationsSwitch;
 
 import java.util.Collections;
 import java.util.IdentityHashMap;
-import java.util.Map;
 import java.util.Set;
 
 /**

@@ -6,7 +6,6 @@ import ClockRDL.model.declarations.PrimitiveFunctionDecl;
 import ClockRDL.model.kernel.NamedDeclaration;
 
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by ciprian on 22/10/15.

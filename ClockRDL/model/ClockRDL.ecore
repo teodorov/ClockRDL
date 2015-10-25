@@ -225,13 +225,17 @@
         <eClassifiers xsi:type="ecore:EClass" name="LibraryItemDecl" abstract="true"
             interface="true" eSuperTypes="#/0/model/kernel/Declaration">
           <eStructuralFeatures xsi:type="ecore:EReference" name="library" lowerBound="1"
-              eType="#/0/model/declarations/Repository" eOpposite="#/0/model/declarations/Repository/items"/>
+              eType="#/0/model/declarations/RepositoryDecl" eOpposite="#/0/model/declarations/RepositoryDecl/libraries"/>
         </eClassifiers>
-        <eClassifiers xsi:type="ecore:EClass" name="Repository" eSuperTypes="#/0/model/kernel/NamedDeclaration">
-          <eStructuralFeatures xsi:type="ecore:EReference" name="items" upperBound="-1"
+        <eClassifiers xsi:type="ecore:EClass" name="RepositoryDecl" eSuperTypes="#/0/model/kernel/NamedDeclaration">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="libraries" upperBound="-1"
               eType="#/0/model/declarations/LibraryItemDecl" containment="true" eOpposite="#/0/model/declarations/LibraryItemDecl/library"/>
         </eClassifiers>
-        <eClassifiers xsi:type="ecore:EClass" name="LibraryDecl" eSuperTypes="#/0/model/declarations/Repository #/0/model/declarations/LibraryItemDecl"/>
+        <eClassifiers xsi:type="ecore:EClass" name="LibraryDecl" eSuperTypes="#/0/model/declarations/RepositoryDecl #/0/model/declarations/LibraryItemDecl"/>
+        <eClassifiers xsi:type="ecore:EClass" name="SystemDecl" eSuperTypes="#/0/model/declarations/RepositoryDecl">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="root" eType="#/0/model/declarations/RelationInstanceDecl"
+              containment="true"/>
+        </eClassifiers>
       </eSubpackages>
     </eSubpackages>
   </ecore:EPackage>

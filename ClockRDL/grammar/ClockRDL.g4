@@ -5,6 +5,10 @@ LINE_COMMENT : '//' .*? '\n' -> skip ;
 COMMENT : '/*' .*? '*/' -> skip ;
 WS : [ \r\t\n]+ -> skip ;
 
+systemDecl : importDecl* libraryDecl* instanceDecl?;
+
+importDecl : IMPORT STRING;
+
 libraryDecl : LIBRARY IDENTIFIER '{' libraryItem+ '}';
 libraryItem : relationDecl
     | libraryDecl
@@ -98,6 +102,7 @@ ELSE: 'else';
 RETURN: 'return';
 DEFINE: 'def';
 INTERNAL: 'internal';
+IMPORT: 'import';
 
 //special characters
 LPAREN : '(';
@@ -139,6 +144,6 @@ COLON: ':';
 
 IDENTIFIER : [a-zA-Z_][a-zA-Z_0-9]*;
 NUMBER : [0-9]+;
-
+STRING :  '"' (~["\\\r\n])* '"';
 
 

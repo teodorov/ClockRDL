@@ -8,7 +8,6 @@ import ClockRDL.model.expressions.literals.*;
 import ClockRDL.model.expressions.literals.util.LiteralsSwitch;
 import ClockRDL.model.kernel.Expression;
 
-import java.time.Clock;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;

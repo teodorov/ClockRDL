@@ -1,16 +1,10 @@
 package ClockRDL.interpreter;
 
 import ClockRDL.interpreter.values.BooleanValue;
-import ClockRDL.interpreter.values.IntegerValue;
 import ClockRDL.interpreter.values.PrimitiveFunctionValue;
-import ClockRDL.model.declarations.PrimitiveFunctionDecl;
-import ClockRDL.model.expressions.BinaryExp;
-import ClockRDL.model.expressions.BinaryOperator;
-import ClockRDL.model.expressions.ExpressionsFactory;
 import ClockRDL.model.kernel.NamedDeclaration;
 
 import java.util.HashMap;
-import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 

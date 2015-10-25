@@ -16,7 +16,13 @@ import org.junit.Test;
 
 public class ClockRDLGrammarTest {
 	private String currentRule;
-	
+
+
+    @Test
+    public void importDecl() {
+        setCurrentRule("importDecl");
+        assertParse("import \"mocos.crd\"");
+    }
 	@Test	
 	public void booleanLiteral() {
 		setCurrentRule("booleanLiteral");
@@ -259,7 +265,7 @@ public class ClockRDLGrammarTest {
 			e.printStackTrace();
 			return null;
 		}
-		return parse(fs, "libraryDecl");
+		return parse(fs, "systemDecl");
 	}
 	
 	public ParseTree parse(CharStream cs, String rule) {
@@ -279,8 +285,7 @@ public class ClockRDLGrammarTest {
 			if (errorL.hasErrors()) return null;
 			return pt; 
 		} catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-			System.err.println("no matching method for rule: " + rule);
-			return null;
+			throw new RuntimeException("Compilation error (" + e.getCause().getLocalizedMessage() +" "+ e.getMessage() + ")");
 		}
 	}
 

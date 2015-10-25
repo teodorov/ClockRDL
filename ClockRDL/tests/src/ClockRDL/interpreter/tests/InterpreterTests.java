@@ -4,17 +4,11 @@ import ClockRDL.compiler.ClockRDLBuilderAST;
 import ClockRDL.compiler.GlobalScope;
 import ClockRDL.grammar.ClockRDLLexer;
 import ClockRDL.grammar.ClockRDLParser;
-import ClockRDL.grammar.tests.ClockRDLGrammarTest;
 import ClockRDL.interpreter.*;
-import ClockRDL.interpreter.values.ClockValue;
 import ClockRDL.interpreter.values.IntegerValue;
 import ClockRDL.interpreter.values.NulValue;
 import ClockRDL.model.declarations.RelationInstanceDecl;
-import ClockRDL.model.declarations.TransitionDecl;
-import ClockRDL.model.kernel.Expression;
-import ClockRDL.model.statements.BlockStmt;
 import org.antlr.v4.runtime.ANTLRInputStream;
-import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -23,7 +17,6 @@ import org.junit.Test;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Map;
 import java.util.Set;
 
 import static junit.framework.Assert.assertEquals;
@@ -36,14 +29,14 @@ public class InterpreterTests {
 
     Interpreter evaluator = new Interpreter();
 
-    String simpleLib = "library simple {\n"+
-            "\trelation counter10\n"+
-            "\t clock a b;\n"+
-            "\t\tvar x:=1;\n"+
-            "\t{\n"+
-            "\t [x<10]{a b}[x +=1]\n"+
-            "\t\t[x>=10] {a b} [ x := 0]\n"+
-            "\t}\n"+
+    String simpleLib = "library simple {\n" +
+            "\trelation counter10\n" +
+            "\t clock a b;\n" +
+            "\t\tvar x:=1;\n" +
+            "\t{\n" +
+            "\t [x<10]{a b}[x +=1]\n" +
+            "\t\t[x>=10] {a b} [ x := 0]\n" +
+            "\t}\n" +
             "}";
     String simpleInstance = "i:simple.counter10";
 
@@ -51,15 +44,15 @@ public class InterpreterTests {
     public void simpleRelationExecutionOnce() {
         Frame env = initialize(simpleInstance, simpleLib);
         RelationInstanceDecl instance = env.getMapping().keySet().toArray(new RelationInstanceDecl[1])[0];
-        Set<FireableTransition> fireable = evaluator.fireableTransitions(instance,env);
+        Set<FireableTransition> fireable = evaluator.fireableTransitions(instance, env);
 
         for (FireableTransition transition : fireable) {
             evaluator.evaluate(transition);
         }
 
-        Frame instanceFrame = (Frame)env.lookup("i");
+        Frame instanceFrame = (Frame) env.lookup("i");
 
-        IntegerValue valueX = (IntegerValue)instanceFrame.lookup("x");
+        IntegerValue valueX = (IntegerValue) instanceFrame.lookup("x");
         assertEquals(2, valueX.data);
     }
 
@@ -69,7 +62,7 @@ public class InterpreterTests {
         RelationInstanceDecl instance = env.getMapping().keySet().toArray(new RelationInstanceDecl[1])[0];
 
         Frame instanceFrame = (Frame) env.lookup("i");
-        for (int i = 1; i<11; i++) {
+        for (int i = 1; i < 11; i++) {
 
             IntegerValue valueX = (IntegerValue) instanceFrame.lookup("x");
             assertEquals(i, valueX.data);
@@ -87,10 +80,10 @@ public class InterpreterTests {
         RelationInstanceDecl instance = env.getMapping().keySet().toArray(new RelationInstanceDecl[1])[0];
 
         Frame instanceFrame = (Frame) env.lookup("i");
-        for (int i = 1; i<30; i++) {
+        for (int i = 1; i < 30; i++) {
 
             IntegerValue valueX = (IntegerValue) instanceFrame.lookup("x");
-            assertEquals(i%11, valueX.data);
+            assertEquals(i % 11, valueX.data);
 
             Set<FireableTransition> fireable = evaluator.fireableTransitions(instance, env);
             for (FireableTransition transition : fireable) {
@@ -103,7 +96,7 @@ public class InterpreterTests {
     public void simpleRelationFireables() {
         Frame env = initialize(simpleInstance, simpleLib);
         RelationInstanceDecl instance = env.getMapping().keySet().toArray(new RelationInstanceDecl[1])[0];
-        Set<FireableTransition> fireable = evaluator.fireableTransitions(instance,env);
+        Set<FireableTransition> fireable = evaluator.fireableTransitions(instance, env);
 
         assertEquals(1, fireable.size());
     }
@@ -111,10 +104,10 @@ public class InterpreterTests {
     @Test
     public void simpleRelationInitialization() {
         Frame env = initialize(simpleInstance, simpleLib);
-        Frame instanceFrame = (Frame)env.lookup("i");
+        Frame instanceFrame = (Frame) env.lookup("i");
         assertNotNull(instanceFrame);
 
-        IntegerValue initialX = (IntegerValue)instanceFrame.lookup("x");
+        IntegerValue initialX = (IntegerValue) instanceFrame.lookup("x");
         assertEquals(1, initialX.data);
 
         Value initialA = instanceFrame.lookup("a");
@@ -152,16 +145,16 @@ public class InterpreterTests {
     }
 
     public ParseTree parse(String input, String rule) {
-        ANTLRInputStream 	is		= new ANTLRInputStream(input);
-        ClockRDLLexer 		lexer 	= new ClockRDLLexer(is);
-        CommonTokenStream 	tokens 	= new CommonTokenStream(lexer);
-        Parser              parser 	= new ClockRDLParser(tokens);
+        ANTLRInputStream is = new ANTLRInputStream(input);
+        ClockRDLLexer lexer = new ClockRDLLexer(is);
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        Parser parser = new ClockRDLParser(tokens);
 
         //TODO define a clear error handling strategy for Parsing
 
         try {
             Method mtd = parser.getClass().getMethod(rule);
-            ParseTree pt = (ParseTree)mtd.invoke(parser);
+            ParseTree pt = (ParseTree) mtd.invoke(parser);
             return pt;
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             System.err.println("no matching method for rule: " + rule);

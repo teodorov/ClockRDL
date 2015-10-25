@@ -8,12 +8,7 @@ import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
-import org.eclipse.emf.common.notify.Adapter;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.*;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
@@ -21,7 +16,6 @@ import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
 
 /**
@@ -31,32 +25,29 @@ public class ClockRDLCompiler {
 
     private static ClockRDLCompiler instance = new ClockRDLCompiler();
 
-    public static Repository compile(File file) throws IOException {
+    public static RepositoryDecl compile(File file) throws IOException {
         ANTLRFileStream fs = new ANTLRFileStream(file.getAbsolutePath());
 
         return instance.compile(fs);
     }
 
-    public static Repository compile(String program) {
+    public static RepositoryDecl compile(String program) {
         ANTLRInputStream is = new ANTLRInputStream(program);
 
         return instance.compile(is);
     }
 
-    public static URI generateModelXMI(Repository lib, String fileName) throws IOException {
+    public static URI generateModelXMI(RepositoryDecl lib, String fileName) throws IOException {
         return instance.saveXMI(lib, fileName);
     }
 
-    public Repository compile(ANTLRInputStream is) {
+    public RepositoryDecl compile(ANTLRInputStream is) {
         ClockRDLLexer lexer = new ClockRDLLexer(is);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         ClockRDLParser parser = new ClockRDLParser(tokens);
-        ParseTree tree = parser.libraryDecl();
+        ParseTree tree = parser.systemDecl();
         ParseTreeWalker walker = new ParseTreeWalker();
         ClockRDLBuilderAST builder = new ClockRDLBuilderAST(new GlobalScope());
-        Repository topLib = DeclarationsFactory.eINSTANCE.createRepository();
-        topLib.setName("root");
-
 
         //TODO define a clear error handling strategy for Parsing
         parser.removeErrorListeners();
@@ -64,19 +55,15 @@ public class ClockRDLCompiler {
 
         try {
             walker.walk(builder, tree);
-            LibraryDecl system = builder.library;
-            //top lib
-            topLib.getItems().add(system);
+            return builder.getValue(tree, RepositoryDecl.class);
 
         } catch (Error e) {
             java.lang.System.err.println(e.getMessage());
             return null;
         }
-
-        return topLib;
     }
 
-    public URI saveXMI(Repository lib, String fileName) throws IOException {
+    public URI saveXMI(RepositoryDecl lib, String fileName) throws IOException {
         ResourceSet resourceSet = new ResourceSetImpl();
         resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl());
         Resource r = resourceSet.createResource(URI.createFileURI(fileName));

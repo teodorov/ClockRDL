@@ -1,8 +1,14 @@
 package ClockRDL.compiler;
 
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.*;
+import java.util.stream.Stream;
 
+import ClockRDL.grammar.ClockRDLLexer;
 import ClockRDL.grammar.ClockRDLParser;
 import ClockRDL.model.declarations.*;
 import ClockRDL.grammar.ClockRDLBaseListener;
@@ -14,8 +20,11 @@ import ClockRDL.model.kernel.NamedDeclaration;
 import ClockRDL.model.kernel.Statement;
 import ClockRDL.model.statements.*;
 import org.antlr.v4.codegen.model.decl.Decl;
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 
@@ -754,5 +763,58 @@ public class ClockRDLBuilderAST extends ClockRDLBaseListener {
 
         setValue(ctx, decl);
         library = decl;
+    }
+
+    @Override
+    public void enterImportDecl(ClockRDLParser.ImportDeclContext ctx) {
+        try {
+            String uriString = ctx.STRING().getText().replaceAll("\"", "");
+            URI uri = new URI(uriString);
+
+            InputStream inputStream = uri.toURL().openStream();
+            ANTLRInputStream is = new ANTLRInputStream(inputStream);
+            ClockRDLLexer lexer = new ClockRDLLexer(is);
+            CommonTokenStream tokens = new CommonTokenStream(lexer);
+            ClockRDLParser parser = new ClockRDLParser(tokens);
+            ParseTree tree = parser.systemDecl();
+            ParseTreeWalker walker = new ParseTreeWalker();
+
+            walker.walk(this, tree);
+            RepositoryDecl repositoryDecl = getValue(tree, RepositoryDecl.class);
+            setValue(ctx, repositoryDecl.getLibraries());
+        } catch (IOException | URISyntaxException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //TODO the library support is very shitty
+    //I should reify the importDecl in the model,
+    //stop doing relation name resolution here but in an subsequent pass over the instantiated model
+    //and use the symbol table to resolve stuff instead of doing this shitty library support
+
+    @Override
+    public void exitSystemDecl(ClockRDLParser.SystemDeclContext ctx) {
+        RepositoryDecl decl;
+        if (ctx.instanceDecl() == null) {
+            decl = declFact.createRepositoryDecl();
+        }
+        else {
+            decl = declFact.createSystemDecl();
+            RelationInstanceDecl instanceDecl = getValue(ctx.instanceDecl(), RelationInstanceDecl.class);
+            ((SystemDecl)decl).setRoot(instanceDecl);
+        }
+
+        List<LibraryItemDecl> libs = decl.getLibraries();
+        for (ClockRDLParser.ImportDeclContext importDeclContext : ctx.importDecl()) {
+            List<LibraryItemDecl> importedLibraries = getValue(importDeclContext, List.class);
+            libs.addAll(importedLibraries);
+        }
+
+        for (ClockRDLParser.LibraryDeclContext libraryDeclContext : ctx.libraryDecl()) {
+            LibraryDecl libraryDecl = getValue(libraryDeclContext, LibraryDecl.class);
+            libraryDecl.setLibrary(decl);
+        }
+
+        setValue(ctx, decl);
     }
 }

@@ -1,4 +1,4 @@
-//import "ccsl-kernel.crd" as kernel
+import "file:///Users/ciprian/Playfield/repositories/plugmc-java/ClockSystem/ClockRDL/examples/ccsl-kernel.crd"
 library PAM_SDF {
     library sdf {
         relation link
@@ -48,7 +48,7 @@ library PAM_SDF {
     relation PAM1_sequentialPlatform
         clock signalProvider displayIn nFFT avg threshold displayOut;
     {
-        kernel.allExclusive
+        kernel.exclusion6
             (signalProvider displayIn nFFT avg threshold displayOut)
 
         sdf.link

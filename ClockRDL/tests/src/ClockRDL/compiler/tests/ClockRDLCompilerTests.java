@@ -6,8 +6,7 @@ import java.io.File;
 import java.io.IOException;
 
 import ClockRDL.compiler.ClockRDLCompiler;
-import ClockRDL.model.declarations.LibraryDecl;
-import ClockRDL.model.declarations.Repository;
+import ClockRDL.model.declarations.RepositoryDecl;
 import org.eclipse.emf.common.util.URI;
 import org.junit.Test;
 
@@ -62,7 +61,7 @@ public class ClockRDLCompilerTests {
     @Test
     public void testXMIGeneration() {
         try {
-            Repository lib = ClockRDLCompiler.compile(new File("examples/ccsl-kernel.crd"));
+            RepositoryDecl lib = ClockRDLCompiler.compile(new File("examples/ccsl-kernel.crd"));
             URI uri = ClockRDLCompiler.generateModelXMI(lib, "examples/ccsl-kernel.xmi");
             System.out.println("XMI saved in: " + uri + "\n");
 
@@ -101,13 +100,13 @@ public class ClockRDLCompilerTests {
 	}
 
 	public void assertString(String libraryString) {
-		Repository sys = null;
+		RepositoryDecl sys = null;
         sys = ClockRDLCompiler.compile(libraryString);
 		assertTrue(sys != null);
 	}
 	
 	public void assertFile(String filename) {
-		Repository sys = null;
+		RepositoryDecl sys = null;
 		try {
 			sys = ClockRDLCompiler.compile(new File(filename));
 		} catch (IOException e) {
