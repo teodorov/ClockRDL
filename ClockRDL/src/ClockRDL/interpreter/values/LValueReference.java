@@ -1,6 +1,6 @@
 package ClockRDL.interpreter.values;
 
-import ClockRDL.interpreter.Frame;
+import ClockRDL.interpreter.Environment;
 import ClockRDL.interpreter.Value;
 import ClockRDL.model.kernel.NamedDeclaration;
 
@@ -11,10 +11,15 @@ public class LValueReference extends LValue {
     NamedDeclaration lvalue;
 
     public LValueReference(NamedDeclaration decl) {
-        lvalue =decl;
+        lvalue=decl;
     }
 
-    public void assign(Value value, Frame env) {
+    public void assign(Value value, Environment env) {
         env.update(lvalue, value);
+    }
+
+    @Override
+    public boolean isAssignmentCompatible(Value value) {
+        return false;
     }
 }

@@ -34,6 +34,7 @@
       <declarations xsi:type="declarations:ClockDecl" name="a"/>
       <declarations xsi:type="declarations:ClockDecl" name="b"/>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.1/@declarations.0"/>
         <vector ref="//@libraries.0/@libraries.1/@declarations.1"/>
       </transitions>
@@ -43,6 +44,7 @@
       <declarations xsi:type="declarations:ClockDecl" name="b"/>
       <declarations xsi:type="declarations:ClockDecl" name="c"/>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.2/@declarations.0"/>
         <vector ref="//@libraries.0/@libraries.2/@declarations.1"/>
         <vector ref="//@libraries.0/@libraries.2/@declarations.2"/>
@@ -52,9 +54,11 @@
       <declarations xsi:type="declarations:ClockDecl" name="a"/>
       <declarations xsi:type="declarations:ClockDecl" name="b"/>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.3/@declarations.0"/>
       </transitions>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.3/@declarations.1"/>
       </transitions>
     </libraries>
@@ -63,12 +67,15 @@
       <declarations xsi:type="declarations:ClockDecl" name="b"/>
       <declarations xsi:type="declarations:ClockDecl" name="c"/>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.4/@declarations.0"/>
       </transitions>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.4/@declarations.1"/>
       </transitions>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.4/@declarations.2"/>
       </transitions>
     </libraries>
@@ -78,15 +85,19 @@
       <declarations xsi:type="declarations:ClockDecl" name="c"/>
       <declarations xsi:type="declarations:ClockDecl" name="d"/>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.5/@declarations.0"/>
       </transitions>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.5/@declarations.1"/>
       </transitions>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.5/@declarations.2"/>
       </transitions>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.5/@declarations.3"/>
       </transitions>
     </libraries>
@@ -97,18 +108,23 @@
       <declarations xsi:type="declarations:ClockDecl" name="d"/>
       <declarations xsi:type="declarations:ClockDecl" name="e"/>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.6/@declarations.0"/>
       </transitions>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.6/@declarations.1"/>
       </transitions>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.6/@declarations.2"/>
       </transitions>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.6/@declarations.3"/>
       </transitions>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.6/@declarations.4"/>
       </transitions>
     </libraries>
@@ -120,21 +136,27 @@
       <declarations xsi:type="declarations:ClockDecl" name="e"/>
       <declarations xsi:type="declarations:ClockDecl" name="f"/>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.7/@declarations.0"/>
       </transitions>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.7/@declarations.1"/>
       </transitions>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.7/@declarations.2"/>
       </transitions>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.7/@declarations.3"/>
       </transitions>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.7/@declarations.4"/>
       </transitions>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.7/@declarations.5"/>
       </transitions>
     </libraries>
@@ -142,9 +164,11 @@
       <declarations xsi:type="declarations:ClockDecl" name="a"/>
       <declarations xsi:type="declarations:ClockDecl" name="b"/>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.8/@declarations.1"/>
       </transitions>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.8/@declarations.0"/>
         <vector ref="//@libraries.0/@libraries.8/@declarations.1"/>
       </transitions>
@@ -189,6 +213,7 @@
         </action>
       </transitions>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.9/@declarations.0"/>
         <action xsi:type="statements:AssignmentStmt" operator="PLUSASSIGN">
           <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.9/@declarations.2"/>
@@ -265,6 +290,7 @@
         </action>
       </transitions>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.10/@declarations.0"/>
         <vector ref="//@libraries.0/@libraries.10/@declarations.1"/>
         <action xsi:type="statements:AssignmentStmt">
@@ -469,14 +495,17 @@
       <declarations xsi:type="declarations:ClockDecl" name="b"/>
       <declarations xsi:type="declarations:ClockDecl" name="c"/>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.12/@declarations.0"/>
         <vector ref="//@libraries.0/@libraries.12/@declarations.2"/>
       </transitions>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.12/@declarations.1"/>
         <vector ref="//@libraries.0/@libraries.12/@declarations.2"/>
       </transitions>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.12/@declarations.0"/>
         <vector ref="//@libraries.0/@libraries.12/@declarations.1"/>
         <vector ref="//@libraries.0/@libraries.12/@declarations.2"/>
@@ -487,12 +516,15 @@
       <declarations xsi:type="declarations:ClockDecl" name="b"/>
       <declarations xsi:type="declarations:ClockDecl" name="c"/>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.13/@declarations.0"/>
       </transitions>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.13/@declarations.1"/>
       </transitions>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.13/@declarations.0"/>
         <vector ref="//@libraries.0/@libraries.13/@declarations.1"/>
         <vector ref="//@libraries.0/@libraries.13/@declarations.2"/>
@@ -591,6 +623,7 @@
         </action>
       </transitions>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.14/@declarations.0"/>
         <action xsi:type="statements:AssignmentStmt">
           <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.14/@declarations.3"/>
@@ -725,6 +758,7 @@
         </action>
       </transitions>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.15/@declarations.0"/>
         <action xsi:type="statements:AssignmentStmt" operator="PLUSASSIGN">
           <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.3"/>
@@ -756,6 +790,7 @@
         </action>
       </transitions>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.15/@declarations.0"/>
         <action xsi:type="statements:AssignmentStmt" operator="PLUSASSIGN">
           <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.3"/>
@@ -788,6 +823,7 @@
         </action>
       </transitions>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.15/@declarations.0"/>
         <vector ref="//@libraries.0/@libraries.15/@declarations.2"/>
         <action xsi:type="statements:AssignmentStmt" operator="PLUSASSIGN">
@@ -828,6 +864,7 @@
         </action>
       </transitions>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.16/@declarations.0"/>
         <vector ref="//@libraries.0/@libraries.16/@declarations.2"/>
         <action xsi:type="statements:AssignmentStmt" operator="PLUSASSIGN">
@@ -861,6 +898,7 @@
         </action>
       </transitions>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.16/@declarations.0"/>
         <vector ref="//@libraries.0/@libraries.16/@declarations.2"/>
         <action xsi:type="statements:AssignmentStmt" operator="PLUSASSIGN">
@@ -893,6 +931,7 @@
         </action>
       </transitions>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.16/@declarations.0"/>
         <action xsi:type="statements:AssignmentStmt" operator="PLUSASSIGN">
           <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.16/@declarations.3"/>
@@ -931,6 +970,7 @@
         </action>
       </transitions>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.17/@declarations.0"/>
         <vector ref="//@libraries.0/@libraries.17/@declarations.1"/>
         <vector ref="//@libraries.0/@libraries.17/@declarations.2"/>
@@ -962,6 +1002,7 @@
         </action>
       </transitions>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.17/@declarations.1"/>
         <vector ref="//@libraries.0/@libraries.17/@declarations.2"/>
         <action xsi:type="statements:AssignmentStmt" operator="PLUSASSIGN">
@@ -982,6 +1023,7 @@
         </action>
       </transitions>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.17/@declarations.0"/>
         <action xsi:type="expressions:BinaryExp" operator="BGT">
           <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.17/@declarations.3"/>
@@ -989,6 +1031,7 @@
         </action>
       </transitions>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.17/@declarations.1"/>
       </transitions>
     </libraries>
@@ -1011,6 +1054,7 @@
         </action>
       </transitions>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.18/@declarations.0"/>
         <action xsi:type="statements:AssignmentStmt" operator="PLUSASSIGN">
           <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.18/@declarations.3"/>
@@ -1029,6 +1073,7 @@
         </action>
       </transitions>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.18/@declarations.1"/>
         <vector ref="//@libraries.0/@libraries.18/@declarations.2"/>
         <action xsi:type="statements:AssignmentStmt" operator="PLUSASSIGN">
@@ -1049,6 +1094,7 @@
         </action>
       </transitions>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.18/@declarations.0"/>
         <action xsi:type="expressions:BinaryExp" operator="BGT">
           <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.18/@declarations.3"/>
@@ -1056,6 +1102,7 @@
         </action>
       </transitions>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.18/@declarations.1"/>
       </transitions>
     </libraries>
@@ -1072,24 +1119,28 @@
         <action xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.19/@declarations.3"/>
       </transitions>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.19/@declarations.1"/>
         <vector ref="//@libraries.0/@libraries.19/@declarations.0"/>
         <vector ref="//@libraries.0/@libraries.19/@declarations.2"/>
         <action xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.19/@declarations.3"/>
       </transitions>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.19/@declarations.0"/>
         <action xsi:type="expressions:UnaryExp">
           <operand xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.19/@declarations.3"/>
         </action>
       </transitions>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.19/@declarations.0"/>
         <action xsi:type="expressions:UnaryExp">
           <operand xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.19/@declarations.3"/>
         </action>
       </transitions>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.19/@declarations.1"/>
         <vector ref="//@libraries.0/@libraries.19/@declarations.0"/>
         <vector ref="//@libraries.0/@libraries.19/@declarations.2"/>
@@ -1098,6 +1149,7 @@
         </action>
       </transitions>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.19/@declarations.1"/>
         <vector ref="//@libraries.0/@libraries.19/@declarations.2"/>
         <action xsi:type="statements:AssignmentStmt" operator="MINUSASSIGN">
@@ -1120,6 +1172,7 @@
         <action xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.20/@declarations.3"/>
       </transitions>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.20/@declarations.1"/>
         <action xsi:type="statements:AssignmentStmt">
           <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.20/@declarations.3"/>
@@ -1150,12 +1203,14 @@
         </action>
       </transitions>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.20/@declarations.0"/>
         <action xsi:type="expressions:UnaryExp">
           <operand xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.20/@declarations.3"/>
         </action>
       </transitions>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.20/@declarations.1"/>
       </transitions>
     </libraries>
@@ -1195,6 +1250,7 @@
         </action>
       </transitions>
       <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.22/@declarations.0"/>
         <action xsi:type="statements:AssignmentStmt" operator="MINUSASSIGN">
           <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.22/@declarations.2"/>

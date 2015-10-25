@@ -1,6 +1,6 @@
 package ClockRDL.interpreter.values;
 
-import ClockRDL.interpreter.Frame;
+import ClockRDL.interpreter.Environment;
 import ClockRDL.interpreter.Value;
 
 /**
@@ -8,5 +8,5 @@ import ClockRDL.interpreter.Value;
  */
 public abstract class LValue extends Value {
 
-    public abstract void assign(Value value, Frame env);
+    public abstract void assign(Value value, Environment env);
 }

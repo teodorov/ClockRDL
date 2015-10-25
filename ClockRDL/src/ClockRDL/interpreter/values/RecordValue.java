@@ -15,6 +15,24 @@ public class RecordValue extends Value {
     }
 
     @Override
+    public boolean isAssignmentCompatible(Value value) {
+        if (!value.isRecordValue()) return false;
+        RecordValue val = (RecordValue)value;
+        if (data.size() != val.data.size()) return false;
+        //for now we check only if the fields are the same and that their values are assignment compatible
+
+        for (Map.Entry<String, Value> field: data.entrySet()) {
+            Value otherFieldValue = val.data.get(field.getKey());
+            if (otherFieldValue == null) return false;
+
+            if (!field.getValue().isAssignmentCompatible(otherFieldValue)) return false;
+        }
+
+        return true;
+    }
+
+
+    @Override
     public boolean isRecordValue() {
         return true;
     }

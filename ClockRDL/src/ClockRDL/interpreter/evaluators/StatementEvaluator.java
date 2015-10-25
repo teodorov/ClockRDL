@@ -1,12 +1,13 @@
 package ClockRDL.interpreter.evaluators;
 
-import ClockRDL.interpreter.Frame;
+import ClockRDL.interpreter.Environment;
 import ClockRDL.interpreter.Interpreter;
 import ClockRDL.interpreter.Value;
+import ClockRDL.interpreter.frames.TemporaryFrame;
 import ClockRDL.interpreter.values.BooleanValue;
 import ClockRDL.interpreter.values.IntegerValue;
 import ClockRDL.interpreter.values.LValue;
-import ClockRDL.interpreter.values.NulValue;
+import ClockRDL.interpreter.values.NullValue;
 import ClockRDL.model.kernel.NamedDeclaration;
 import ClockRDL.model.kernel.Statement;
 import ClockRDL.model.statements.*;
@@ -18,19 +19,19 @@ import org.eclipse.emf.ecore.EObject;
  */
 public class StatementEvaluator extends StatementsSwitch<Boolean> {
     Interpreter interpreter;
-    Frame currentFrame;
+    Environment environment;
 
-    public StatementEvaluator(Interpreter interpreter, Frame env) {
+    public StatementEvaluator(Interpreter interpreter, Environment env) {
         this.interpreter = interpreter;
-        this.currentFrame = env;
+        this.environment = env;
     }
 
     @Override
     public Boolean caseAssignmentStmt(AssignmentStmt object) {
 
-        Value rhs = interpreter.evaluate(object.getRhs(), currentFrame);
-        LValue lhs = interpreter.lvalue(object.getLhs(), currentFrame);
-        Value result = NulValue.uniqueInstance;
+        Value rhs = interpreter.evaluate(object.getRhs(), environment);
+        LValue lhs = interpreter.lvalue(object.getLhs(), environment);
+        Value result = NullValue.uniqueInstance;
         Value lhsV;
 
         switch (object.getOperator()) {
@@ -38,49 +39,49 @@ public class StatementEvaluator extends StatementsSwitch<Boolean> {
                 result = rhs;
                 break;
             case ANDASSIGN:
-                lhsV = interpreter.evaluate(object.getLhs(), currentFrame);
+                lhsV = interpreter.evaluate(object.getLhs(), environment);
                 if (!(rhs.isBooleanValue() && lhsV.isBooleanValue())) {
                     throw new RuntimeException("Cannot &= non boolean values");
                 }
                 result = BooleanValue.value(((BooleanValue)lhsV).data && ((BooleanValue)rhs).data);
                 break;
             case ORASSIGN:
-                lhsV = interpreter.evaluate(object.getLhs(), currentFrame);
+                lhsV = interpreter.evaluate(object.getLhs(), environment);
                 if (!(rhs.isBooleanValue() && lhsV.isBooleanValue())) {
                     throw new RuntimeException("Cannot |= non boolean values");
                 }
                 result = BooleanValue.value(((BooleanValue)lhsV).data || ((BooleanValue)rhs).data);
                 break;
             case DIVASSIGN:
-                lhsV = interpreter.evaluate(object.getLhs(), currentFrame);
+                lhsV = interpreter.evaluate(object.getLhs(), environment);
                 if (!(rhs.isIntegerValue() && lhsV.isIntegerValue())) {
                     throw new RuntimeException("Cannot /= non integer values");
                 }
                 result = IntegerValue.value(((IntegerValue) lhsV).data / ((IntegerValue) rhs).data);
                 break;
             case MINUSASSIGN:
-                lhsV = interpreter.evaluate(object.getLhs(), currentFrame);
+                lhsV = interpreter.evaluate(object.getLhs(), environment);
                 if (!(rhs.isIntegerValue() && lhsV.isIntegerValue())) {
                     throw new RuntimeException("Cannot -= non integer values");
                 }
                 result = IntegerValue.value(((IntegerValue) lhsV).data - ((IntegerValue) rhs).data);
                 break;
             case MODASSIGN:
-                lhsV = interpreter.evaluate(object.getLhs(), currentFrame);
+                lhsV = interpreter.evaluate(object.getLhs(), environment);
                 if (!(rhs.isIntegerValue() && lhsV.isIntegerValue())) {
                     throw new RuntimeException("Cannot %= non integer values");
                 }
                 result = IntegerValue.value(((IntegerValue) lhsV).data % ((IntegerValue) rhs).data);
                 break;
             case MULTASSIGN:
-                lhsV = interpreter.evaluate(object.getLhs(), currentFrame);
+                lhsV = interpreter.evaluate(object.getLhs(), environment);
                 if (!(rhs.isIntegerValue() && lhsV.isIntegerValue())) {
                     throw new RuntimeException("Cannot *= non integer values");
                 }
                 result = IntegerValue.value(((IntegerValue) lhsV).data * ((IntegerValue) rhs).data);
                 break;
             case PLUSASSIGN:
-                lhsV = interpreter.evaluate(object.getLhs(), currentFrame);
+                lhsV = interpreter.evaluate(object.getLhs(), environment);
                 if (!(rhs.isIntegerValue() && lhsV.isIntegerValue())) {
                     throw new RuntimeException("Cannot += non integer values");
                 }
@@ -89,39 +90,40 @@ public class StatementEvaluator extends StatementsSwitch<Boolean> {
 
         }
 
-        lhs.assign(result, currentFrame);
+        lhs.assign(result, environment);
+        //the assign statement cannot stop the execution
         return true;
     }
 
     @Override
     public Boolean caseConditionalStmt(ConditionalStmt object) {
-        BooleanValue condition = interpreter.evaluate(object.getCondition(), currentFrame, BooleanValue.class);
+        BooleanValue condition = interpreter.evaluate(object.getCondition(), environment, BooleanValue.class);
 
         if (condition.data == true) {
-            doSwitch(object.getTrueBranch());
+            //the execution stops if a return is hit in the branch
+            return doSwitch(object.getTrueBranch());
         }
-        else {
-            doSwitch(object.getFalseBranch());
-        }
-        return true;
+        //the execution stops if a return is hit in the branch
+        return doSwitch(object.getFalseBranch());
     }
 
     @Override
     public Boolean caseLoopStmt(LoopStmt object) {
-        BooleanValue condition = interpreter.evaluate(object.getCondition(), currentFrame, BooleanValue.class);
+        BooleanValue condition = interpreter.evaluate(object.getCondition(), environment, BooleanValue.class);
 
         while (condition.data == true) {
-            doSwitch(object.getBody());
-            condition = interpreter.evaluate(object.getCondition(), currentFrame, BooleanValue.class);
+            if (!doSwitch(object.getBody())) return false;
+            condition = interpreter.evaluate(object.getCondition(), environment, BooleanValue.class);
         }
         return true;
     }
 
     @Override
     public Boolean caseReturnStmt(ReturnStmt object) {
-        Value result = interpreter.evaluate(object.getExp(), currentFrame);
-        //TODO implement return statement
-        return super.caseReturnStmt(object);
+        Value result = interpreter.evaluate(object.getExp(), environment);
+        environment.returnRegister = result;
+        //returning false stops the execution of the block
+        return false;
     }
 
     @Override
@@ -131,28 +133,34 @@ public class StatementEvaluator extends StatementsSwitch<Boolean> {
         boolean hadFrame = false;
         if (object.getDeclarations().size()>0) {
             hadFrame = true;
-            Frame myFrame = new Frame("block", currentFrame);
-            currentFrame = myFrame;
+            TemporaryFrame myFrame = new TemporaryFrame("block", environment.currentFrame());
+            environment.push(myFrame);
 
             for (NamedDeclaration decl : object.getDeclarations()) {
-                myFrame.bind(decl, interpreter.evaluate(decl, currentFrame));
+                environment.bind(decl, interpreter.evaluate(decl, environment));
             }
         }
 
+        boolean canContinue = true;
         for (Statement stmt : object.getStatements()) {
-            doSwitch(stmt);
+            //stop the block execution if we encounter a return statement
+            if (!doSwitch(stmt)) {
+                canContinue = false;
+                break;
+            }
         }
 
         if (hadFrame) {
-            //restor the current frame
-            currentFrame = currentFrame.getEnclosingEnvironment();
+            //restore the current frame
+            environment.pop();
         }
-        return true;
+        //continue execution of the parent
+        return canContinue;
     }
 
     @Override
     public Boolean defaultCase(EObject object) {
-        KernelEvaluator ev = new KernelEvaluator(interpreter, currentFrame);
+        KernelEvaluator ev = new KernelEvaluator(interpreter, environment);
         ev.doSwitch(object);
         return true;
     }

@@ -1,25 +1,19 @@
 package ClockRDL.interpreter.tests;
 
 import ClockRDL.compiler.ClockRDLBuilderAST;
-import ClockRDL.compiler.ClockRDLCompiler;
 import ClockRDL.compiler.GlobalScope;
-import ClockRDL.compiler.Scope;
 import ClockRDL.grammar.ClockRDLLexer;
 import ClockRDL.grammar.ClockRDLParser;
 import ClockRDL.grammar.tests.ClockRDLGrammarTest;
-import ClockRDL.interpreter.GlobalFrame;
+import ClockRDL.interpreter.Environment;
+import ClockRDL.interpreter.frames.GlobalFrame;
 import ClockRDL.interpreter.Interpreter;
-import ClockRDL.interpreter.Value;
-import ClockRDL.model.kernel.Expression;
-import ClockRDL.model.kernel.NamedDeclaration;
 import ClockRDL.model.statements.BlockStmt;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.junit.Test;
-
-import javax.swing.undo.UndoableEdit;
 
 /**
  * Created by ciprian on 22/10/15.
@@ -86,7 +80,7 @@ public class StatementEvaluatorTest {
     }
 
     public void evaluate(String blockCode) {
-        evaluator.evaluate(compile(blockCode), new GlobalFrame());
+        evaluator.evaluate(compile(blockCode), new Environment());
     }
 
     public BlockStmt compile(String expressionString) {

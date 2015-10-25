@@ -19,6 +19,15 @@ public class ArrayValue extends Value {
     }
 
     @Override
+    public boolean isAssignmentCompatible(Value value) {
+        if (!value.isArrayValue()) return false;
+        ArrayValue val = (ArrayValue)value;
+        if (data.length != val.data.length) return false;
+        //TODO do we care about changing the types of elements in an array by assignment?
+        return true;
+    }
+
+    @Override
     public boolean isArrayValue() {
         return true;
     }

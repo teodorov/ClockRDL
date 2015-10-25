@@ -518,7 +518,7 @@ public class ClockRDLBuilderAST extends ClockRDLBaseListener {
     @Override
     public void enterFunctionDecl(ClockRDLParser.FunctionDeclContext ctx) {
         //create a function scope and set it as current for the children
-        Scope<NamedDeclaration> scope = new Scope<>("fun " + ctx.IDENTIFIER(0).getText(), currentScope);
+        Scope<NamedDeclaration> scope = new Scope<>("fun " + ctx.IDENTIFIER().getText(), currentScope);
         currentScope = scope;
     }
 
@@ -526,7 +526,7 @@ public class ClockRDLBuilderAST extends ClockRDLBaseListener {
     public void exitFunctionDecl(ClockRDLParser.FunctionDeclContext ctx) {
         FunctionDecl decl = declFact.createFunctionDecl();
 
-        String name = ctx.IDENTIFIER(0).getText();
+        String name = ctx.IDENTIFIER().getText();
 
         //add this function to the enclosing scope
         currentScope = currentScope.getEnclosingScope();
@@ -534,14 +534,8 @@ public class ClockRDLBuilderAST extends ClockRDLBaseListener {
 
         decl.setName(name);
 
-        List<ParameterDecl> args = decl.getParameters();
-
-        for (int i = 1; i < ctx.IDENTIFIER().size(); i++) {
-            ParameterDecl pDecl = declFact.createParameterDecl();
-            pDecl.setName(ctx.IDENTIFIER(i).getText());
-
-            args.add(pDecl);
-        }
+        List<ArgumentDecl> arguments = getValue(ctx.argumentDecl(), List.class);
+        if (arguments != null) decl.getArguments().addAll(arguments);
 
         BlockStmt body = getValue(ctx.blockStmt(), BlockStmt.class);
         decl.setBody(body);
@@ -549,11 +543,17 @@ public class ClockRDLBuilderAST extends ClockRDLBaseListener {
         setValue(ctx, decl);
     }
 
+    public BooleanLiteral trueGuard() {
+        BooleanLiteral trueGuard = litFact.createBooleanLiteral();
+        trueGuard.setValue(true);
+        return trueGuard;
+    }
+
     @Override
     public void exitTransitionDecl(ClockRDLParser.TransitionDeclContext ctx) {
         TransitionDecl decl = declFact.createTransitionDecl();
 
-        Expression guard = ctx.guard() != null ? getValue(ctx.guard().expression(), Expression.class) : null;
+        Expression guard = ctx.guard() != null ? getValue(ctx.guard().expression(), Expression.class) : trueGuard();
         decl.setGuard(guard);
 
         List<ClockReference> clocks = decl.getVector();

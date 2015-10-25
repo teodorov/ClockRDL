@@ -1,6 +1,6 @@
 package ClockRDL.interpreter.evaluators;
 
-import ClockRDL.interpreter.Frame;
+import ClockRDL.interpreter.Environment;
 import ClockRDL.interpreter.Interpreter;
 import ClockRDL.model.kernel.Declaration;
 import ClockRDL.model.kernel.Expression;
@@ -12,26 +12,26 @@ import ClockRDL.model.kernel.util.KernelSwitch;
  */
 public class KernelEvaluator extends KernelSwitch {
     Interpreter interpreter;
-    Frame currentFrame;
-    public KernelEvaluator(Interpreter interpreter, Frame env) {
+    Environment environment;
+    public KernelEvaluator(Interpreter interpreter, Environment env) {
         this.interpreter = interpreter;
-        this.currentFrame = env;
+        this.environment = env;
     }
     @Override
     public Object caseDeclaration(Declaration object) {
-        DeclarationEvaluator ev = new DeclarationEvaluator(interpreter, currentFrame);
+        DeclarationEvaluator ev = new DeclarationEvaluator(interpreter, environment);
         return ev.doSwitch(object);
     }
 
     @Override
     public Object caseExpression(Expression object) {
-        ExpressionEvaluator ev = new ExpressionEvaluator(interpreter, currentFrame);
+        ExpressionEvaluator ev = new ExpressionEvaluator(interpreter, environment);
         return ev.doSwitch(object);
     }
 
     @Override
     public Object caseStatement(Statement object) {
-        StatementEvaluator ev = new StatementEvaluator(interpreter, currentFrame);
+        StatementEvaluator ev = new StatementEvaluator(interpreter, environment);
         return ev.doSwitch(object);
     }
 }

@@ -1,8 +1,9 @@
 package ClockRDL.interpreter.evaluators;
 
-import ClockRDL.interpreter.Frame;
+import ClockRDL.interpreter.Environment;
 import ClockRDL.interpreter.Interpreter;
 import ClockRDL.interpreter.Value;
+import ClockRDL.interpreter.frames.AbstractFrame;
 import ClockRDL.interpreter.values.*;
 import ClockRDL.model.expressions.IndexedExp;
 import ClockRDL.model.expressions.ReferenceExp;
@@ -12,7 +13,7 @@ import ClockRDL.model.expressions.SelectedExp;
  * Created by ciprian on 21/10/15.
  */
 public class ExpressionLValueEvaluator extends ExpressionEvaluator {
-    public ExpressionLValueEvaluator(Interpreter interpreter, Frame env) {
+    public ExpressionLValueEvaluator(Interpreter interpreter, Environment env) {
         super(interpreter, env);
     }
 

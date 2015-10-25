@@ -1,9 +1,12 @@
 package ClockRDL.interpreter.evaluators;
 
-import ClockRDL.interpreter.Frame;
+import ClockRDL.interpreter.Environment;
 import ClockRDL.interpreter.Interpreter;
 import ClockRDL.interpreter.Value;
+import ClockRDL.interpreter.frames.AbstractFrame;
+import ClockRDL.interpreter.frames.TemporaryFrame;
 import ClockRDL.interpreter.values.*;
+import ClockRDL.model.declarations.ArgumentDecl;
 import ClockRDL.model.expressions.*;
 import ClockRDL.model.expressions.util.ExpressionsSwitch;
 import ClockRDL.model.kernel.Expression;
@@ -17,11 +20,11 @@ import java.util.List;
 public class ExpressionEvaluator extends ExpressionsSwitch<Value> {
 
     Interpreter interpreter;
-    Frame currentFrame;
+    Environment environment;
 
-    public ExpressionEvaluator(Interpreter interpreter, Frame env) {
+    public ExpressionEvaluator(Interpreter interpreter, Environment env) {
         this.interpreter = interpreter;
-        this.currentFrame = env;
+        this.environment = env;
     }
 
     @Override
@@ -86,26 +89,47 @@ public class ExpressionEvaluator extends ExpressionsSwitch<Value> {
             argList.add(argValue);
         }
 
-        Value result;
         if (opaqueValue.isFunctionValue()) {
             //interpret the functionDeclaration in the current environment extended with the functionFrame
-            result = interpreter.applyClosure(((FunctionValue) opaqueValue), currentFrame, argList);
-        } else {
-            //primitive call
-            result = interpreter.evaluatePrimitive((PrimitiveFunctionValue) opaqueValue, argList);
+            return applyClosure(((FunctionValue) opaqueValue), environment, argList);
+        }
+        //primitive call
+        return (Value) ((PrimitiveFunctionValue)opaqueValue).fct.apply(argList);
+    }
+
+    public Value applyClosure(FunctionValue closure, Environment env, List<Value> argList) {
+        AbstractFrame myFrame = new TemporaryFrame(closure.data.getName(), closure.declarationEnvironment);
+        environment.push(myFrame); //the function should be interpreted in the context of the frame
+
+        List<ArgumentDecl> formalList = closure.data.getArguments();
+        if (argList.size() != formalList.size()) {
+            throw new RuntimeException("Function '"+ closure.data.getName() +"' expects " +  formalList.size() + " arguments but was called with " + argList.size() + " arguments");
         }
 
-        return result;
+        //bind the formals to actuals in the frame of the function
+        int argIndex = 0;
+        for (argIndex = 0; argIndex < argList.size(); argIndex++) {
+            environment.bind(formalList.get(argIndex), argList.get(argIndex));
+        }
+
+        interpreter.evaluate(closure.data.getBody(), environment);
+
+        environment.pop();
+
+        Value returnValue = environment.returnRegister;
+        environment.returnRegister = null;
+
+        return returnValue;
     }
 
     @Override
     public Value caseReferenceExp(ReferenceExp object) {
-        return currentFrame.lookup(object.getRef());
+        return environment.lookup(object.getRef());
     }
 
     @Override
     public Value caseClockReference(ClockReference object) {
-        return currentFrame.lookup(object.getRef());
+        return environment.lookup(object.getRef());
     }
 
     @Override
@@ -286,6 +310,6 @@ public class ExpressionEvaluator extends ExpressionsSwitch<Value> {
 
     @Override
     public Value caseLiteral(Literal object) {
-        return interpreter.evaluate(object, currentFrame);
+        return interpreter.evaluate(object, environment);
     }
 }

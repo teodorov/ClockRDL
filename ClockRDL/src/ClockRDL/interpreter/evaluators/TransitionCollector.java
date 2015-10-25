@@ -1,8 +1,9 @@
 package ClockRDL.interpreter.evaluators;
 
+import ClockRDL.interpreter.Environment;
 import ClockRDL.interpreter.FireableTransition;
-import ClockRDL.interpreter.Frame;
 import ClockRDL.interpreter.Interpreter;
+import ClockRDL.interpreter.frames.AbstractFrame;
 import ClockRDL.interpreter.values.BooleanValue;
 import ClockRDL.model.declarations.CompositeRelationDecl;
 import ClockRDL.model.declarations.PrimitiveRelationDecl;
@@ -18,15 +19,15 @@ import java.util.Set;
  * Created by ciprian on 23/10/15.
  */
 public class TransitionCollector extends DeclarationsSwitch<Set<FireableTransition>> {
-    Frame currentEnvironment;
+    Environment environment;
     Interpreter interpreter;
 
     //Frame is first because it represents the execution context,
     // in the same execution context we cannot have two transitions with the same identity
-    // in different execution contexts we can have two transitions with the same identity
-    public Set<FireableTransition> collectTransitions(RelationInstanceDecl instance, Frame env, Interpreter interpreter) {
+    // in different execution contexts we can have two transitions with the same identity due to relation instantiation
+    public Set<FireableTransition> collectTransitions(RelationInstanceDecl instance, Environment env, Interpreter interpreter) {
         this.interpreter = interpreter;
-        this.currentEnvironment = env;
+        this.environment = env;
         return doSwitch(instance);
     }
 
@@ -34,9 +35,9 @@ public class TransitionCollector extends DeclarationsSwitch<Set<FireableTransiti
     public Set<FireableTransition> casePrimitiveRelationDecl(PrimitiveRelationDecl object) {
         Set<FireableTransition> fireable = Collections.newSetFromMap(new IdentityHashMap<>());
         for (TransitionDecl transitionDecl : object.getTransitions()) {
-            BooleanValue guard = interpreter.evaluate(transitionDecl.getGuard(), currentEnvironment, BooleanValue.class);
+            BooleanValue guard = interpreter.evaluate(transitionDecl.getGuard(), environment, BooleanValue.class);
             if (guard.data) {
-                fireable.add(new FireableTransition(currentEnvironment, transitionDecl));
+                fireable.add(new FireableTransition(environment.currentFrame(), transitionDecl));
             }
         }
         return fireable;
@@ -54,9 +55,11 @@ public class TransitionCollector extends DeclarationsSwitch<Set<FireableTransiti
     @Override
     public Set<FireableTransition> caseRelationInstanceDecl(RelationInstanceDecl object) {
         Set<FireableTransition> fireable;
-        currentEnvironment = (Frame) currentEnvironment.lookup(object);
+        //currentEnvironment = (AbstractFrame) currentEnvironment.lookup(object);
+        environment.push((AbstractFrame)environment.lookup(object));
         fireable = doSwitch(object.getRelation());
-        currentEnvironment = currentEnvironment.getEnclosingEnvironment();
+        //currentEnvironment = currentEnvironment.getEnclosingEnvironment();
+        environment.pop();
         return fireable;
     }
 }

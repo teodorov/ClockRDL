@@ -175,15 +175,14 @@
         <eClassifiers xsi:type="ecore:EClass" name="ArgumentDecl" eSuperTypes="#/0/model/kernel/NamedDeclaration"/>
         <eClassifiers xsi:type="ecore:EClass" name="AbstractFunctionDecl" abstract="true"
             eSuperTypes="#/0/model/kernel/NamedDeclaration">
-          <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
-              eType="#/0/model/declarations/ParameterDecl" containment="true"/>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="arguments" upperBound="-1"
+              eType="#/0/model/declarations/ArgumentDecl" containment="true"/>
         </eClassifiers>
         <eClassifiers xsi:type="ecore:EClass" name="PrimitiveFunctionDecl" eSuperTypes="#/0/model/declarations/AbstractFunctionDecl"/>
         <eClassifiers xsi:type="ecore:EClass" name="FunctionDecl" eSuperTypes="#/0/model/declarations/AbstractFunctionDecl">
           <eStructuralFeatures xsi:type="ecore:EReference" name="body" lowerBound="1"
               eType="#/0/model/statements/BlockStmt" containment="true"/>
         </eClassifiers>
-        <eClassifiers xsi:type="ecore:EClass" name="ParameterDecl" eSuperTypes="#/0/model/kernel/NamedDeclaration"/>
         <eClassifiers xsi:type="ecore:EClass" name="TransitionDecl" eSuperTypes="#/0/model/kernel/Declaration">
           <eStructuralFeatures xsi:type="ecore:EReference" name="guard" eType="#/0/model/kernel/Expression"
               containment="true"/>

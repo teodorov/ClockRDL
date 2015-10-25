@@ -28,6 +28,11 @@ public class IntegerValue extends Value {
     }
 
     @Override
+    public boolean isAssignmentCompatible(Value value) {
+        return value.isIntegerValue();
+    }
+
+    @Override
     public boolean isIntegerValue() {
         return true;
     }

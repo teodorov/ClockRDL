@@ -59,6 +59,14 @@ public class QueueValue extends Value {
     }
 
     @Override
+    public boolean isAssignmentCompatible(Value value) {
+        if (!value.isQueueValue()) return false;
+        //TODO do we care about changing the types of elements in an array by assignment?
+        return true;
+    }
+
+
+    @Override
     public boolean isQueueValue() {
         return true;
     }

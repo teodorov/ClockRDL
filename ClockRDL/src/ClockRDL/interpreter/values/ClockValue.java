@@ -17,4 +17,9 @@ public class ClockValue extends Value {
     public String toString() {
         return literal.getName();
     }
+
+    @Override
+    public boolean isAssignmentCompatible(Value value) {
+        return false;
+    }
 }

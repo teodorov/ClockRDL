@@ -1,6 +1,6 @@
 package ClockRDL.interpreter.evaluators;
 
-import ClockRDL.interpreter.Frame;
+import ClockRDL.interpreter.Environment;
 import ClockRDL.interpreter.Interpreter;
 import ClockRDL.interpreter.Value;
 import ClockRDL.interpreter.values.*;
@@ -17,10 +17,10 @@ import java.util.List;
  */
 public class LiteralEvaluator extends LiteralsSwitch<Value> {
     Interpreter interpreter;
-    Frame currentFrame;
-    public LiteralEvaluator(Interpreter interpreter, Frame env) {
+    Environment environment;
+    public LiteralEvaluator(Interpreter interpreter, Environment env) {
         this.interpreter = interpreter;
-        currentFrame = env;
+        this.environment = env;
     }
 
     @Override
@@ -83,6 +83,6 @@ public class LiteralEvaluator extends LiteralsSwitch<Value> {
 
     @Override
     public Value caseExpression(Expression object) {
-        return interpreter.evaluate(object, currentFrame);
+        return interpreter.evaluate(object, environment);
     }
 }

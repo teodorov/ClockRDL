@@ -1,7 +1,7 @@
 package ClockRDL.interpreter.values;
 
-import ClockRDL.interpreter.Frame;
 import ClockRDL.interpreter.Value;
+import ClockRDL.interpreter.frames.AbstractFrame;
 import ClockRDL.model.declarations.FunctionDecl;
 
 /**
@@ -14,7 +14,12 @@ public class FunctionValue extends Value{
     //this way I get to know what is the environment captured
     //I don't really need this since all the functions are statically bound
     //I would need this if I ever wanted to pass functions as arguments
-    public Frame declarationEnvironment;
+    public AbstractFrame declarationEnvironment;
+
+    @Override
+    public boolean isAssignmentCompatible(Value value) {
+        return false;
+    }
 
     @Override
     public boolean isFunctionValue() {

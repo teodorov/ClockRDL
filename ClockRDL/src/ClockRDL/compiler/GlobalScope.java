@@ -1,7 +1,7 @@
 package ClockRDL.compiler;
 
+import ClockRDL.model.declarations.ArgumentDecl;
 import ClockRDL.model.declarations.DeclarationsFactory;
-import ClockRDL.model.declarations.ParameterDecl;
 import ClockRDL.model.declarations.PrimitiveFunctionDecl;
 import ClockRDL.model.kernel.NamedDeclaration;
 
@@ -16,11 +16,11 @@ public class GlobalScope extends Scope {
         super("global");
 
         symbols = new HashMap<String, NamedDeclaration>() {{
-            ParameterDecl predicate = DeclarationsFactory.eINSTANCE.createParameterDecl();
+            ArgumentDecl predicate = DeclarationsFactory.eINSTANCE.createArgumentDecl();
             predicate.setName("predicate");
             PrimitiveFunctionDecl fct = DeclarationsFactory.eINSTANCE.createPrimitiveFunctionDecl();
             fct.setName("assert");
-            fct.getParameters().add(predicate);
+            fct.getArguments().add(predicate);
             this.put("assert", fct);
 
             fct = DeclarationsFactory.eINSTANCE.createPrimitiveFunctionDecl();

@@ -1,6 +1,6 @@
 package ClockRDL.interpreter.values;
 
-import ClockRDL.interpreter.Frame;
+import ClockRDL.interpreter.Environment;
 import ClockRDL.interpreter.Value;
 
 /**
@@ -16,9 +16,14 @@ public class LValueRecordField extends LValue {
     }
 
     @Override
-    public void assign(Value value, Frame env) {
+    public void assign(Value value, Environment env) {
         if (prefix.data.get(fieldName) == null)
             throw new RuntimeException("The record does not contain a field named " + fieldName);
         prefix.data.put(fieldName, value);
+    }
+
+    @Override
+    public boolean isAssignmentCompatible(Value value) {
+        return false;
     }
 }

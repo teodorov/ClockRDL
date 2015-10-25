@@ -22,7 +22,7 @@ variableDecl : VARIABLE initializedIdentifier+ SEMICOLON;
 constantDecl : CONST initializedIdentifier+ SEMICOLON;
 initializedIdentifier : IDENTIFIER (ASSIGN expression)?;
 
-functionDecl : DEFINE IDENTIFIER (LPAREN IDENTIFIER+ RPAREN)? blockStmt;
+functionDecl : DEFINE IDENTIFIER argumentDecl? blockStmt;
 
 primitiveRelationBody: transitionDecl+;
 transitionDecl: guard? vector action?;

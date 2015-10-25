@@ -7,9 +7,11 @@ import java.util.Map;
 /**
  * Created by ciprian on 20/10/15.
  */
-public class Value {
+public abstract class Value {
 
     public Map<String, PrimitiveFunctionValue> primitives;
+
+    public abstract boolean isAssignmentCompatible(Value value);
 
     public boolean isArrayValue() {
         return false;
@@ -27,4 +29,5 @@ public class Value {
     public boolean isFunctionValue() { return false; }
     public boolean isNulValue() {return false;}
     public boolean isPrimitiveFunctionValue() { return false; }
+    public boolean isFrame() {return false; }
 }

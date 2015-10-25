@@ -1,6 +1,7 @@
 package ClockRDL.interpreter;
 
 import ClockRDL.interpreter.evaluators.*;
+import ClockRDL.interpreter.frames.AbstractFrame;
 import ClockRDL.interpreter.values.FunctionValue;
 import ClockRDL.interpreter.values.LValue;
 import ClockRDL.interpreter.values.PrimitiveFunctionValue;
@@ -18,19 +19,7 @@ import java.util.Set;
  */
 public class Interpreter {
 
-    public Value evaluatePrimitive(PrimitiveFunctionValue opaqueValue, List<Value> argList) {
-        if (argList.size() == 0) {
-            return (Value)opaqueValue.fct.apply(new Object());
-        }
-
-        return (Value) opaqueValue.fct.apply(argList);
-    }
-
-    public Value applyClosure(FunctionValue closure, Frame env, List<Value> argList) {
-        throw new RuntimeException("Feature mission");
-    }
-
-    public <T extends Value> T evaluate(Expression exp, Frame env, Class<T> type) {
+    public <T extends Value> T evaluate(Expression exp, Environment env, Class<T> type) {
         ExpressionEvaluator evaluator = new ExpressionEvaluator(this, env);
         Value value = evaluator.doSwitch(exp);
         if (type.isAssignableFrom(value.getClass())) {
@@ -40,11 +29,11 @@ public class Interpreter {
         //return null;
     }
 
-    public Value evaluate(Expression exp, Frame env) {
+    public Value evaluate(Expression exp, Environment env) {
         return evaluate(exp, env, Value.class);
     }
 
-    public <T extends Value> T evaluate(Literal exp, Frame env, Class<T> type) {
+    public <T extends Value> T evaluate(Literal exp, Environment env, Class<T> type) {
         LiteralEvaluator evaluator = new LiteralEvaluator(this, env);
         Value value = evaluator.doSwitch(exp);
         if (type.isAssignableFrom(value.getClass())) {
@@ -54,11 +43,11 @@ public class Interpreter {
         //return null;
     }
 
-    public Value evaluate(Literal exp, Frame env) {
+    public Value evaluate(Literal exp, Environment env) {
         return evaluate(exp, env, Value.class);
     }
 
-    public LValue lvalue(Expression exp, Frame env) {
+    public LValue lvalue(Expression exp, Environment env) {
         ExpressionLValueEvaluator evaluator = new ExpressionLValueEvaluator(this, env);
         Value value = evaluator.doSwitch(exp);
         if (value instanceof LValue) {
@@ -67,30 +56,36 @@ public class Interpreter {
         throw new RuntimeException("Expected an Lvalue but found " + value.getClass().getSimpleName());
     }
 
-    public Value evaluate(NamedDeclaration decl, Frame env) {
+    public Value evaluate(NamedDeclaration decl, Environment env) {
         DeclarationEvaluator evaluator = new DeclarationEvaluator(this, env);
 
         return evaluator.doSwitch(decl);
     }
 
-    public void evaluate(Statement statement, Frame env) {
+    public void evaluate(Statement statement, Environment env) {
         StatementEvaluator evaluator = new StatementEvaluator(this, env);
 
         evaluator.doSwitch(statement);
     }
 
-    public void initialize(RelationInstanceDecl instance,  Frame env) {
+    public void initialize(RelationInstanceDecl instance,  Environment env) {
+        env.setMemory(new Memory());
         DeclarationEvaluator evaluator = new DeclarationEvaluator(this, env);
         env.bind(instance, evaluator.doSwitch(instance));
     }
 
-    public Set<FireableTransition> fireableTransitions(RelationInstanceDecl instance,  Frame env) {
+    public Set<FireableTransition> fireableTransitions(RelationInstanceDecl instance,  Environment env) {
         TransitionCollector collector = new TransitionCollector();
         return collector.collectTransitions(instance, env, this);
     }
 
-    public void evaluate(FireableTransition fireableTransition) {
-        this.evaluate(fireableTransition.transition.getAction(), fireableTransition.executionContext);
+    public void evaluate(FireableTransition fireableTransition, Environment env) {
+        Statement action = fireableTransition.transition.getAction();
+        if (action != null) {
+            env.push(fireableTransition.executionContext);
+            this.evaluate(fireableTransition.transition.getAction(), env);
+            env.pop();
+        }
     }
 
     //TODO clarify the difference between the Scope computed during parsing and the execution Frame

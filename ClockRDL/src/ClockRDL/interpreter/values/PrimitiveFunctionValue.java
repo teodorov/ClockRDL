@@ -17,6 +17,11 @@ public class PrimitiveFunctionValue extends Value {
     }
 
     @Override
+    public boolean isAssignmentCompatible(Value value) {
+        return false;
+    }
+
+    @Override
     public boolean isPrimitiveFunctionValue() {
         return true;
     }

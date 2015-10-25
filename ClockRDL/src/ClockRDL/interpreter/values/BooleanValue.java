@@ -19,6 +19,11 @@ public class BooleanValue extends Value {
     }
 
     @Override
+    public boolean isAssignmentCompatible(Value value) {
+        return value.isBooleanValue();
+    }
+
+    @Override
     public boolean isBooleanValue() {
         return true;
     }
@@ -34,4 +39,5 @@ public class BooleanValue extends Value {
     public String toString() {
         return Boolean.toString(data);
     }
+
 }

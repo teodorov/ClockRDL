@@ -5,8 +5,10 @@ import ClockRDL.compiler.GlobalScope;
 import ClockRDL.grammar.ClockRDLLexer;
 import ClockRDL.grammar.ClockRDLParser;
 import ClockRDL.interpreter.*;
+import ClockRDL.interpreter.frames.AbstractFrame;
+import ClockRDL.interpreter.values.ClockValue;
 import ClockRDL.interpreter.values.IntegerValue;
-import ClockRDL.interpreter.values.NulValue;
+import ClockRDL.interpreter.values.NullValue;
 import ClockRDL.model.declarations.RelationInstanceDecl;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -39,63 +41,93 @@ public class InterpreterTests {
             "\t}\n" +
             "}";
     String simpleInstance = "i:simple.counter10";
+    String simpleInstanceWithClocks = "i:simple.counter10(a: clock[x] b:clock[y])";
+
+    String libWithFct="library rel {\n"+
+            " relation r \n"+
+            " var x := 2;\n"+
+            " def fct( a ) {\n"+
+            "    return a + x\n"+
+            " }\n"+
+            " {\n"+
+            " {} [{ assert(2 x) x := fct(1)+5 assert(8 x)}]\n"+
+            " }\n"+
+            "}";
+    String fctInstance = "j:rel.r";
+
 
     @Test
-    public void simpleRelationExecutionOnce() {
-        Frame env = initialize(simpleInstance, simpleLib);
-        RelationInstanceDecl instance = env.getMapping().keySet().toArray(new RelationInstanceDecl[1])[0];
+    public void libWithFctExecutionOnce() {
+        Environment env = initialize(fctInstance, libWithFct);
+        RelationInstanceDecl instance = (RelationInstanceDecl)env.find("j");
         Set<FireableTransition> fireable = evaluator.fireableTransitions(instance, env);
 
         for (FireableTransition transition : fireable) {
-            evaluator.evaluate(transition);
+            evaluator.evaluate(transition, env);
         }
 
-        Frame instanceFrame = (Frame) env.lookup("i");
+        AbstractFrame instanceFrame = (AbstractFrame) env.lookup("j");
 
-        IntegerValue valueX = (IntegerValue) instanceFrame.lookup("x");
+        IntegerValue valueX = (IntegerValue) instanceFrame.lookup("x", env.getMemory());
+        assertEquals(8, valueX.data);
+    }
+
+    @Test
+    public void simpleRelationExecutionOnce() {
+        Environment env = initialize(simpleInstance, simpleLib);
+        RelationInstanceDecl instance = (RelationInstanceDecl)env.find("i");
+        Set<FireableTransition> fireable = evaluator.fireableTransitions(instance, env);
+
+        for (FireableTransition transition : fireable) {
+            evaluator.evaluate(transition, env);
+        }
+
+        AbstractFrame instanceFrame = (AbstractFrame) env.lookup("i");
+
+        IntegerValue valueX = (IntegerValue) instanceFrame.lookup("x", env.getMemory());
         assertEquals(2, valueX.data);
     }
 
     @Test
     public void simpleRelationExecution10() {
-        Frame env = initialize(simpleInstance, simpleLib);
-        RelationInstanceDecl instance = env.getMapping().keySet().toArray(new RelationInstanceDecl[1])[0];
+        Environment env = initialize(simpleInstance, simpleLib);
+        RelationInstanceDecl instance = (RelationInstanceDecl)env.find("i");
 
-        Frame instanceFrame = (Frame) env.lookup("i");
+        AbstractFrame instanceFrame = (AbstractFrame) env.lookup("i");
         for (int i = 1; i < 11; i++) {
 
-            IntegerValue valueX = (IntegerValue) instanceFrame.lookup("x");
+            IntegerValue valueX = (IntegerValue) instanceFrame.lookup("x", env.getMemory());
             assertEquals(i, valueX.data);
 
             Set<FireableTransition> fireable = evaluator.fireableTransitions(instance, env);
             for (FireableTransition transition : fireable) {
-                evaluator.evaluate(transition);
+                evaluator.evaluate(transition, env);
             }
         }
     }
 
     @Test
     public void simpleRelationExecution30() {
-        Frame env = initialize(simpleInstance, simpleLib);
-        RelationInstanceDecl instance = env.getMapping().keySet().toArray(new RelationInstanceDecl[1])[0];
+        Environment env = initialize(simpleInstance, simpleLib);
+        RelationInstanceDecl instance = (RelationInstanceDecl)env.find("i");
 
-        Frame instanceFrame = (Frame) env.lookup("i");
+        AbstractFrame instanceFrame = (AbstractFrame) env.lookup("i");
         for (int i = 1; i < 30; i++) {
 
-            IntegerValue valueX = (IntegerValue) instanceFrame.lookup("x");
+            IntegerValue valueX = (IntegerValue) instanceFrame.lookup("x", env.getMemory());
             assertEquals(i % 11, valueX.data);
 
             Set<FireableTransition> fireable = evaluator.fireableTransitions(instance, env);
             for (FireableTransition transition : fireable) {
-                evaluator.evaluate(transition);
+                evaluator.evaluate(transition, env);
             }
         }
     }
 
     @Test
     public void simpleRelationFireables() {
-        Frame env = initialize(simpleInstance, simpleLib);
-        RelationInstanceDecl instance = env.getMapping().keySet().toArray(new RelationInstanceDecl[1])[0];
+        Environment env = initialize(simpleInstance, simpleLib);
+        RelationInstanceDecl instance = (RelationInstanceDecl)env.find("i");
         Set<FireableTransition> fireable = evaluator.fireableTransitions(instance, env);
 
         assertEquals(1, fireable.size());
@@ -103,24 +135,41 @@ public class InterpreterTests {
 
     @Test
     public void simpleRelationInitialization() {
-        Frame env = initialize(simpleInstance, simpleLib);
-        Frame instanceFrame = (Frame) env.lookup("i");
+        Environment env = initialize(simpleInstance, simpleLib);
+        AbstractFrame instanceFrame = (AbstractFrame) env.lookup("i");
         assertNotNull(instanceFrame);
 
-        IntegerValue initialX = (IntegerValue) instanceFrame.lookup("x");
+        IntegerValue initialX = (IntegerValue) instanceFrame.lookup("x", env.getMemory());
         assertEquals(1, initialX.data);
 
-        Value initialA = instanceFrame.lookup("a");
-        assertEquals(NulValue.uniqueInstance, initialA);
+        Value initialA = instanceFrame.lookup("a", env.getMemory());
+        assertEquals(NullValue.uniqueInstance, initialA);
 
-        Value initialB = instanceFrame.lookup("b");
-        assertEquals(NulValue.uniqueInstance, initialB);
+        Value initialB = instanceFrame.lookup("b", env.getMemory());
+        assertEquals(NullValue.uniqueInstance, initialB);
 
     }
 
-    public Frame initialize(String blockCode, String libraryString) {
+    @Test
+    public void simpleRelationWithClocksInitialization() {
+        Environment env = initialize(simpleInstanceWithClocks, simpleLib);
+        AbstractFrame instanceFrame = (AbstractFrame) env.lookup("i");
+        assertNotNull(instanceFrame);
+
+        IntegerValue initialX = (IntegerValue) instanceFrame.lookup("x", env.getMemory());
+        assertEquals(1, initialX.data);
+
+        Value initialA = instanceFrame.lookup("a", env.getMemory());
+        assertEquals("x", ((ClockValue)initialA).toString());
+
+        Value initialB = instanceFrame.lookup("b", env.getMemory());
+        assertEquals("y", ((ClockValue)initialB).toString());
+
+    }
+
+    public Environment initialize(String blockCode, String libraryString) {
         RelationInstanceDecl instance = compile(blockCode, libraryString);
-        GlobalFrame env = new GlobalFrame();
+        Environment env = new Environment();
 
         evaluator.initialize(instance, env);
         return env;
