@@ -797,9 +797,11 @@ public class ClockRDLBuilderAST extends ClockRDLBaseListener {
         RepositoryDecl decl;
         if (ctx.instanceDecl() == null) {
             decl = declFact.createRepositoryDecl();
+            decl.setName("top");
         }
         else {
             decl = declFact.createSystemDecl();
+            decl.setName("top");
             RelationInstanceDecl instanceDecl = getValue(ctx.instanceDecl(), RelationInstanceDecl.class);
             ((SystemDecl)decl).setRoot(instanceDecl);
         }

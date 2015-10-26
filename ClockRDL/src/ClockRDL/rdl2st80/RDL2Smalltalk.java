@@ -402,9 +402,23 @@ public class RDL2Smalltalk {
                     + " action: [" + statementTransformer.doSwitch(object.getAction()) + "]]";
         }
 
+        private String buildHierarchicalClassName(AbstractRelationDecl decl) {
+            String name = "";
+            NamedDeclaration current = decl;
+            while (current != null) {
+                name = "_" + current.getName() + name;
+                current = (NamedDeclaration)((LibraryItemDecl)current).getLibrary();
+                if (!(current instanceof LibraryDecl)) {
+                    break;
+                }
+            }
+            return name;
+        }
+
         @Override
         public String casePrimitiveRelationDecl(PrimitiveRelationDecl object) {
-            String className = "Relation"+object.getName();
+            String className = "Relation"+buildHierarchicalClassName(object);
+
             //TODO if one day we will have shared vars I need to handle the args
             String initializeCode = "";
             String setterString = "";
@@ -419,7 +433,7 @@ public class RDL2Smalltalk {
                     continue;
                 }
                 if (cR instanceof FunctionDecl) {
-                    functionBody += annotateMethod(className,doSwitch(cR));
+                    functionBody += annotateMethod(className, doSwitch(cR));
                     continue;
                 }
                 doSwitch(cR);

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ASCII"?>
-<declarations:RepositoryDecl xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:declarations="RDL/model/declarations" xmlns:expressions="RDL/model/expressions" xmlns:literals="RDL/model/expressions/literals" xmlns:statements="RDL/model/statements">
+<declarations:RepositoryDecl xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:declarations="RDL/model/declarations" xmlns:expressions="RDL/model/expressions" xmlns:literals="RDL/model/expressions/literals" xmlns:statements="RDL/model/statements" name="top">
   <libraries xsi:type="declarations:LibraryDecl" name="kernel">
     <libraries xsi:type="declarations:PrimitiveRelationDecl" name="tick">
       <declarations xsi:type="declarations:ClockDecl" name="clk"/>
