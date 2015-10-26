@@ -11,8 +11,11 @@ import ClockRDL.model.kernel.NamedDeclaration;
 import ClockRDL.model.kernel.Statement;
 import ClockRDL.model.statements.*;
 import ClockRDL.model.statements.util.StatementsSwitch;
+import javafx.scene.input.DataFormat;
 import org.eclipse.emf.ecore.EObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.Map;
@@ -127,11 +130,17 @@ public class RDL2Smalltalk {
 
             String function = doSwitch(object.getPrefix());
 
-            return "(" + function + " value: " + argList  + ")";
+            if (object.getPrefix() instanceof SelectedExp) {
+                return "(" + function + " value: " + argList + ")";
+            }
+            return "("+function + argList+ ")";
         }
 
         @Override
         public String caseReferenceExp(ReferenceExp object) {
+            if (object.getRef() instanceof FunctionDecl) {
+                return "self " + object.getRef().getName() + ": ";
+            }
             return "(self " + object.getRef().getName() + ")";
         }
 
@@ -374,7 +383,7 @@ public class RDL2Smalltalk {
 
         @Override
         public String caseFunctionDecl(FunctionDecl object) {
-            return object.getName() + ": args\n\t" + statementTransformer.doSwitch(object.getBody());
+            return object.getName() + ": args \n\t" + statementTransformer.doSwitch(object.getBody()) + "\n\n";
         }
 
         @Override
@@ -395,6 +404,7 @@ public class RDL2Smalltalk {
 
         @Override
         public String casePrimitiveRelationDecl(PrimitiveRelationDecl object) {
+            String className = "Relation"+object.getName();
             //TODO if one day we will have shared vars I need to handle the args
             String initializeCode = "";
             String setterString = "";
@@ -404,20 +414,20 @@ public class RDL2Smalltalk {
             for (NamedDeclaration cR : object.getDeclarations()) {
                 if (cR instanceof ClockDecl) {
                     doSwitch(cR);
-                    setterString += setters.get(cR) + "\n";
-                    getterString += getters.get(cR) + "\n";
+                    setterString += annotateMethod(className, setters.get(cR)) + "\n";
+                    getterString += annotateMethod(className, getters.get(cR)) + "\n";
                     continue;
                 }
                 if (cR instanceof FunctionDecl) {
-                    functionBody += doSwitch(cR);
+                    functionBody += annotateMethod(className,doSwitch(cR));
                     continue;
                 }
                 doSwitch(cR);
                 if (initialization.get(cR) != null) {
                     initializeCode += initialization.get(cR) + "\n";
                 }
-                setterString += setters.get(cR) + "\n";
-                getterString += getters.get(cR) + "\n";
+                setterString += annotateMethod(className,setters.get(cR)) + "\n";
+                getterString += annotateMethod(className,getters.get(cR)) + "\n";
             }
 
             initializeCode = "initialize\n" +
@@ -434,20 +444,26 @@ public class RDL2Smalltalk {
             int transitionID = 1;
             for (TransitionDecl tr : object.getTransitions()) {
 
-                transitionMethods += "t" + transitionID + "\n\t" + doSwitch(tr) + "\n\n";
+                transitionMethods += annotateMethod(className,"t" + transitionID + "\n\t" + doSwitch(tr)) + "\n\n";
                 transitionCollection += "\t(t := self t"+transitionID+") ifNotNil: [ transitions add: t ].\n";
                 transitionID++;
             }
 
             transitionCollection += "\t^transitions";
 
-            String classString = "RDLPrimitiveRelation subclass: #Relation"+object.getName()+"\n" +
+
+            String classString = "''!\nRDLPrimitiveRelation subclass: #"+ className+"\n" +
                     "\tinstanceVariableNames: ''\n" +
                     "\tclassVariableNames: ''\n" +
-                    "\tcategory: 'RDL-RelationLibrary-Test'\n\n";
+                    "\tcategory: 'RDL-RelationLibrary-Test'!\n\n";
 
-            relationString.put(object, classString + initializeCode + functionBody + getterString + setterString + transitionMethods + transitionCollection);
-            return "Relation" + object.getName();
+            relationString.put(object, classString + annotateMethod(className, initializeCode) + functionBody + getterString + setterString + transitionMethods + annotateMethod(className, transitionCollection));
+            return className;
+        }
+
+        public String annotateMethod(String className, String body) {
+            SimpleDateFormat dataFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm");
+            return "!"+className+" methodsFor: 'generated' stamp: 'CiprianTeodorov " + dataFormat.format(new Date()) + "'!\n" + body + "! !\n\n";
         }
 
         @Override
