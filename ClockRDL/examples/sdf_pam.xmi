@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="ASCII"?>
 <declarations:RepositoryDecl xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:declarations="RDL/model/declarations" xmlns:expressions="RDL/model/expressions" xmlns:literals="RDL/model/expressions/literals" xmlns:statements="RDL/model/statements">
   <libraries xsi:type="declarations:LibraryDecl" name="kernel">
+    <libraries xsi:type="declarations:PrimitiveRelationDecl" name="tick">
+      <declarations xsi:type="declarations:ClockDecl" name="clk"/>
+      <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
+        <vector ref="//@libraries.0/@libraries.0/@declarations.0"/>
+      </transitions>
+    </libraries>
     <libraries xsi:type="declarations:PrimitiveRelationDecl" name="alternates">
       <declarations xsi:type="declarations:ClockDecl" name="a"/>
       <declarations xsi:type="declarations:ClockDecl" name="b"/>
@@ -8,24 +15,24 @@
         <initial xsi:type="literals:BooleanLiteral" value="true"/>
       </declarations>
       <transitions>
-        <guard xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.0/@declarations.2"/>
-        <vector ref="//@libraries.0/@libraries.0/@declarations.0"/>
+        <guard xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.1/@declarations.2"/>
+        <vector ref="//@libraries.0/@libraries.1/@declarations.0"/>
         <action xsi:type="statements:AssignmentStmt">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.0/@declarations.2"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.1/@declarations.2"/>
           <rhs xsi:type="expressions:UnaryExp">
-            <operand xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.0/@declarations.2"/>
+            <operand xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.1/@declarations.2"/>
           </rhs>
         </action>
       </transitions>
       <transitions>
         <guard xsi:type="expressions:UnaryExp">
-          <operand xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.0/@declarations.2"/>
+          <operand xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.1/@declarations.2"/>
         </guard>
-        <vector ref="//@libraries.0/@libraries.0/@declarations.1"/>
+        <vector ref="//@libraries.0/@libraries.1/@declarations.1"/>
         <action xsi:type="statements:AssignmentStmt">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.0/@declarations.2"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.1/@declarations.2"/>
           <rhs xsi:type="expressions:UnaryExp">
-            <operand xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.0/@declarations.2"/>
+            <operand xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.1/@declarations.2"/>
           </rhs>
         </action>
       </transitions>
@@ -35,8 +42,8 @@
       <declarations xsi:type="declarations:ClockDecl" name="b"/>
       <transitions>
         <guard xsi:type="literals:BooleanLiteral" value="true"/>
-        <vector ref="//@libraries.0/@libraries.1/@declarations.0"/>
-        <vector ref="//@libraries.0/@libraries.1/@declarations.1"/>
+        <vector ref="//@libraries.0/@libraries.2/@declarations.0"/>
+        <vector ref="//@libraries.0/@libraries.2/@declarations.1"/>
       </transitions>
     </libraries>
     <libraries xsi:type="declarations:PrimitiveRelationDecl" name="coincidence3">
@@ -45,27 +52,14 @@
       <declarations xsi:type="declarations:ClockDecl" name="c"/>
       <transitions>
         <guard xsi:type="literals:BooleanLiteral" value="true"/>
-        <vector ref="//@libraries.0/@libraries.2/@declarations.0"/>
-        <vector ref="//@libraries.0/@libraries.2/@declarations.1"/>
-        <vector ref="//@libraries.0/@libraries.2/@declarations.2"/>
+        <vector ref="//@libraries.0/@libraries.3/@declarations.0"/>
+        <vector ref="//@libraries.0/@libraries.3/@declarations.1"/>
+        <vector ref="//@libraries.0/@libraries.3/@declarations.2"/>
       </transitions>
     </libraries>
     <libraries xsi:type="declarations:PrimitiveRelationDecl" name="exclusion2">
       <declarations xsi:type="declarations:ClockDecl" name="a"/>
       <declarations xsi:type="declarations:ClockDecl" name="b"/>
-      <transitions>
-        <guard xsi:type="literals:BooleanLiteral" value="true"/>
-        <vector ref="//@libraries.0/@libraries.3/@declarations.0"/>
-      </transitions>
-      <transitions>
-        <guard xsi:type="literals:BooleanLiteral" value="true"/>
-        <vector ref="//@libraries.0/@libraries.3/@declarations.1"/>
-      </transitions>
-    </libraries>
-    <libraries xsi:type="declarations:PrimitiveRelationDecl" name="exclusion3">
-      <declarations xsi:type="declarations:ClockDecl" name="a"/>
-      <declarations xsi:type="declarations:ClockDecl" name="b"/>
-      <declarations xsi:type="declarations:ClockDecl" name="c"/>
       <transitions>
         <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.4/@declarations.0"/>
@@ -74,16 +68,11 @@
         <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.4/@declarations.1"/>
       </transitions>
-      <transitions>
-        <guard xsi:type="literals:BooleanLiteral" value="true"/>
-        <vector ref="//@libraries.0/@libraries.4/@declarations.2"/>
-      </transitions>
     </libraries>
-    <libraries xsi:type="declarations:PrimitiveRelationDecl" name="exclusion4">
+    <libraries xsi:type="declarations:PrimitiveRelationDecl" name="exclusion3">
       <declarations xsi:type="declarations:ClockDecl" name="a"/>
       <declarations xsi:type="declarations:ClockDecl" name="b"/>
       <declarations xsi:type="declarations:ClockDecl" name="c"/>
-      <declarations xsi:type="declarations:ClockDecl" name="d"/>
       <transitions>
         <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.5/@declarations.0"/>
@@ -96,17 +85,12 @@
         <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.5/@declarations.2"/>
       </transitions>
-      <transitions>
-        <guard xsi:type="literals:BooleanLiteral" value="true"/>
-        <vector ref="//@libraries.0/@libraries.5/@declarations.3"/>
-      </transitions>
     </libraries>
-    <libraries xsi:type="declarations:PrimitiveRelationDecl" name="exclusion5">
+    <libraries xsi:type="declarations:PrimitiveRelationDecl" name="exclusion4">
       <declarations xsi:type="declarations:ClockDecl" name="a"/>
       <declarations xsi:type="declarations:ClockDecl" name="b"/>
       <declarations xsi:type="declarations:ClockDecl" name="c"/>
       <declarations xsi:type="declarations:ClockDecl" name="d"/>
-      <declarations xsi:type="declarations:ClockDecl" name="e"/>
       <transitions>
         <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.6/@declarations.0"/>
@@ -123,18 +107,13 @@
         <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.6/@declarations.3"/>
       </transitions>
-      <transitions>
-        <guard xsi:type="literals:BooleanLiteral" value="true"/>
-        <vector ref="//@libraries.0/@libraries.6/@declarations.4"/>
-      </transitions>
     </libraries>
-    <libraries xsi:type="declarations:PrimitiveRelationDecl" name="exclusion6">
+    <libraries xsi:type="declarations:PrimitiveRelationDecl" name="exclusion5">
       <declarations xsi:type="declarations:ClockDecl" name="a"/>
       <declarations xsi:type="declarations:ClockDecl" name="b"/>
       <declarations xsi:type="declarations:ClockDecl" name="c"/>
       <declarations xsi:type="declarations:ClockDecl" name="d"/>
       <declarations xsi:type="declarations:ClockDecl" name="e"/>
-      <declarations xsi:type="declarations:ClockDecl" name="f"/>
       <transitions>
         <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.7/@declarations.0"/>
@@ -155,9 +134,37 @@
         <guard xsi:type="literals:BooleanLiteral" value="true"/>
         <vector ref="//@libraries.0/@libraries.7/@declarations.4"/>
       </transitions>
+    </libraries>
+    <libraries xsi:type="declarations:PrimitiveRelationDecl" name="exclusion6">
+      <declarations xsi:type="declarations:ClockDecl" name="a"/>
+      <declarations xsi:type="declarations:ClockDecl" name="b"/>
+      <declarations xsi:type="declarations:ClockDecl" name="c"/>
+      <declarations xsi:type="declarations:ClockDecl" name="d"/>
+      <declarations xsi:type="declarations:ClockDecl" name="e"/>
+      <declarations xsi:type="declarations:ClockDecl" name="f"/>
       <transitions>
         <guard xsi:type="literals:BooleanLiteral" value="true"/>
-        <vector ref="//@libraries.0/@libraries.7/@declarations.5"/>
+        <vector ref="//@libraries.0/@libraries.8/@declarations.0"/>
+      </transitions>
+      <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
+        <vector ref="//@libraries.0/@libraries.8/@declarations.1"/>
+      </transitions>
+      <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
+        <vector ref="//@libraries.0/@libraries.8/@declarations.2"/>
+      </transitions>
+      <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
+        <vector ref="//@libraries.0/@libraries.8/@declarations.3"/>
+      </transitions>
+      <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
+        <vector ref="//@libraries.0/@libraries.8/@declarations.4"/>
+      </transitions>
+      <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
+        <vector ref="//@libraries.0/@libraries.8/@declarations.5"/>
       </transitions>
     </libraries>
     <libraries xsi:type="declarations:PrimitiveRelationDecl" name="subclocking">
@@ -165,12 +172,12 @@
       <declarations xsi:type="declarations:ClockDecl" name="b"/>
       <transitions>
         <guard xsi:type="literals:BooleanLiteral" value="true"/>
-        <vector ref="//@libraries.0/@libraries.8/@declarations.1"/>
+        <vector ref="//@libraries.0/@libraries.9/@declarations.1"/>
       </transitions>
       <transitions>
         <guard xsi:type="literals:BooleanLiteral" value="true"/>
-        <vector ref="//@libraries.0/@libraries.8/@declarations.0"/>
-        <vector ref="//@libraries.0/@libraries.8/@declarations.1"/>
+        <vector ref="//@libraries.0/@libraries.9/@declarations.0"/>
+        <vector ref="//@libraries.0/@libraries.9/@declarations.1"/>
       </transitions>
     </libraries>
     <libraries xsi:type="declarations:PrimitiveRelationDecl" name="precedence">
@@ -189,34 +196,34 @@
       </declarations>
       <transitions>
         <guard xsi:type="expressions:UnaryExp">
-          <operand xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.9/@declarations.4"/>
+          <operand xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.10/@declarations.4"/>
         </guard>
-        <vector ref="//@libraries.0/@libraries.9/@declarations.0"/>
-        <vector ref="//@libraries.0/@libraries.9/@declarations.1"/>
+        <vector ref="//@libraries.0/@libraries.10/@declarations.0"/>
+        <vector ref="//@libraries.0/@libraries.10/@declarations.1"/>
         <action xsi:type="expressions:BinaryExp" operator="BAND">
           <lhs xsi:type="expressions:ParenExp">
             <exp xsi:type="expressions:BinaryExp">
               <lhs xsi:type="expressions:BinaryExp" operator="BLT">
-                <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.9/@declarations.3"/>
+                <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.10/@declarations.3"/>
                 <rhs xsi:type="literals:IntegerLiteral"/>
               </lhs>
               <rhs xsi:type="expressions:BinaryExp" operator="BGT">
-                <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.9/@declarations.3"/>
-                <rhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.9/@declarations.2"/>
+                <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.10/@declarations.3"/>
+                <rhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.10/@declarations.2"/>
               </rhs>
             </exp>
           </lhs>
           <rhs xsi:type="expressions:BinaryExp" operator="BEQ">
-            <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.9/@declarations.2"/>
+            <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.10/@declarations.2"/>
             <rhs xsi:type="literals:IntegerLiteral"/>
           </rhs>
         </action>
       </transitions>
       <transitions>
         <guard xsi:type="literals:BooleanLiteral" value="true"/>
-        <vector ref="//@libraries.0/@libraries.9/@declarations.0"/>
+        <vector ref="//@libraries.0/@libraries.10/@declarations.0"/>
         <action xsi:type="statements:AssignmentStmt" operator="PLUSASSIGN">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.9/@declarations.2"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.10/@declarations.2"/>
           <rhs xsi:type="literals:IntegerLiteral" value="1"/>
         </action>
       </transitions>
@@ -225,23 +232,23 @@
           <lhs xsi:type="expressions:ParenExp">
             <exp xsi:type="expressions:BinaryExp">
               <lhs xsi:type="expressions:BinaryExp" operator="BLT">
-                <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.9/@declarations.3"/>
+                <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.10/@declarations.3"/>
                 <rhs xsi:type="literals:IntegerLiteral"/>
               </lhs>
               <rhs xsi:type="expressions:BinaryExp" operator="BGT">
-                <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.9/@declarations.3"/>
-                <rhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.9/@declarations.2"/>
+                <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.10/@declarations.3"/>
+                <rhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.10/@declarations.2"/>
               </rhs>
             </exp>
           </lhs>
           <rhs xsi:type="expressions:BinaryExp" operator="BNE">
-            <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.9/@declarations.2"/>
+            <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.10/@declarations.2"/>
             <rhs xsi:type="literals:IntegerLiteral"/>
           </rhs>
         </guard>
-        <vector ref="//@libraries.0/@libraries.9/@declarations.0"/>
+        <vector ref="//@libraries.0/@libraries.10/@declarations.0"/>
         <action xsi:type="statements:AssignmentStmt" operator="PLUSASSIGN">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.9/@declarations.2"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.10/@declarations.2"/>
           <rhs xsi:type="literals:IntegerLiteral" value="1"/>
         </action>
       </transitions>
@@ -250,23 +257,23 @@
           <lhs xsi:type="expressions:ParenExp">
             <exp xsi:type="expressions:BinaryExp">
               <lhs xsi:type="expressions:BinaryExp" operator="BLT">
-                <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.9/@declarations.3"/>
+                <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.10/@declarations.3"/>
                 <rhs xsi:type="literals:IntegerLiteral"/>
               </lhs>
               <rhs xsi:type="expressions:BinaryExp" operator="BGE">
-                <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.9/@declarations.3"/>
-                <rhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.9/@declarations.2"/>
+                <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.10/@declarations.3"/>
+                <rhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.10/@declarations.2"/>
               </rhs>
             </exp>
           </lhs>
           <rhs xsi:type="expressions:BinaryExp" operator="BNE">
-            <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.9/@declarations.2"/>
+            <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.10/@declarations.2"/>
             <rhs xsi:type="literals:IntegerLiteral"/>
           </rhs>
         </guard>
-        <vector ref="//@libraries.0/@libraries.9/@declarations.1"/>
+        <vector ref="//@libraries.0/@libraries.10/@declarations.1"/>
         <action xsi:type="statements:AssignmentStmt" operator="MINUSASSIGN">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.9/@declarations.2"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.10/@declarations.2"/>
           <rhs xsi:type="literals:IntegerLiteral" value="1"/>
         </action>
       </transitions>
@@ -276,36 +283,36 @@
       <declarations xsi:type="declarations:ClockDecl" name="a"/>
       <declarations xsi:type="declarations:ClockDecl" name="c"/>
       <declarations xsi:type="declarations:VariableDecl" name="state">
-        <initial xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.10/@arguments.0"/>
+        <initial xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.11/@arguments.0"/>
       </declarations>
       <transitions>
         <guard xsi:type="expressions:BinaryExp" operator="BEQ">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.10/@declarations.2"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.11/@declarations.2"/>
           <rhs xsi:type="literals:IntegerLiteral"/>
         </guard>
-        <vector ref="//@libraries.0/@libraries.10/@declarations.0"/>
+        <vector ref="//@libraries.0/@libraries.11/@declarations.0"/>
         <action xsi:type="expressions:BinaryExp" operator="BEQ">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.10/@declarations.2"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.11/@declarations.2"/>
           <rhs xsi:type="literals:IntegerLiteral" value="1"/>
         </action>
       </transitions>
       <transitions>
         <guard xsi:type="literals:BooleanLiteral" value="true"/>
-        <vector ref="//@libraries.0/@libraries.10/@declarations.0"/>
-        <vector ref="//@libraries.0/@libraries.10/@declarations.1"/>
+        <vector ref="//@libraries.0/@libraries.11/@declarations.0"/>
+        <vector ref="//@libraries.0/@libraries.11/@declarations.1"/>
         <action xsi:type="statements:AssignmentStmt">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.10/@declarations.2"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.11/@declarations.2"/>
           <rhs xsi:type="literals:IntegerLiteral"/>
         </action>
       </transitions>
       <transitions>
         <guard xsi:type="expressions:BinaryExp" operator="BNE">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.10/@declarations.2"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.11/@declarations.2"/>
           <rhs xsi:type="literals:IntegerLiteral" value="1"/>
         </guard>
-        <vector ref="//@libraries.0/@libraries.10/@declarations.0"/>
+        <vector ref="//@libraries.0/@libraries.11/@declarations.0"/>
         <action xsi:type="statements:AssignmentStmt" operator="MINUSASSIGN">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.10/@declarations.2"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.11/@declarations.2"/>
           <rhs xsi:type="literals:IntegerLiteral" value="1"/>
         </action>
       </transitions>
@@ -324,20 +331,20 @@
             <condition xsi:type="expressions:BinaryExp" operator="BAND">
               <lhs xsi:type="expressions:BinaryExp" operator="BLE">
                 <lhs xsi:type="expressions:BinaryExp" operator="BPLUS">
-                  <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.11/@declarations.2"/>
+                  <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.12/@declarations.2"/>
                   <rhs xsi:type="literals:IntegerLiteral" value="1"/>
                 </lhs>
                 <rhs xsi:type="expressions:FunctionCallExp">
                   <prefix xsi:type="expressions:SelectedExp" selector="size">
-                    <prefix xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.11/@declarations.3"/>
+                    <prefix xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.12/@declarations.3"/>
                   </prefix>
                 </rhs>
               </lhs>
               <rhs xsi:type="expressions:BinaryExp" operator="BEQ">
                 <lhs xsi:type="expressions:IndexedExp">
-                  <prefix xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.11/@declarations.3"/>
+                  <prefix xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.12/@declarations.3"/>
                   <index xsi:type="expressions:BinaryExp" operator="BPLUS">
-                    <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.11/@declarations.2"/>
+                    <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.12/@declarations.2"/>
                     <rhs xsi:type="literals:IntegerLiteral" value="1"/>
                   </index>
                 </lhs>
@@ -362,19 +369,19 @@
               <operand xsi:type="expressions:ParenExp">
                 <exp xsi:type="expressions:BinaryExp" operator="BAND">
                   <lhs xsi:type="expressions:BinaryExp" operator="BEQ">
-                    <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.11/@declarations.4"/>
+                    <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.12/@declarations.4"/>
                     <rhs xsi:type="expressions:FunctionCallExp">
                       <prefix xsi:type="expressions:SelectedExp" selector="size">
-                        <prefix xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.11/@declarations.3"/>
+                        <prefix xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.12/@declarations.3"/>
                       </prefix>
                     </rhs>
                   </lhs>
                   <rhs xsi:type="expressions:BinaryExp" operator="BGT">
                     <lhs xsi:type="expressions:BinaryExp" operator="BPLUS">
-                      <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.11/@declarations.2"/>
+                      <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.12/@declarations.2"/>
                       <rhs xsi:type="literals:IntegerLiteral" value="1"/>
                     </lhs>
-                    <rhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.11/@declarations.4"/>
+                    <rhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.12/@declarations.4"/>
                   </rhs>
                 </exp>
               </operand>
@@ -383,24 +390,24 @@
               <statements xsi:type="statements:ConditionalStmt">
                 <condition xsi:type="expressions:BinaryExp" operator="BEQ">
                   <lhs xsi:type="expressions:BinaryExp" operator="BPLUS">
-                    <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.11/@declarations.2"/>
+                    <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.12/@declarations.2"/>
                     <rhs xsi:type="literals:IntegerLiteral" value="1"/>
                   </lhs>
                   <rhs xsi:type="expressions:FunctionCallExp">
                     <prefix xsi:type="expressions:SelectedExp" selector="size">
-                      <prefix xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.11/@declarations.3"/>
+                      <prefix xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.12/@declarations.3"/>
                     </prefix>
                   </rhs>
                 </condition>
                 <trueBranch>
                   <statements xsi:type="statements:AssignmentStmt">
-                    <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.11/@declarations.2"/>
-                    <rhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.11/@declarations.4"/>
+                    <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.12/@declarations.2"/>
+                    <rhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.12/@declarations.4"/>
                   </statements>
                 </trueBranch>
                 <falseBranch>
                   <statements xsi:type="statements:AssignmentStmt" operator="PLUSASSIGN">
-                    <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.11/@declarations.2"/>
+                    <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.12/@declarations.2"/>
                     <rhs xsi:type="literals:IntegerLiteral" value="1"/>
                   </statements>
                 </falseBranch>
@@ -413,19 +420,19 @@
         <guard xsi:type="expressions:BinaryExp" operator="BAND">
           <lhs xsi:type="expressions:BinaryExp" operator="BLE">
             <lhs xsi:type="expressions:BinaryExp" operator="BPLUS">
-              <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.11/@declarations.2"/>
+              <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.12/@declarations.2"/>
               <rhs xsi:type="literals:IntegerLiteral" value="1"/>
             </lhs>
-            <rhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.11/@declarations.4"/>
+            <rhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.12/@declarations.4"/>
           </lhs>
           <rhs xsi:type="expressions:FunctionCallExp">
-            <prefix xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.11/@declarations.5"/>
+            <prefix xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.12/@declarations.5"/>
           </rhs>
         </guard>
-        <vector ref="//@libraries.0/@libraries.11/@declarations.0"/>
-        <vector ref="//@libraries.0/@libraries.11/@declarations.1"/>
+        <vector ref="//@libraries.0/@libraries.12/@declarations.0"/>
+        <vector ref="//@libraries.0/@libraries.12/@declarations.1"/>
         <action xsi:type="statements:AssignmentStmt" operator="PLUSASSIGN">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.11/@declarations.2"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.12/@declarations.2"/>
           <rhs xsi:type="literals:IntegerLiteral" value="1"/>
         </action>
       </transitions>
@@ -433,20 +440,20 @@
         <guard xsi:type="expressions:BinaryExp" operator="BAND">
           <lhs xsi:type="expressions:BinaryExp" operator="BLE">
             <lhs xsi:type="expressions:BinaryExp" operator="BPLUS">
-              <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.11/@declarations.2"/>
+              <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.12/@declarations.2"/>
               <rhs xsi:type="literals:IntegerLiteral" value="1"/>
             </lhs>
-            <rhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.11/@declarations.4"/>
+            <rhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.12/@declarations.4"/>
           </lhs>
           <rhs xsi:type="expressions:UnaryExp">
             <operand xsi:type="expressions:FunctionCallExp">
-              <prefix xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.11/@declarations.5"/>
+              <prefix xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.12/@declarations.5"/>
             </operand>
           </rhs>
         </guard>
-        <vector ref="//@libraries.0/@libraries.11/@declarations.0"/>
+        <vector ref="//@libraries.0/@libraries.12/@declarations.0"/>
         <action xsi:type="statements:AssignmentStmt" operator="PLUSASSIGN">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.11/@declarations.2"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.12/@declarations.2"/>
           <rhs xsi:type="literals:IntegerLiteral" value="1"/>
         </action>
       </transitions>
@@ -454,39 +461,39 @@
         <guard xsi:type="expressions:BinaryExp" operator="BAND">
           <lhs xsi:type="expressions:BinaryExp" operator="BGT">
             <lhs xsi:type="expressions:BinaryExp" operator="BPLUS">
-              <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.11/@declarations.2"/>
+              <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.12/@declarations.2"/>
               <rhs xsi:type="literals:IntegerLiteral" value="1"/>
             </lhs>
-            <rhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.11/@declarations.4"/>
+            <rhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.12/@declarations.4"/>
           </lhs>
           <rhs xsi:type="expressions:FunctionCallExp">
-            <prefix xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.11/@declarations.5"/>
+            <prefix xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.12/@declarations.5"/>
           </rhs>
         </guard>
-        <vector ref="//@libraries.0/@libraries.11/@declarations.0"/>
-        <vector ref="//@libraries.0/@libraries.11/@declarations.1"/>
+        <vector ref="//@libraries.0/@libraries.12/@declarations.0"/>
+        <vector ref="//@libraries.0/@libraries.12/@declarations.1"/>
         <action xsi:type="expressions:FunctionCallExp">
-          <prefix xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.11/@declarations.6"/>
+          <prefix xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.12/@declarations.6"/>
         </action>
       </transitions>
       <transitions>
         <guard xsi:type="expressions:BinaryExp" operator="BAND">
           <lhs xsi:type="expressions:BinaryExp" operator="BGT">
             <lhs xsi:type="expressions:BinaryExp" operator="BPLUS">
-              <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.11/@declarations.2"/>
+              <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.12/@declarations.2"/>
               <rhs xsi:type="literals:IntegerLiteral" value="1"/>
             </lhs>
-            <rhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.11/@declarations.4"/>
+            <rhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.12/@declarations.4"/>
           </lhs>
           <rhs xsi:type="expressions:UnaryExp">
             <operand xsi:type="expressions:FunctionCallExp">
-              <prefix xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.11/@declarations.5"/>
+              <prefix xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.12/@declarations.5"/>
             </operand>
           </rhs>
         </guard>
-        <vector ref="//@libraries.0/@libraries.11/@declarations.0"/>
+        <vector ref="//@libraries.0/@libraries.12/@declarations.0"/>
         <action xsi:type="expressions:FunctionCallExp">
-          <prefix xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.11/@declarations.6"/>
+          <prefix xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.12/@declarations.6"/>
         </action>
       </transitions>
     </libraries>
@@ -496,19 +503,19 @@
       <declarations xsi:type="declarations:ClockDecl" name="c"/>
       <transitions>
         <guard xsi:type="literals:BooleanLiteral" value="true"/>
-        <vector ref="//@libraries.0/@libraries.12/@declarations.0"/>
-        <vector ref="//@libraries.0/@libraries.12/@declarations.2"/>
+        <vector ref="//@libraries.0/@libraries.13/@declarations.0"/>
+        <vector ref="//@libraries.0/@libraries.13/@declarations.2"/>
       </transitions>
       <transitions>
         <guard xsi:type="literals:BooleanLiteral" value="true"/>
-        <vector ref="//@libraries.0/@libraries.12/@declarations.1"/>
-        <vector ref="//@libraries.0/@libraries.12/@declarations.2"/>
+        <vector ref="//@libraries.0/@libraries.13/@declarations.1"/>
+        <vector ref="//@libraries.0/@libraries.13/@declarations.2"/>
       </transitions>
       <transitions>
         <guard xsi:type="literals:BooleanLiteral" value="true"/>
-        <vector ref="//@libraries.0/@libraries.12/@declarations.0"/>
-        <vector ref="//@libraries.0/@libraries.12/@declarations.1"/>
-        <vector ref="//@libraries.0/@libraries.12/@declarations.2"/>
+        <vector ref="//@libraries.0/@libraries.13/@declarations.0"/>
+        <vector ref="//@libraries.0/@libraries.13/@declarations.1"/>
+        <vector ref="//@libraries.0/@libraries.13/@declarations.2"/>
       </transitions>
     </libraries>
     <libraries xsi:type="declarations:PrimitiveRelationDecl" name="intersection">
@@ -517,17 +524,17 @@
       <declarations xsi:type="declarations:ClockDecl" name="c"/>
       <transitions>
         <guard xsi:type="literals:BooleanLiteral" value="true"/>
-        <vector ref="//@libraries.0/@libraries.13/@declarations.0"/>
+        <vector ref="//@libraries.0/@libraries.14/@declarations.0"/>
       </transitions>
       <transitions>
         <guard xsi:type="literals:BooleanLiteral" value="true"/>
-        <vector ref="//@libraries.0/@libraries.13/@declarations.1"/>
+        <vector ref="//@libraries.0/@libraries.14/@declarations.1"/>
       </transitions>
       <transitions>
         <guard xsi:type="literals:BooleanLiteral" value="true"/>
-        <vector ref="//@libraries.0/@libraries.13/@declarations.0"/>
-        <vector ref="//@libraries.0/@libraries.13/@declarations.1"/>
-        <vector ref="//@libraries.0/@libraries.13/@declarations.2"/>
+        <vector ref="//@libraries.0/@libraries.14/@declarations.0"/>
+        <vector ref="//@libraries.0/@libraries.14/@declarations.1"/>
+        <vector ref="//@libraries.0/@libraries.14/@declarations.2"/>
       </transitions>
     </libraries>
     <libraries xsi:type="declarations:PrimitiveRelationDecl" name="deferred">
@@ -545,15 +552,15 @@
           </declarations>
           <statements xsi:type="statements:LoopStmt">
             <condition xsi:type="expressions:BinaryExp" operator="BLT">
-              <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.14/@declarations.5/@body/@declarations.0"/>
-              <rhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.14/@declarations.3"/>
+              <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.5/@body/@declarations.0"/>
+              <rhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.3"/>
             </condition>
             <body>
               <statements xsi:type="statements:ConditionalStmt">
                 <condition xsi:type="expressions:BinaryExp" operator="BEQ">
                   <lhs xsi:type="expressions:IndexedExp">
-                    <prefix xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.14/@declarations.4"/>
-                    <index xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.14/@declarations.5/@body/@declarations.0"/>
+                    <prefix xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.4"/>
+                    <index xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.5/@body/@declarations.0"/>
                   </lhs>
                   <rhs xsi:type="literals:IntegerLiteral" value="1"/>
                 </condition>
@@ -564,7 +571,7 @@
                 </trueBranch>
               </statements>
               <statements xsi:type="statements:AssignmentStmt" operator="PLUSASSIGN">
-                <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.14/@declarations.5/@body/@declarations.0"/>
+                <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.5/@body/@declarations.0"/>
                 <rhs xsi:type="literals:IntegerLiteral" value="1"/>
               </statements>
             </body>
@@ -581,30 +588,30 @@
           </declarations>
           <statements xsi:type="statements:LoopStmt">
             <condition xsi:type="expressions:BinaryExp" operator="BLT">
-              <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.14/@declarations.6/@body/@declarations.0"/>
-              <rhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.14/@declarations.3"/>
+              <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.6/@body/@declarations.0"/>
+              <rhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.3"/>
             </condition>
             <body>
               <statements xsi:type="statements:ConditionalStmt">
                 <condition xsi:type="expressions:BinaryExp" operator="BGT">
                   <lhs xsi:type="expressions:IndexedExp">
-                    <prefix xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.14/@declarations.4"/>
-                    <index xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.14/@declarations.6/@body/@declarations.0"/>
+                    <prefix xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.4"/>
+                    <index xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.6/@body/@declarations.0"/>
                   </lhs>
                   <rhs xsi:type="literals:IntegerLiteral"/>
                 </condition>
                 <trueBranch>
-                  <statements xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.14/@declarations.4"/>
+                  <statements xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.4"/>
                   <statements xsi:type="statements:AssignmentStmt" operator="MINUSASSIGN">
                     <lhs xsi:type="literals:ArrayLiteral">
-                      <value xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.14/@declarations.6/@body/@declarations.0"/>
+                      <value xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.6/@body/@declarations.0"/>
                     </lhs>
                     <rhs xsi:type="literals:IntegerLiteral" value="1"/>
                   </statements>
                 </trueBranch>
               </statements>
               <statements xsi:type="statements:AssignmentStmt" operator="PLUSASSIGN">
-                <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.14/@declarations.6/@body/@declarations.0"/>
+                <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.6/@body/@declarations.0"/>
                 <rhs xsi:type="literals:IntegerLiteral" value="1"/>
               </statements>
             </body>
@@ -613,37 +620,37 @@
       </declarations>
       <transitions>
         <guard xsi:type="expressions:BinaryExp" operator="BEQ">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.14/@declarations.3"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.3"/>
           <rhs xsi:type="literals:IntegerLiteral"/>
         </guard>
-        <vector ref="//@libraries.0/@libraries.14/@declarations.1"/>
+        <vector ref="//@libraries.0/@libraries.15/@declarations.1"/>
         <action xsi:type="expressions:BinaryExp" operator="BEQ">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.14/@declarations.3"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.3"/>
           <rhs xsi:type="literals:IntegerLiteral"/>
         </action>
       </transitions>
       <transitions>
         <guard xsi:type="literals:BooleanLiteral" value="true"/>
-        <vector ref="//@libraries.0/@libraries.14/@declarations.0"/>
+        <vector ref="//@libraries.0/@libraries.15/@declarations.0"/>
         <action xsi:type="statements:AssignmentStmt">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.14/@declarations.3"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.3"/>
           <rhs xsi:type="expressions:BinaryExp" operator="BPLUS">
-            <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.14/@declarations.3"/>
+            <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.3"/>
             <rhs xsi:type="literals:IntegerLiteral" value="2"/>
           </rhs>
         </action>
       </transitions>
       <transitions>
         <guard xsi:type="expressions:BinaryExp" operator="BEQ">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.14/@declarations.3"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.3"/>
           <rhs xsi:type="literals:IntegerLiteral"/>
         </guard>
-        <vector ref="//@libraries.0/@libraries.14/@declarations.0"/>
-        <vector ref="//@libraries.0/@libraries.14/@declarations.1"/>
+        <vector ref="//@libraries.0/@libraries.15/@declarations.0"/>
+        <vector ref="//@libraries.0/@libraries.15/@declarations.1"/>
         <action xsi:type="statements:AssignmentStmt">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.14/@declarations.3"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.3"/>
           <rhs xsi:type="expressions:BinaryExp" operator="BPLUS">
-            <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.14/@declarations.3"/>
+            <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.3"/>
             <rhs xsi:type="literals:IntegerLiteral" value="2"/>
           </rhs>
         </action>
@@ -651,54 +658,54 @@
       <transitions>
         <guard xsi:type="expressions:BinaryExp" operator="BAND">
           <lhs xsi:type="expressions:BinaryExp" operator="BNE">
-            <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.14/@declarations.3"/>
+            <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.3"/>
             <rhs xsi:type="literals:IntegerLiteral"/>
           </lhs>
           <rhs xsi:type="expressions:FunctionCallExp">
-            <prefix xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.14/@declarations.5"/>
+            <prefix xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.5"/>
           </rhs>
         </guard>
-        <vector ref="//@libraries.0/@libraries.14/@declarations.1"/>
-        <vector ref="//@libraries.0/@libraries.14/@declarations.2"/>
+        <vector ref="//@libraries.0/@libraries.15/@declarations.1"/>
+        <vector ref="//@libraries.0/@libraries.15/@declarations.2"/>
         <action xsi:type="expressions:FunctionCallExp">
-          <prefix xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.14/@declarations.6"/>
+          <prefix xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.6"/>
         </action>
       </transitions>
       <transitions>
         <guard xsi:type="expressions:BinaryExp" operator="BAND">
           <lhs xsi:type="expressions:BinaryExp" operator="BNE">
-            <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.14/@declarations.3"/>
+            <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.3"/>
             <rhs xsi:type="literals:IntegerLiteral"/>
           </lhs>
           <rhs xsi:type="expressions:UnaryExp">
             <operand xsi:type="expressions:FunctionCallExp">
-              <prefix xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.14/@declarations.5"/>
+              <prefix xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.5"/>
             </operand>
           </rhs>
         </guard>
-        <vector ref="//@libraries.0/@libraries.14/@declarations.1"/>
+        <vector ref="//@libraries.0/@libraries.15/@declarations.1"/>
         <action xsi:type="expressions:FunctionCallExp">
-          <prefix xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.14/@declarations.6"/>
+          <prefix xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.6"/>
         </action>
       </transitions>
       <transitions>
         <guard xsi:type="expressions:BinaryExp" operator="BNE">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.14/@declarations.3"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.3"/>
           <rhs xsi:type="literals:IntegerLiteral"/>
         </guard>
-        <vector ref="//@libraries.0/@libraries.14/@declarations.0"/>
+        <vector ref="//@libraries.0/@libraries.15/@declarations.0"/>
         <action xsi:type="statements:ConditionalStmt">
           <condition xsi:type="expressions:BinaryExp" operator="BGE">
             <lhs xsi:type="expressions:SelectedExp" selector="size">
-              <prefix xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.14/@declarations.4"/>
+              <prefix xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.4"/>
             </lhs>
-            <rhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.14/@declarations.3"/>
+            <rhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.3"/>
           </condition>
           <trueBranch>
             <statements xsi:type="statements:AssignmentStmt">
-              <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.14/@declarations.3"/>
+              <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.3"/>
               <rhs xsi:type="expressions:BinaryExp" operator="BPLUS">
-                <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.14/@declarations.3"/>
+                <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.3"/>
                 <rhs xsi:type="literals:IntegerLiteral" value="1"/>
               </rhs>
             </statements>
@@ -708,33 +715,33 @@
       <transitions>
         <guard xsi:type="expressions:BinaryExp" operator="BAND">
           <lhs xsi:type="expressions:BinaryExp" operator="BNE">
-            <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.14/@declarations.3"/>
+            <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.3"/>
             <rhs xsi:type="literals:IntegerLiteral"/>
           </lhs>
           <rhs xsi:type="expressions:FunctionCallExp">
-            <prefix xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.14/@declarations.5"/>
+            <prefix xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.5"/>
           </rhs>
         </guard>
-        <vector ref="//@libraries.0/@libraries.14/@declarations.0"/>
-        <vector ref="//@libraries.0/@libraries.14/@declarations.1"/>
-        <vector ref="//@libraries.0/@libraries.14/@declarations.2"/>
-        <action xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.14/@declarations.6"/>
+        <vector ref="//@libraries.0/@libraries.15/@declarations.0"/>
+        <vector ref="//@libraries.0/@libraries.15/@declarations.1"/>
+        <vector ref="//@libraries.0/@libraries.15/@declarations.2"/>
+        <action xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.6"/>
       </transitions>
       <transitions>
         <guard xsi:type="expressions:BinaryExp" operator="BAND">
           <lhs xsi:type="expressions:BinaryExp" operator="BNE">
-            <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.14/@declarations.3"/>
+            <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.3"/>
             <rhs xsi:type="literals:IntegerLiteral"/>
           </lhs>
           <rhs xsi:type="expressions:UnaryExp">
             <operand xsi:type="expressions:FunctionCallExp">
-              <prefix xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.14/@declarations.5"/>
+              <prefix xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.5"/>
             </operand>
           </rhs>
         </guard>
-        <vector ref="//@libraries.0/@libraries.14/@declarations.0"/>
-        <vector ref="//@libraries.0/@libraries.14/@declarations.1"/>
-        <action xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.14/@declarations.6"/>
+        <vector ref="//@libraries.0/@libraries.15/@declarations.0"/>
+        <vector ref="//@libraries.0/@libraries.15/@declarations.1"/>
+        <action xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.6"/>
       </transitions>
     </libraries>
     <libraries xsi:type="declarations:PrimitiveRelationDecl" name="supremum">
@@ -746,99 +753,99 @@
       </declarations>
       <transitions>
         <guard xsi:type="expressions:BinaryExp" operator="BEQ">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.3"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.16/@declarations.3"/>
           <rhs xsi:type="literals:IntegerLiteral"/>
         </guard>
-        <vector ref="//@libraries.0/@libraries.15/@declarations.0"/>
-        <vector ref="//@libraries.0/@libraries.15/@declarations.1"/>
-        <vector ref="//@libraries.0/@libraries.15/@declarations.2"/>
+        <vector ref="//@libraries.0/@libraries.16/@declarations.0"/>
+        <vector ref="//@libraries.0/@libraries.16/@declarations.1"/>
+        <vector ref="//@libraries.0/@libraries.16/@declarations.2"/>
         <action xsi:type="expressions:BinaryExp" operator="BEQ">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.3"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.16/@declarations.3"/>
           <rhs xsi:type="literals:IntegerLiteral"/>
         </action>
       </transitions>
       <transitions>
         <guard xsi:type="literals:BooleanLiteral" value="true"/>
-        <vector ref="//@libraries.0/@libraries.15/@declarations.0"/>
+        <vector ref="//@libraries.0/@libraries.16/@declarations.0"/>
         <action xsi:type="statements:AssignmentStmt" operator="PLUSASSIGN">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.3"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.16/@declarations.3"/>
           <rhs xsi:type="literals:IntegerLiteral" value="1"/>
         </action>
       </transitions>
       <transitions>
         <guard xsi:type="expressions:BinaryExp" operator="BEQ">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.3"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.16/@declarations.3"/>
           <rhs xsi:type="literals:IntegerLiteral"/>
         </guard>
-        <vector ref="//@libraries.0/@libraries.15/@declarations.1"/>
+        <vector ref="//@libraries.0/@libraries.16/@declarations.1"/>
         <action xsi:type="statements:AssignmentStmt" operator="MINUSASSIGN">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.3"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.16/@declarations.3"/>
           <rhs xsi:type="literals:IntegerLiteral" value="1"/>
         </action>
       </transitions>
       <transitions>
         <guard xsi:type="expressions:BinaryExp" operator="BGT">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.3"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.16/@declarations.3"/>
           <rhs xsi:type="literals:IntegerLiteral"/>
         </guard>
-        <vector ref="//@libraries.0/@libraries.15/@declarations.0"/>
-        <vector ref="//@libraries.0/@libraries.15/@declarations.1"/>
-        <vector ref="//@libraries.0/@libraries.15/@declarations.2"/>
+        <vector ref="//@libraries.0/@libraries.16/@declarations.0"/>
+        <vector ref="//@libraries.0/@libraries.16/@declarations.1"/>
+        <vector ref="//@libraries.0/@libraries.16/@declarations.2"/>
         <action xsi:type="expressions:BinaryExp" operator="BGT">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.3"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.16/@declarations.3"/>
           <rhs xsi:type="literals:IntegerLiteral"/>
         </action>
       </transitions>
       <transitions>
         <guard xsi:type="literals:BooleanLiteral" value="true"/>
-        <vector ref="//@libraries.0/@libraries.15/@declarations.0"/>
+        <vector ref="//@libraries.0/@libraries.16/@declarations.0"/>
         <action xsi:type="statements:AssignmentStmt" operator="PLUSASSIGN">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.3"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.16/@declarations.3"/>
           <rhs xsi:type="literals:IntegerLiteral" value="1"/>
         </action>
       </transitions>
       <transitions>
         <guard xsi:type="expressions:BinaryExp" operator="BGT">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.3"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.16/@declarations.3"/>
           <rhs xsi:type="literals:IntegerLiteral"/>
         </guard>
-        <vector ref="//@libraries.0/@libraries.15/@declarations.1"/>
-        <vector ref="//@libraries.0/@libraries.15/@declarations.2"/>
+        <vector ref="//@libraries.0/@libraries.16/@declarations.1"/>
+        <vector ref="//@libraries.0/@libraries.16/@declarations.2"/>
         <action xsi:type="statements:AssignmentStmt" operator="MINUSASSIGN">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.3"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.16/@declarations.3"/>
           <rhs xsi:type="literals:IntegerLiteral" value="1"/>
         </action>
       </transitions>
       <transitions>
         <guard xsi:type="expressions:BinaryExp" operator="BLT">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.3"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.16/@declarations.3"/>
           <rhs xsi:type="literals:IntegerLiteral"/>
         </guard>
-        <vector ref="//@libraries.0/@libraries.15/@declarations.0"/>
-        <vector ref="//@libraries.0/@libraries.15/@declarations.1"/>
-        <vector ref="//@libraries.0/@libraries.15/@declarations.2"/>
+        <vector ref="//@libraries.0/@libraries.16/@declarations.0"/>
+        <vector ref="//@libraries.0/@libraries.16/@declarations.1"/>
+        <vector ref="//@libraries.0/@libraries.16/@declarations.2"/>
         <action xsi:type="expressions:BinaryExp" operator="BLT">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.3"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.16/@declarations.3"/>
           <rhs xsi:type="literals:IntegerLiteral"/>
         </action>
       </transitions>
       <transitions>
         <guard xsi:type="literals:BooleanLiteral" value="true"/>
-        <vector ref="//@libraries.0/@libraries.15/@declarations.0"/>
-        <vector ref="//@libraries.0/@libraries.15/@declarations.2"/>
+        <vector ref="//@libraries.0/@libraries.16/@declarations.0"/>
+        <vector ref="//@libraries.0/@libraries.16/@declarations.2"/>
         <action xsi:type="statements:AssignmentStmt" operator="PLUSASSIGN">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.3"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.16/@declarations.3"/>
           <rhs xsi:type="literals:IntegerLiteral" value="1"/>
         </action>
       </transitions>
       <transitions>
         <guard xsi:type="expressions:BinaryExp" operator="BLT">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.3"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.16/@declarations.3"/>
           <rhs xsi:type="literals:IntegerLiteral"/>
         </guard>
-        <vector ref="//@libraries.0/@libraries.15/@declarations.1"/>
+        <vector ref="//@libraries.0/@libraries.16/@declarations.1"/>
         <action xsi:type="statements:AssignmentStmt" operator="MINUSASSIGN">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.15/@declarations.3"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.16/@declarations.3"/>
           <rhs xsi:type="literals:IntegerLiteral" value="1"/>
         </action>
       </transitions>
@@ -852,190 +859,106 @@
       </declarations>
       <transitions>
         <guard xsi:type="expressions:BinaryExp" operator="BEQ">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.16/@declarations.3"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.17/@declarations.3"/>
           <rhs xsi:type="literals:IntegerLiteral"/>
         </guard>
-        <vector ref="//@libraries.0/@libraries.16/@declarations.0"/>
-        <vector ref="//@libraries.0/@libraries.16/@declarations.1"/>
-        <vector ref="//@libraries.0/@libraries.16/@declarations.2"/>
+        <vector ref="//@libraries.0/@libraries.17/@declarations.0"/>
+        <vector ref="//@libraries.0/@libraries.17/@declarations.1"/>
+        <vector ref="//@libraries.0/@libraries.17/@declarations.2"/>
         <action xsi:type="expressions:BinaryExp" operator="BEQ">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.16/@declarations.3"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.17/@declarations.3"/>
           <rhs xsi:type="literals:IntegerLiteral"/>
         </action>
       </transitions>
       <transitions>
         <guard xsi:type="literals:BooleanLiteral" value="true"/>
-        <vector ref="//@libraries.0/@libraries.16/@declarations.0"/>
-        <vector ref="//@libraries.0/@libraries.16/@declarations.2"/>
+        <vector ref="//@libraries.0/@libraries.17/@declarations.0"/>
+        <vector ref="//@libraries.0/@libraries.17/@declarations.2"/>
         <action xsi:type="statements:AssignmentStmt" operator="PLUSASSIGN">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.16/@declarations.3"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.17/@declarations.3"/>
           <rhs xsi:type="literals:IntegerLiteral" value="1"/>
         </action>
       </transitions>
       <transitions>
         <guard xsi:type="expressions:BinaryExp" operator="BEQ">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.16/@declarations.3"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.17/@declarations.3"/>
           <rhs xsi:type="literals:IntegerLiteral"/>
         </guard>
-        <vector ref="//@libraries.0/@libraries.16/@declarations.1"/>
-        <vector ref="//@libraries.0/@libraries.16/@declarations.2"/>
+        <vector ref="//@libraries.0/@libraries.17/@declarations.1"/>
+        <vector ref="//@libraries.0/@libraries.17/@declarations.2"/>
         <action xsi:type="statements:AssignmentStmt" operator="MINUSASSIGN">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.16/@declarations.3"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.17/@declarations.3"/>
           <rhs xsi:type="literals:IntegerLiteral" value="1"/>
         </action>
       </transitions>
       <transitions>
         <guard xsi:type="expressions:BinaryExp" operator="BGT">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.16/@declarations.3"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.17/@declarations.3"/>
           <rhs xsi:type="literals:IntegerLiteral"/>
         </guard>
-        <vector ref="//@libraries.0/@libraries.16/@declarations.0"/>
-        <vector ref="//@libraries.0/@libraries.16/@declarations.1"/>
-        <vector ref="//@libraries.0/@libraries.16/@declarations.2"/>
+        <vector ref="//@libraries.0/@libraries.17/@declarations.0"/>
+        <vector ref="//@libraries.0/@libraries.17/@declarations.1"/>
+        <vector ref="//@libraries.0/@libraries.17/@declarations.2"/>
         <action xsi:type="expressions:BinaryExp" operator="BGT">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.16/@declarations.3"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.17/@declarations.3"/>
           <rhs xsi:type="literals:IntegerLiteral"/>
         </action>
       </transitions>
       <transitions>
         <guard xsi:type="literals:BooleanLiteral" value="true"/>
-        <vector ref="//@libraries.0/@libraries.16/@declarations.0"/>
-        <vector ref="//@libraries.0/@libraries.16/@declarations.2"/>
+        <vector ref="//@libraries.0/@libraries.17/@declarations.0"/>
+        <vector ref="//@libraries.0/@libraries.17/@declarations.2"/>
         <action xsi:type="statements:AssignmentStmt" operator="PLUSASSIGN">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.16/@declarations.3"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.17/@declarations.3"/>
           <rhs xsi:type="literals:IntegerLiteral" value="1"/>
         </action>
       </transitions>
       <transitions>
         <guard xsi:type="expressions:BinaryExp" operator="BGT">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.16/@declarations.3"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.17/@declarations.3"/>
           <rhs xsi:type="literals:IntegerLiteral"/>
         </guard>
-        <vector ref="//@libraries.0/@libraries.16/@declarations.1"/>
+        <vector ref="//@libraries.0/@libraries.17/@declarations.1"/>
         <action xsi:type="statements:AssignmentStmt" operator="MINUSASSIGN">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.16/@declarations.3"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.17/@declarations.3"/>
           <rhs xsi:type="literals:IntegerLiteral" value="1"/>
         </action>
       </transitions>
       <transitions>
         <guard xsi:type="expressions:BinaryExp" operator="BLT">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.16/@declarations.3"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.17/@declarations.3"/>
           <rhs xsi:type="literals:IntegerLiteral"/>
         </guard>
-        <vector ref="//@libraries.0/@libraries.16/@declarations.0"/>
-        <vector ref="//@libraries.0/@libraries.16/@declarations.1"/>
-        <vector ref="//@libraries.0/@libraries.16/@declarations.2"/>
+        <vector ref="//@libraries.0/@libraries.17/@declarations.0"/>
+        <vector ref="//@libraries.0/@libraries.17/@declarations.1"/>
+        <vector ref="//@libraries.0/@libraries.17/@declarations.2"/>
         <action xsi:type="expressions:BinaryExp" operator="BLT">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.16/@declarations.3"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.17/@declarations.3"/>
           <rhs xsi:type="literals:IntegerLiteral"/>
         </action>
       </transitions>
       <transitions>
         <guard xsi:type="literals:BooleanLiteral" value="true"/>
-        <vector ref="//@libraries.0/@libraries.16/@declarations.0"/>
+        <vector ref="//@libraries.0/@libraries.17/@declarations.0"/>
         <action xsi:type="statements:AssignmentStmt" operator="PLUSASSIGN">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.16/@declarations.3"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.17/@declarations.3"/>
           <rhs xsi:type="literals:IntegerLiteral" value="1"/>
         </action>
       </transitions>
       <transitions>
         <guard xsi:type="expressions:BinaryExp" operator="BLT">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.16/@declarations.3"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.17/@declarations.3"/>
           <rhs xsi:type="literals:IntegerLiteral"/>
         </guard>
-        <vector ref="//@libraries.0/@libraries.16/@declarations.1"/>
-        <vector ref="//@libraries.0/@libraries.16/@declarations.2"/>
+        <vector ref="//@libraries.0/@libraries.17/@declarations.1"/>
+        <vector ref="//@libraries.0/@libraries.17/@declarations.2"/>
         <action xsi:type="statements:AssignmentStmt" operator="MINUSASSIGN">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.16/@declarations.3"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.17/@declarations.3"/>
           <rhs xsi:type="literals:IntegerLiteral" value="1"/>
         </action>
       </transitions>
     </libraries>
     <libraries xsi:type="declarations:PrimitiveRelationDecl" name="sampling">
-      <declarations xsi:type="declarations:ClockDecl" name="trigger"/>
-      <declarations xsi:type="declarations:ClockDecl" name="baseClock"/>
-      <declarations xsi:type="declarations:ClockDecl" name="sampled"/>
-      <declarations xsi:type="declarations:VariableDecl" name="state">
-        <initial xsi:type="literals:IntegerLiteral"/>
-      </declarations>
-      <transitions>
-        <guard xsi:type="expressions:BinaryExp" operator="BEQ">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.17/@declarations.3"/>
-          <rhs xsi:type="literals:IntegerLiteral"/>
-        </guard>
-        <vector ref="//@libraries.0/@libraries.17/@declarations.1"/>
-        <action xsi:type="expressions:BinaryExp" operator="BEQ">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.17/@declarations.3"/>
-          <rhs xsi:type="literals:IntegerLiteral"/>
-        </action>
-      </transitions>
-      <transitions>
-        <guard xsi:type="literals:BooleanLiteral" value="true"/>
-        <vector ref="//@libraries.0/@libraries.17/@declarations.0"/>
-        <vector ref="//@libraries.0/@libraries.17/@declarations.1"/>
-        <vector ref="//@libraries.0/@libraries.17/@declarations.2"/>
-        <action xsi:type="statements:AssignmentStmt" operator="PLUSASSIGN">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.17/@declarations.3"/>
-          <rhs xsi:type="literals:IntegerLiteral" value="2"/>
-        </action>
-      </transitions>
-      <transitions>
-        <guard xsi:type="expressions:BinaryExp" operator="BEQ">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.17/@declarations.3"/>
-          <rhs xsi:type="literals:IntegerLiteral"/>
-        </guard>
-        <vector ref="//@libraries.0/@libraries.17/@declarations.0"/>
-        <action xsi:type="statements:AssignmentStmt" operator="PLUSASSIGN">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.17/@declarations.3"/>
-          <rhs xsi:type="literals:IntegerLiteral" value="1"/>
-        </action>
-      </transitions>
-      <transitions>
-        <guard xsi:type="expressions:BinaryExp" operator="BEQ">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.17/@declarations.3"/>
-          <rhs xsi:type="literals:IntegerLiteral" value="1"/>
-        </guard>
-        <vector ref="//@libraries.0/@libraries.17/@declarations.0"/>
-        <action xsi:type="expressions:BinaryExp" operator="BEQ">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.17/@declarations.3"/>
-          <rhs xsi:type="literals:IntegerLiteral" value="1"/>
-        </action>
-      </transitions>
-      <transitions>
-        <guard xsi:type="literals:BooleanLiteral" value="true"/>
-        <vector ref="//@libraries.0/@libraries.17/@declarations.1"/>
-        <vector ref="//@libraries.0/@libraries.17/@declarations.2"/>
-        <action xsi:type="statements:AssignmentStmt" operator="PLUSASSIGN">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.17/@declarations.3"/>
-          <rhs xsi:type="literals:IntegerLiteral" value="1"/>
-        </action>
-      </transitions>
-      <transitions>
-        <guard xsi:type="expressions:BinaryExp" operator="BGT">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.17/@declarations.3"/>
-          <rhs xsi:type="literals:IntegerLiteral" value="1"/>
-        </guard>
-        <vector ref="//@libraries.0/@libraries.17/@declarations.0"/>
-        <vector ref="//@libraries.0/@libraries.17/@declarations.1"/>
-        <action xsi:type="expressions:BinaryExp" operator="BGT">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.17/@declarations.3"/>
-          <rhs xsi:type="literals:IntegerLiteral" value="1"/>
-        </action>
-      </transitions>
-      <transitions>
-        <guard xsi:type="literals:BooleanLiteral" value="true"/>
-        <vector ref="//@libraries.0/@libraries.17/@declarations.0"/>
-        <action xsi:type="expressions:BinaryExp" operator="BGT">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.17/@declarations.3"/>
-          <rhs xsi:type="literals:IntegerLiteral" value="1"/>
-        </action>
-      </transitions>
-      <transitions>
-        <guard xsi:type="literals:BooleanLiteral" value="true"/>
-        <vector ref="//@libraries.0/@libraries.17/@declarations.1"/>
-      </transitions>
-    </libraries>
-    <libraries xsi:type="declarations:PrimitiveRelationDecl" name="strictSampling">
       <declarations xsi:type="declarations:ClockDecl" name="trigger"/>
       <declarations xsi:type="declarations:ClockDecl" name="baseClock"/>
       <declarations xsi:type="declarations:ClockDecl" name="sampled"/>
@@ -1055,6 +978,19 @@
       </transitions>
       <transitions>
         <guard xsi:type="literals:BooleanLiteral" value="true"/>
+        <vector ref="//@libraries.0/@libraries.18/@declarations.0"/>
+        <vector ref="//@libraries.0/@libraries.18/@declarations.1"/>
+        <vector ref="//@libraries.0/@libraries.18/@declarations.2"/>
+        <action xsi:type="statements:AssignmentStmt" operator="PLUSASSIGN">
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.18/@declarations.3"/>
+          <rhs xsi:type="literals:IntegerLiteral" value="2"/>
+        </action>
+      </transitions>
+      <transitions>
+        <guard xsi:type="expressions:BinaryExp" operator="BEQ">
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.18/@declarations.3"/>
+          <rhs xsi:type="literals:IntegerLiteral"/>
+        </guard>
         <vector ref="//@libraries.0/@libraries.18/@declarations.0"/>
         <action xsi:type="statements:AssignmentStmt" operator="PLUSASSIGN">
           <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.18/@declarations.3"/>
@@ -1106,6 +1042,77 @@
         <vector ref="//@libraries.0/@libraries.18/@declarations.1"/>
       </transitions>
     </libraries>
+    <libraries xsi:type="declarations:PrimitiveRelationDecl" name="strictSampling">
+      <declarations xsi:type="declarations:ClockDecl" name="trigger"/>
+      <declarations xsi:type="declarations:ClockDecl" name="baseClock"/>
+      <declarations xsi:type="declarations:ClockDecl" name="sampled"/>
+      <declarations xsi:type="declarations:VariableDecl" name="state">
+        <initial xsi:type="literals:IntegerLiteral"/>
+      </declarations>
+      <transitions>
+        <guard xsi:type="expressions:BinaryExp" operator="BEQ">
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.19/@declarations.3"/>
+          <rhs xsi:type="literals:IntegerLiteral"/>
+        </guard>
+        <vector ref="//@libraries.0/@libraries.19/@declarations.1"/>
+        <action xsi:type="expressions:BinaryExp" operator="BEQ">
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.19/@declarations.3"/>
+          <rhs xsi:type="literals:IntegerLiteral"/>
+        </action>
+      </transitions>
+      <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
+        <vector ref="//@libraries.0/@libraries.19/@declarations.0"/>
+        <action xsi:type="statements:AssignmentStmt" operator="PLUSASSIGN">
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.19/@declarations.3"/>
+          <rhs xsi:type="literals:IntegerLiteral" value="1"/>
+        </action>
+      </transitions>
+      <transitions>
+        <guard xsi:type="expressions:BinaryExp" operator="BEQ">
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.19/@declarations.3"/>
+          <rhs xsi:type="literals:IntegerLiteral" value="1"/>
+        </guard>
+        <vector ref="//@libraries.0/@libraries.19/@declarations.0"/>
+        <action xsi:type="expressions:BinaryExp" operator="BEQ">
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.19/@declarations.3"/>
+          <rhs xsi:type="literals:IntegerLiteral" value="1"/>
+        </action>
+      </transitions>
+      <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
+        <vector ref="//@libraries.0/@libraries.19/@declarations.1"/>
+        <vector ref="//@libraries.0/@libraries.19/@declarations.2"/>
+        <action xsi:type="statements:AssignmentStmt" operator="PLUSASSIGN">
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.19/@declarations.3"/>
+          <rhs xsi:type="literals:IntegerLiteral" value="1"/>
+        </action>
+      </transitions>
+      <transitions>
+        <guard xsi:type="expressions:BinaryExp" operator="BGT">
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.19/@declarations.3"/>
+          <rhs xsi:type="literals:IntegerLiteral" value="1"/>
+        </guard>
+        <vector ref="//@libraries.0/@libraries.19/@declarations.0"/>
+        <vector ref="//@libraries.0/@libraries.19/@declarations.1"/>
+        <action xsi:type="expressions:BinaryExp" operator="BGT">
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.19/@declarations.3"/>
+          <rhs xsi:type="literals:IntegerLiteral" value="1"/>
+        </action>
+      </transitions>
+      <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
+        <vector ref="//@libraries.0/@libraries.19/@declarations.0"/>
+        <action xsi:type="expressions:BinaryExp" operator="BGT">
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.19/@declarations.3"/>
+          <rhs xsi:type="literals:IntegerLiteral" value="1"/>
+        </action>
+      </transitions>
+      <transitions>
+        <guard xsi:type="literals:BooleanLiteral" value="true"/>
+        <vector ref="//@libraries.0/@libraries.19/@declarations.1"/>
+      </transitions>
+    </libraries>
     <libraries xsi:type="declarations:PrimitiveRelationDecl" name="samplingOn">
       <declarations xsi:type="declarations:ClockDecl" name="trigger"/>
       <declarations xsi:type="declarations:ClockDecl" name="base"/>
@@ -1114,46 +1121,46 @@
         <initial xsi:type="literals:BooleanLiteral" value="true"/>
       </declarations>
       <transitions>
-        <guard xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.19/@declarations.3"/>
-        <vector ref="//@libraries.0/@libraries.19/@declarations.1"/>
-        <action xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.19/@declarations.3"/>
+        <guard xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.20/@declarations.3"/>
+        <vector ref="//@libraries.0/@libraries.20/@declarations.1"/>
+        <action xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.20/@declarations.3"/>
       </transitions>
       <transitions>
         <guard xsi:type="literals:BooleanLiteral" value="true"/>
-        <vector ref="//@libraries.0/@libraries.19/@declarations.1"/>
-        <vector ref="//@libraries.0/@libraries.19/@declarations.0"/>
-        <vector ref="//@libraries.0/@libraries.19/@declarations.2"/>
-        <action xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.19/@declarations.3"/>
+        <vector ref="//@libraries.0/@libraries.20/@declarations.1"/>
+        <vector ref="//@libraries.0/@libraries.20/@declarations.0"/>
+        <vector ref="//@libraries.0/@libraries.20/@declarations.2"/>
+        <action xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.20/@declarations.3"/>
       </transitions>
       <transitions>
         <guard xsi:type="literals:BooleanLiteral" value="true"/>
-        <vector ref="//@libraries.0/@libraries.19/@declarations.0"/>
+        <vector ref="//@libraries.0/@libraries.20/@declarations.0"/>
         <action xsi:type="expressions:UnaryExp">
-          <operand xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.19/@declarations.3"/>
+          <operand xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.20/@declarations.3"/>
         </action>
       </transitions>
       <transitions>
         <guard xsi:type="literals:BooleanLiteral" value="true"/>
-        <vector ref="//@libraries.0/@libraries.19/@declarations.0"/>
+        <vector ref="//@libraries.0/@libraries.20/@declarations.0"/>
         <action xsi:type="expressions:UnaryExp">
-          <operand xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.19/@declarations.3"/>
+          <operand xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.20/@declarations.3"/>
         </action>
       </transitions>
       <transitions>
         <guard xsi:type="literals:BooleanLiteral" value="true"/>
-        <vector ref="//@libraries.0/@libraries.19/@declarations.1"/>
-        <vector ref="//@libraries.0/@libraries.19/@declarations.0"/>
-        <vector ref="//@libraries.0/@libraries.19/@declarations.2"/>
+        <vector ref="//@libraries.0/@libraries.20/@declarations.1"/>
+        <vector ref="//@libraries.0/@libraries.20/@declarations.0"/>
+        <vector ref="//@libraries.0/@libraries.20/@declarations.2"/>
         <action xsi:type="expressions:UnaryExp">
-          <operand xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.19/@declarations.3"/>
+          <operand xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.20/@declarations.3"/>
         </action>
       </transitions>
       <transitions>
         <guard xsi:type="literals:BooleanLiteral" value="true"/>
-        <vector ref="//@libraries.0/@libraries.19/@declarations.1"/>
-        <vector ref="//@libraries.0/@libraries.19/@declarations.2"/>
+        <vector ref="//@libraries.0/@libraries.20/@declarations.1"/>
+        <vector ref="//@libraries.0/@libraries.20/@declarations.2"/>
         <action xsi:type="statements:AssignmentStmt" operator="MINUSASSIGN">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.19/@declarations.3"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.20/@declarations.3"/>
           <rhs xsi:type="literals:IntegerLiteral" value="1"/>
         </action>
       </transitions>
@@ -1166,52 +1173,52 @@
         <initial xsi:type="literals:BooleanLiteral" value="true"/>
       </declarations>
       <transitions>
-        <guard xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.20/@declarations.3"/>
-        <vector ref="//@libraries.0/@libraries.20/@declarations.0"/>
-        <vector ref="//@libraries.0/@libraries.20/@declarations.2"/>
-        <action xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.20/@declarations.3"/>
+        <guard xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.21/@declarations.3"/>
+        <vector ref="//@libraries.0/@libraries.21/@declarations.0"/>
+        <vector ref="//@libraries.0/@libraries.21/@declarations.2"/>
+        <action xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.21/@declarations.3"/>
       </transitions>
       <transitions>
         <guard xsi:type="literals:BooleanLiteral" value="true"/>
-        <vector ref="//@libraries.0/@libraries.20/@declarations.1"/>
+        <vector ref="//@libraries.0/@libraries.21/@declarations.1"/>
         <action xsi:type="statements:AssignmentStmt">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.20/@declarations.3"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.21/@declarations.3"/>
           <rhs xsi:type="expressions:UnaryExp">
-            <operand xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.20/@declarations.3"/>
+            <operand xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.21/@declarations.3"/>
           </rhs>
         </action>
       </transitions>
       <transitions>
-        <guard xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.20/@declarations.3"/>
-        <vector ref="//@libraries.0/@libraries.20/@declarations.0"/>
-        <vector ref="//@libraries.0/@libraries.20/@declarations.1"/>
+        <guard xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.21/@declarations.3"/>
+        <vector ref="//@libraries.0/@libraries.21/@declarations.0"/>
+        <vector ref="//@libraries.0/@libraries.21/@declarations.1"/>
         <action xsi:type="statements:AssignmentStmt">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.20/@declarations.3"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.21/@declarations.3"/>
           <rhs xsi:type="expressions:UnaryExp">
-            <operand xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.20/@declarations.3"/>
+            <operand xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.21/@declarations.3"/>
           </rhs>
         </action>
       </transitions>
       <transitions>
         <guard xsi:type="expressions:UnaryExp">
-          <operand xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.20/@declarations.3"/>
+          <operand xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.21/@declarations.3"/>
         </guard>
-        <vector ref="//@libraries.0/@libraries.20/@declarations.0"/>
-        <vector ref="//@libraries.0/@libraries.20/@declarations.1"/>
+        <vector ref="//@libraries.0/@libraries.21/@declarations.0"/>
+        <vector ref="//@libraries.0/@libraries.21/@declarations.1"/>
         <action xsi:type="expressions:UnaryExp">
-          <operand xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.20/@declarations.3"/>
+          <operand xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.21/@declarations.3"/>
         </action>
       </transitions>
       <transitions>
         <guard xsi:type="literals:BooleanLiteral" value="true"/>
-        <vector ref="//@libraries.0/@libraries.20/@declarations.0"/>
+        <vector ref="//@libraries.0/@libraries.21/@declarations.0"/>
         <action xsi:type="expressions:UnaryExp">
-          <operand xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.20/@declarations.3"/>
+          <operand xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.21/@declarations.3"/>
         </action>
       </transitions>
       <transitions>
         <guard xsi:type="literals:BooleanLiteral" value="true"/>
-        <vector ref="//@libraries.0/@libraries.20/@declarations.1"/>
+        <vector ref="//@libraries.0/@libraries.21/@declarations.1"/>
       </transitions>
     </libraries>
     <libraries xsi:type="declarations:PrimitiveRelationDecl" name="forceOne">
@@ -1220,12 +1227,12 @@
         <initial xsi:type="literals:BooleanLiteral" value="true"/>
       </declarations>
       <transitions>
-        <guard xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.21/@declarations.1"/>
-        <vector ref="//@libraries.0/@libraries.21/@declarations.0"/>
+        <guard xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.22/@declarations.1"/>
+        <vector ref="//@libraries.0/@libraries.22/@declarations.0"/>
         <action xsi:type="statements:AssignmentStmt">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.21/@declarations.1"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.22/@declarations.1"/>
           <rhs xsi:type="expressions:UnaryExp">
-            <operand xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.21/@declarations.1"/>
+            <operand xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.22/@declarations.1"/>
           </rhs>
         </action>
       </transitions>
@@ -1235,25 +1242,25 @@
       <declarations xsi:type="declarations:ClockDecl" name="base"/>
       <declarations xsi:type="declarations:ClockDecl" name="delayed"/>
       <declarations xsi:type="declarations:VariableDecl" name="countdown">
-        <initial xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.22/@arguments.0"/>
+        <initial xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.23/@arguments.0"/>
       </declarations>
       <transitions>
         <guard xsi:type="expressions:BinaryExp" operator="BLT">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.22/@declarations.2"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.23/@declarations.2"/>
           <rhs xsi:type="literals:IntegerLiteral" value="1"/>
         </guard>
-        <vector ref="//@libraries.0/@libraries.22/@declarations.0"/>
-        <vector ref="//@libraries.0/@libraries.22/@declarations.1"/>
+        <vector ref="//@libraries.0/@libraries.23/@declarations.0"/>
+        <vector ref="//@libraries.0/@libraries.23/@declarations.1"/>
         <action xsi:type="expressions:BinaryExp" operator="BGT">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.22/@declarations.2"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.23/@declarations.2"/>
           <rhs xsi:type="literals:IntegerLiteral" value="1"/>
         </action>
       </transitions>
       <transitions>
         <guard xsi:type="literals:BooleanLiteral" value="true"/>
-        <vector ref="//@libraries.0/@libraries.22/@declarations.0"/>
+        <vector ref="//@libraries.0/@libraries.23/@declarations.0"/>
         <action xsi:type="statements:AssignmentStmt" operator="MINUSASSIGN">
-          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.22/@declarations.2"/>
+          <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.23/@declarations.2"/>
           <rhs xsi:type="literals:IntegerLiteral" value="1"/>
         </action>
       </transitions>
@@ -1588,7 +1595,7 @@
       <declarations xsi:type="declarations:ClockDecl" name="avg"/>
       <declarations xsi:type="declarations:ClockDecl" name="threshold"/>
       <declarations xsi:type="declarations:ClockDecl" name="displayOut"/>
-      <instances relation="//@libraries.0/@libraries.7">
+      <instances relation="//@libraries.0/@libraries.8">
         <qualifiedName>kernel</qualifiedName>
         <qualifiedName>exclusion6</qualifiedName>
         <argumentMap key="0">

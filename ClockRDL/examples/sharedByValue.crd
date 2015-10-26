@@ -1,0 +1,17 @@
+library shared {
+    relation r1
+        var x;
+    {
+        {}[x = (x + 1) % 3]
+    }
+
+    relation c1
+        // 'a' is passed by value
+        // no subrelation can change it so
+        // it does not make sense to declare it as a variable
+        const a := 5;
+    {
+        i1:r1(x: a)
+        i2:r1(x: a)
+    }
+}

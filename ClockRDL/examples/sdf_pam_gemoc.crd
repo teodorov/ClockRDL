@@ -24,8 +24,7 @@ library sdf_pam {
 
     relation link(initial)
         clock from to start stop;
-        var size := initial;
-        const outRate inRate capacity;
+        const outRate inRate capacity size := initial; // size is a constant here due to pass by value
     {
         sdf.link
             (write: from read: to outRate: outRate size: size inRate: inRate capacity: capacity)

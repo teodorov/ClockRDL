@@ -1,4 +1,11 @@
 library kernel {
+    //an unconstrained clock needs a relation to help it tick or not tick
+	relation tick
+		clock clk;
+	{
+		{clk}
+	}
+
 	relation alternates
 		clock a b;
 		var state := true;

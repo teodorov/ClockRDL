@@ -1,17 +1,13 @@
 package ClockRDL.interpreter;
 
 import ClockRDL.interpreter.evaluators.*;
-import ClockRDL.interpreter.frames.AbstractFrame;
-import ClockRDL.interpreter.values.FunctionValue;
 import ClockRDL.interpreter.values.LValue;
-import ClockRDL.interpreter.values.PrimitiveFunctionValue;
 import ClockRDL.model.declarations.RelationInstanceDecl;
 import ClockRDL.model.expressions.Literal;
 import ClockRDL.model.kernel.Expression;
 import ClockRDL.model.kernel.NamedDeclaration;
 import ClockRDL.model.kernel.Statement;
 
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -26,7 +22,6 @@ public class Interpreter {
             return type.cast(value);
         }
         throw new RuntimeException("Expected " + type.getSimpleName() + " but found " + value.getClass().getSimpleName());
-        //return null;
     }
 
     public Value evaluate(Expression exp, Environment env) {
@@ -40,7 +35,6 @@ public class Interpreter {
             return type.cast(value);
         }
         throw new RuntimeException("Expected " + type.getSimpleName() + " but found " + value.getClass().getSimpleName());
-        //return null;
     }
 
     public Value evaluate(Literal exp, Environment env) {
