@@ -679,7 +679,7 @@ public class ClockRDLBuilderAST extends ClockRDLBaseListener {
             instances.add(instance);
         }
         Map<String, List> result = new HashMap<>();
-        result.put("internalClock", internalClocks);
+        result.put("internalClocks", internalClocks);
         result.put("instances", instances);
         setValue(ctx, result);
     }

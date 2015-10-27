@@ -23,12 +23,18 @@ import java.util.Map;
  */
 public class RDL2Smalltalk {
 
-    public void convert(RepositoryDecl repositoryDecl) {
-        declarationTransformer.doSwitch(repositoryDecl);
+    public String convert(RepositoryDecl repositoryDecl) {
+        return (String)declarationTransformer.doSwitch(repositoryDecl);
     }
     public String convert(RelationInstanceDecl instanceDecl) {
         String res;
         String instance = (String)declarationTransformer.doSwitch(instanceDecl);
+        res = result + instance;
+        return res;
+    }
+    public String convert(SystemDecl sys) {
+        String res;
+        String instance = (String)declarationTransformer.doSwitch(sys.getRoot());
         res = result + instance;
         return res;
     }
@@ -590,6 +596,15 @@ public class RDL2Smalltalk {
             String result = "";
             for (LibraryItemDecl libItem : object.getLibraries()) {
                 result += doSwitch(libItem);
+            }
+            return result;
+        }
+
+        @Override
+        public String caseSystemDecl(SystemDecl object) {
+            if (object.getRoot()!=null) {
+                String instanceString = doSwitch(object.getRoot());
+                return result + instanceString;
             }
             return result;
         }

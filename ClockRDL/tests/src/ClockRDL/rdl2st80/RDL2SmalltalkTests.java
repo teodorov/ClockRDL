@@ -18,8 +18,7 @@ import org.junit.Test;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Created by ciprian on 26/10/15.
@@ -181,6 +180,33 @@ public class RDL2SmalltalkTests {
         assertNotNull(result);
     }
 
+    @Test
+    public void testSimpleInstance() {
+        String definition = "import \"file:///Users/ciprian/Playfield/repositories/plugmc-java/ClockSystem/ClockRDL/examples/ccsl-kernel.crd\"\n" +
+                "library simple {\n" +
+                "\n" +
+                "    relation alternates\n" +
+                "        clock a b;\n" +
+                "    {\n" +
+                "        clock c := internal clock[delay]; // c is an internal clock due to the delay expression\n" +
+                "\n" +
+                "        kernel.precedence (isStrict: true a: a b: b)\n" +
+                "        kernel.delay (n: 1 base: a delayed: c)\n" +
+                "        kernel.precedence (isStrict: true a: b b: c)\n" +
+                "    }\n" +
+                "}\n" +
+                "simple.alternates(\n" +
+                "    a: clock[x] \n" +
+                "    b:clock[y]\n" +
+                ")";
+        assertString(definition);
+
+
+        //TODO fix the next line -- maybe I can remove the constants in relations and have initialized arguments
+        // maybe I can keep both?
+        assertEquals("This assertion fails because I have a problem with delay... remove args use constants", false, true);
+    }
+
     public String transformInstance(String blockCode, String libraryString) {
         RelationInstanceDecl instance = compile(blockCode, libraryString);
 
@@ -230,8 +256,8 @@ public class RDL2SmalltalkTests {
         RepositoryDecl sys = ClockRDLCompiler.compile(libraryString);
         RDL2Smalltalk transformer = new RDL2Smalltalk();
 
-        transformer.convert(sys);
+        String result = transformer.convert(sys);
 
-        assertTrue(sys != null);
+        assertNotNull(result);
     }
 }

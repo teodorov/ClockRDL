@@ -8,6 +8,10 @@ library simple {
 
         kernel.precedence (isStrict: true a: a b: b)
         kernel.delay (n: 1 base: a delayed: c)
-        kernel.precedence (isStrict: true a: b c: c)
+        kernel.precedence (isStrict: true a: b b: c)
     }
 }
+simple.alternates(
+    a: clock[x]
+    b:clock[y]
+)
