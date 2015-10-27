@@ -705,7 +705,12 @@ public class ClockRDLBuilderAST extends ClockRDLBaseListener {
         if (clocks != null) decl.getDeclarations().addAll(clocks);
 
         List<VariableDecl> variables = getValue(ctx.variableDecl(), List.class);
-        if (variables != null) decl.getDeclarations().addAll(variables);
+        if (variables != null) {
+            decl.getDeclarations().addAll(variables);
+            if (decl instanceof CompositeRelationDecl) {
+                throw new RuntimeException("Composite relation '"+name+"' with variables do not make sense without variable sharing which is not supported yet!");
+            }
+        }
 
         List<ConstantDecl> constants = getValue(ctx.constantDecl(), List.class);
         if (constants != null) decl.getDeclarations().addAll(constants);
