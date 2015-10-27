@@ -20,7 +20,7 @@ public class ClockRDLCompilerTests {
 				"clock a b; " +
 				"var t; " +
 				"def xx {t += 1} " +
-				"{ [true]{} }}");
+				"{ [true]{}; }}");
 	}
 
 	@Test
@@ -31,11 +31,11 @@ public class ClockRDLCompilerTests {
 						"clock a b; " +
 						"var t; " +
 						"def xx {var y := 3; t += y} " +
-						"{ [true]{} }}");
+						"{ [true]{}; }}");
 	}
 
 	String blockStmt(String code) {
-		return "library xx { relation y { [true]{}["+code+"] }}";
+		return "library xx { relation y { [true]{}["+code+"]; }}";
 	}
 
 	@Test

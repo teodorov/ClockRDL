@@ -42,7 +42,7 @@ public class RDL2Smalltalk {
 
         @Override
         public String caseArrayLiteral(ArrayLiteral object) {
-            String str = "{";
+            String str = "(RDLArray withAll: {";
 
             boolean isFirst = true;
             for (Expression exp : object.getValue()) {
@@ -51,13 +51,13 @@ public class RDL2Smalltalk {
                 isFirst = false;
             }
 
-            str += "}";
+            str += "})";
             return str;
         }
 
         @Override
         public String caseQueueLiteral(QueueLiteral object) {
-            String str = "{";
+            String str = "(RDLQueue withAll: {";
 
             boolean isFirst = true;
             for (Expression exp : object.getValue()) {
@@ -66,7 +66,7 @@ public class RDL2Smalltalk {
                 isFirst = false;
             }
 
-            str += "} asOrderedCollection";
+            str += "})";
             return str;
         }
 
@@ -396,10 +396,11 @@ public class RDL2Smalltalk {
                 isFirst = false;
             }
             vector += " } ";
+
             return "^" + expressionTransformer.doSwitch(object.getGuard()) +
                     " ifTrue: [ RDLTransition "
                     + " vector: " + vector +""
-                    + " action: [" + statementTransformer.doSwitch(object.getAction()) + "]]";
+                    + (object.getAction() != null ? " action: [" + statementTransformer.doSwitch(object.getAction()) + "]]" : "]");
         }
 
         private String buildHierarchicalClassName(AbstractRelationDecl decl) {

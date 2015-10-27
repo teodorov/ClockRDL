@@ -6,8 +6,8 @@ library PAM_SDF {
             var size;
             const outRate inRate capacity;
         {
-            [size >= inRate] { read } [ size -= inRate ]
-            [capacity < 0 | capacity - size > outRate] { write } [ size += outRate ]
+            [size >= inRate] { read } [ size -= inRate ];
+            [capacity < 0 | capacity - size > outRate] { write } [ size += outRate ];
         }
     }
 

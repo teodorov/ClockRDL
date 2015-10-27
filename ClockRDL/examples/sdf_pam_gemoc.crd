@@ -6,9 +6,9 @@ library sdf_pam {
             var current:=0;
             const cycles;
         {
-            [current = -1] { start } [ current += 1 ]
-            [current != -1 & current < cycles] { execute } [ current += 1 ]
-            [current >= cycles] { stop } [ current := -1 ]
+            [current = -1] { start } [ current += 1 ];
+            [current != -1 & current < cycles] { execute } [ current += 1 ];
+            [current >= cycles] { stop } [ current := -1 ];
 
         }
 
@@ -17,8 +17,8 @@ library sdf_pam {
             var size;
             const outRate inRate capacity;
         {
-            [size >= inRate] { read } [ size -= inRate ]
-            [capacity < 0 | capacity - size > outRate] { write } [ size += outRate ]
+            [size >= inRate] { read } [ size -= inRate ];
+            [capacity < 0 | capacity - size > outRate] { write } [ size += outRate ];
         }
     }
 

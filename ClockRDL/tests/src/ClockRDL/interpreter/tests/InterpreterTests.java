@@ -36,8 +36,8 @@ public class InterpreterTests {
             "\t clock a b;\n" +
             "\t\tvar x:=1;\n" +
             "\t{\n" +
-            "\t [x<10]{a b}[x +=1]\n" +
-            "\t\t[x>=10] {a b} [ x := 0]\n" +
+            "\t [x<10]{a b}[x +=1];\n" +
+            "\t\t[x>=10] {a b} [ x := 0];\n" +
             "\t}\n" +
             "}";
     String simpleInstance = "i:simple.counter10";
@@ -50,7 +50,7 @@ public class InterpreterTests {
             "    return a + x\n"+
             " }\n"+
             " {\n"+
-            " {} [{ assert(2 x) x := fct(1)+5 assert(8 x)}]\n"+
+            " {} [{ assert(2 x) x := fct(1)+5 assert(8 x)}];\n"+
             " }\n"+
             "}";
     String fctInstance = "j:rel.r";

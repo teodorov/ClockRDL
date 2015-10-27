@@ -276,6 +276,17 @@ public class ExpressionEvaluatorTests {
         assertEquals(BooleanValue.TRUE, result);
     }
 
+    @Test
+    public void testQueueLiteralIsNotEmpty() {
+        Value result = evaluator.evaluate(compileExp("{|1 2 3|}.isNotEmpty()"), null);
+        assertEquals(true, result.isBooleanValue());
+        assertEquals(BooleanValue.TRUE, result);
+
+        result = evaluator.evaluate(compileExp("{||}.isNotEmpty()"), null);
+        assertEquals(true, result.isBooleanValue());
+        assertEquals(BooleanValue.FALSE, result);
+    }
+
     //TODO test expressions using variables defined in the environment
 
     public Expression compileExp(String expressionString) {

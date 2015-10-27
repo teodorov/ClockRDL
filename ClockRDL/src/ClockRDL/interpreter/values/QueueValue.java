@@ -55,6 +55,8 @@ public class QueueValue extends Value {
 
             put("isEmpty", new PrimitiveFunctionValue("isEmpty", (value) -> BooleanValue.value(data.isEmpty())));
 
+            put("isNotEmpty", new PrimitiveFunctionValue("isNotEmpty", (value) -> BooleanValue.value(!data.isEmpty())));
+
         }};
     }
 

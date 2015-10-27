@@ -2,7 +2,7 @@ library shared {
     relation r1
         var x;
     {
-        {}[x = (x + 1) % 3]
+        {}[x = (x + 1) % 3];
     }
 
     relation c1

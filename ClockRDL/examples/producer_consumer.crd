@@ -7,11 +7,11 @@ library producer_consumer {
         clock run unblock down up;
         var pc := 0;
     {
-        [pc=0] { run }      [pc+=1]
-        [pc=1] { run down } [pc+=1] //try lock the empty/full semaphore
-        [pc=2] { unblock }  [pc-=1] //if blocked when getting the semaphore unblock it
-        [pc=2] { run }      [pc+=1] //execute critical section
-        [pc=3] { run up }   [pc=1]  //unlock the full/empty semaphore
+        [pc=0] { run }      [pc+=1];
+        [pc=1] { run down } [pc+=1]; //try lock the empty/full semaphore
+        [pc=2] { unblock }  [pc-=1]; //if blocked when getting the semaphore unblock it
+        [pc=2] { run }      [pc+=1]; //execute critical section
+        [pc=3] { run up }   [pc=1];  //unlock the full/empty semaphore
     }
 
 	relation producer_consumer

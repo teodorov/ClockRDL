@@ -3,79 +3,79 @@ library kernel {
 	relation tick
 		clock clk;
 	{
-		{clk}
+		{clk};
 	}
 
 	relation alternates
 		clock a b;
 		var state := true;
 	{
-		[state] 	{a} [state := ! state]
-		[! state] {b} [state := ! state]
+		[state] 	{a} [state := ! state];
+		[! state] {b} [state := ! state];
 	}
 
 	relation coincidence
 		clock a b;
 	{
-		{a b}
+		{a b};
 	}
 
 	relation coincidence3
 		clock a b c;
 	{
-		{a b c}
+		{a b c};
 	}
 
 	relation exclusion2
 		clock a b;
 	{
-		{a}
-		{b}
+		{a};
+		{b};
 	}
 
 	relation exclusion3
 		clock a b c;
 	{
-		{a}
-		{b}
-		{c}
+		{a};
+		{b};
+		{c};
 	}
 
 	relation exclusion4
 		clock a b c d;
 	{
-		{a}
-		{b}
-		{c}
-		{d}
+		{a};
+		{b};
+		{c};
+		{d};
 	}
 
 	relation exclusion5
 		clock a b c d e;
 	{
-		{a}
-		{b}
-		{c}
-		{d}
-		{e}
+		{a};
+		{b};
+		{c};
+		{d};
+		{e};
 	}
 
 	relation exclusion6
 		clock a b c d e f;
 	{
-		{a}
-		{b}
-		{c}
-		{d}
-		{e}
-		{f}
+		{a};
+		{b};
+		{c};
+		{d};
+		{e};
+		{f};
 	}
 
 	relation subclocking
 		clock a b;
 	{
-		{b}
-		{a b}
+		{b};
+		{a b};
 	}
 
 	//the following relation implements precedence, strict precedence, and bounded precedence
@@ -84,12 +84,12 @@ library kernel {
 		var state := 0;
 		const bound := -1 isStrict := false;
 	{
-		[! isStrict] {a b} //the precedence allows coincidence always
-		[(bound<0 | bound > state) & state=0] { a } [ state += 1]
+		[! isStrict] {a b}; //the precedence allows coincidence always
+		[(bound<0 | bound > state) & state=0] { a } [ state += 1];
 
 
-		[(bound<0 | bound > state) & state!=0] { a } [ state += 1]
-		[(bound<0 | bound >= state) & state!=0] { b } [ state -= 1]
+		[(bound<0 | bound > state) & state!=0] { a } [ state += 1];
+		[(bound<0 | bound >= state) & state!=0] { b } [ state -= 1];
 	}
 
 	//the awaiting clock expression a^n ticks in coincidence with the next nth strictly future tick of a, and then dies
@@ -97,9 +97,9 @@ library kernel {
 		clock a c;
 		var state := n;
 	{
-		[ state=0 ] { a } //this says that this relation does not stop clock a from ticking
-		[ state=1 ] {a c} [state := 0] //the awaiting clock dies
-		[ state!=1 ] {a} [state -= 1]
+		[ state=0 ] { a }; //this says that this relation does not stop clock a from ticking
+		[ state=1 ] {a c} [state := 0]; //the awaiting clock dies
+		[ state!=1 ] {a} [state -= 1];
 	}
 
 	relation filtering
@@ -125,27 +125,27 @@ library kernel {
 		}
 	
 	{
-		[state + 1 <= offset & doesFilteredTicks() ] { baseClock filtered } [ state += 1 ]
-		[state + 1 <= offset & ! doesFilteredTicks() ] { baseClock } [ state += 1 ]
+		[state + 1 <= offset & doesFilteredTicks() ] { baseClock filtered } [ state += 1 ];
+		[state + 1 <= offset & ! doesFilteredTicks() ] { baseClock } [ state += 1 ];
 
-		[state + 1 > offset & doesFilteredTicks() ] { baseClock filtered } [ nextState() ]
-		[state + 1 > offset & ! doesFilteredTicks() ] { baseClock } [ nextState() ]
+		[state + 1 > offset & doesFilteredTicks() ] { baseClock filtered } [ nextState() ];
+		[state + 1 > offset & ! doesFilteredTicks() ] { baseClock } [ nextState() ];
 	}
 
 	relation union
 		clock a b c;
 	{
-		{a c}
-		{b c}
-		{a b c}
+		{a c};
+		{b c};
+		{a b c};
 	}
 
 	relation intersection
 		clock a b c;
 	{
-		{a}
-		{b}
-		{a b c}
+		{a};
+		{b};
+		{a b c};
 	}
 
 	relation deferred
@@ -170,17 +170,17 @@ library kernel {
 		}
 	
 	{
-		[state=0] {b}
-		[state=0] {a} 	[state := state + 2]
-		[state=0] {a b} [state := state + 2]
+		[state=0] {b};
+		[state=0] {a} 	[state := state + 2];
+		[state=0] {a b} [state := state + 2];
 
-		[state!=0 & sync() ] { b c } [ advance() ]
-		[state!=0 & ! sync() ] { b } [ advance() ]
+		[state!=0 & sync() ] { b c } [ advance() ];
+		[state!=0 & ! sync() ] { b } [ advance() ];
 
-		[state!=0] { a } [ if ns.size >= state {state := state + 1} ]
+		[state!=0] { a } [ if ns.size >= state {state := state + 1} ];
 
-		[state!=0 & sync() ] { a b c } [ advance ]
-		[state!=0 & ! sync() ] { a b } [ advance ]
+		[state!=0 & sync() ] { a b c } [ advance ];
+		[state!=0 & ! sync() ] { a b } [ advance ];
 	}
 
 	relation supremum
@@ -188,17 +188,17 @@ library kernel {
 		var state := 0;
 
 	{
-		[state=0] { a b c }
-		[state=0] {a} [state += 1]
-		[state=0] {b} [state -= 1]
+		[state=0] { a b c };
+		[state=0] {a} [state += 1];
+		[state=0] {b} [state -= 1];
 
-		[state>0] { a b c }
-		[state>0] {a} [state += 1]
-		[state>0] {b c} [state -=1]
+		[state>0] { a b c };
+		[state>0] {a} [state += 1];
+		[state>0] {b c} [state -=1];
 
-		[state<0] { a b c }
-		[state<0] {a c} [state += 1]
-		[state<0] {b} [state -= 1]
+		[state<0] { a b c };
+		[state<0] {a c} [state += 1];
+		[state<0] {b} [state -= 1];
 	}
 
 	relation infimum
@@ -206,17 +206,17 @@ library kernel {
 		var state := 0;
 
 	{
-		[state=0] { a b c }
-		[state=0] {a c} [state += 1]
-		[state=0] {b c} [state -= 1]
+		[state=0] { a b c };
+		[state=0] {a c} [state += 1];
+		[state=0] {b c} [state -= 1];
 
-		[state>0] { a b c }
-		[state>0] {a c} [state += 1]
-		[state>0] {b} [state -=1]
+		[state>0] { a b c };
+		[state>0] {a c} [state += 1];
+		[state>0] {b} [state -=1];
 
-		[state<0] { a b c }
-		[state<0] {a} [state += 1]
-		[state<0] {b c} [state -= 1]
+		[state<0] { a b c };
+		[state<0] {a} [state += 1];
+		[state<0] {b c} [state -= 1];
 	}
 
 	//the sampling ticks in coincidence with the tick of the base clock 
@@ -226,16 +226,16 @@ library kernel {
 		clock trigger baseClock sampled;
 		var state := 0;
 	{
-		[state=0] { baseClock }
-		[state=0] {trigger baseClock sampled} [state += 2] //sampled dies
-		[state=0] { trigger } [ state += 1]
+		[state=0] { baseClock };
+		[state=0] {trigger baseClock sampled} [state += 2]; //sampled dies
+		[state=0] { trigger } [ state += 1];
 
-		[state=1] { trigger }
-		[state=1] {baseClock sampled} [state += 1]//sampled dies
+		[state=1] { trigger };
+		[state=1] {baseClock sampled} [state += 1];//sampled dies
 
-		[state>1] { trigger baseClock }
-		[state>1] {trigger}
-		[state>1] {baseClock}
+		[state>1] { trigger baseClock };
+		[state>1] {trigger};
+		[state>1] {baseClock};
 	}
 
 	//the sampling ticks in coincidence with the tick of the base clock 
@@ -245,28 +245,28 @@ library kernel {
 		clock trigger baseClock sampled;
 		var state := 0;
 	{
-		[state=0] { baseClock }
-		[state=0] { trigger } [ state += 1]
+		[state=0] { baseClock };
+		[state=0] { trigger } [ state += 1];
 
-		[state=1] { trigger }
-		[state=1] {baseClock sampled} [state += 1]//sampled dies
+		[state=1] { trigger };
+		[state=1] {baseClock sampled} [state += 1];//sampled dies
 
-		[state>1] { trigger baseClock }
-		[state>1] {trigger}
-		[state>1] {baseClock}
+		[state>1] { trigger baseClock };
+		[state>1] {trigger};
+		[state>1] {baseClock};
 	}
 
 	relation samplingOn
 		clock trigger base sampled;
 		var state := true;
 	{
-		[state] { base }
-		[state] {base trigger sampled}
-		[state] {trigger}
+		[state] { base };
+		[state] {base trigger sampled};
+		[state] {trigger};
 
-		[! state] {trigger}
-		[! state] {base trigger sampled}
-		[! state] {base sampled} [state-=1]
+		[! state] {trigger};
+		[! state] {base trigger sampled};
+		[! state] {base sampled} [state-=1];
 	}
 
 	//the preemption expression behaves as "a" while b does not tick.
@@ -275,20 +275,20 @@ library kernel {
 		clock a b c;
 		var alive := true;
 	{
-		[alive] {a c}
-		[alive] { b } [alive := ! alive]
-		[alive] { a b } [alive := ! alive]
+		[alive] {a c};
+		[alive] { b } [alive := ! alive];
+		[alive] { a b } [alive := ! alive];
 
-		[! alive] { a b }
-		[! alive] { a }
-		[! alive] { b }
+		[! alive] { a b };
+		[! alive] { a };
+		[! alive] { b };
 	}
 
 	relation forceOne
 		clock one;
 		var alive := true;
 	{
-		[alive] { one } [ alive := ! alive ] //the clock dies
+		[alive] { one } [ alive := ! alive ]; //the clock dies
 	}
 
 	//after n ticks of the base clock, the base clock and the delayed one become synchronous forever 
@@ -297,8 +297,8 @@ library kernel {
 		var countdown := n;
 
 	{
-		[countdown<1] { base delayed }
-		[countdown>1] { base } [ countdown -= 1]
+		[countdown<1] { base delayed };
+		[countdown>1] { base } [ countdown -= 1];
 	}
 
 	// this is a clock that is never allowed to tick
