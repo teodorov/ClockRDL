@@ -1,9 +1,24 @@
 package ClockRDL.rdl2st80;
 
+import ClockRDL.compiler.ClockRDLBuilderAST;
 import ClockRDL.compiler.ClockRDLCompiler;
+import ClockRDL.compiler.GlobalScope;
+import ClockRDL.grammar.ClockRDLLexer;
+import ClockRDL.grammar.ClockRDLParser;
+import ClockRDL.interpreter.Environment;
+import ClockRDL.model.declarations.RelationInstanceDecl;
 import ClockRDL.model.declarations.RepositoryDecl;
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.Parser;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.junit.Test;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -118,6 +133,98 @@ public class RDL2SmalltalkTests {
                 "}";
         assertString(sched);
     }
+
+    @Test
+    public void testComposite() {
+        String comp = "library shared {\n" +
+                "    relation r1\n" +
+                "        var x;\n" +
+                "    {\n" +
+                "        {}[x := (x + 1) % 3];\n" +
+                "    }\n" +
+                "\n" +
+                "    relation c1\n" +
+                "        // 'a' is passed by value\n" +
+                "        // no subrelation can change it so\n" +
+                "        // it does not make sense to declare it as a variable\n" +
+                "        const a := 5;\n" +
+                "    {\n" +
+                "        i1:r1(x: a)\n" +
+                "        i2:r1(x: a)\n" +
+                "    }\n" +
+                "}";
+        assertString(comp);
+    }
+
+
+    String simpleLib = "library simple {\n" +
+            "\trelation counter10\n" +
+            "\t clock a b;\n" +
+            "\t\tvar x:=1;\n" +
+            "\t{\n" +
+            "\t [x<10]{a b}[x +=1];\n" +
+            "\t\t[x>=10] {a b} [ x := 0];\n" +
+            "\t}\n" +
+            "}";
+    String simpleInstance = "i:simple.counter10";
+    String simpleInstanceWithClocks = "i:simple.counter10(a: clock[x] b:clock[y])";
+
+    @Test
+    public void testInstanceNoClocks() {
+        String result = transformInstance(simpleInstance, simpleLib);
+        assertNotNull(result);
+    }
+
+    @Test
+    public void testInstanceWithClocks() {
+        String result = transformInstance(simpleInstanceWithClocks, simpleLib);
+        assertNotNull(result);
+    }
+
+    public String transformInstance(String blockCode, String libraryString) {
+        RelationInstanceDecl instance = compile(blockCode, libraryString);
+
+        RDL2Smalltalk transformer = new RDL2Smalltalk();
+
+        return  transformer.convert(instance);
+    }
+
+    public RelationInstanceDecl compile(String instanceString, String libraryString) {
+
+        GlobalScope scope = new GlobalScope();
+
+        //parse the library
+        ParseTree tree = parse(libraryString, "libraryDecl");
+        ParseTreeWalker walker = new ParseTreeWalker();
+        ClockRDLBuilderAST builder = new ClockRDLBuilderAST(scope);
+
+        walker.walk(builder, tree);
+
+        //parse the instanceString using the same global scope
+        tree = parse(instanceString, "instanceDecl");
+        walker.walk(builder, tree);
+
+        return builder.getValue(tree, RelationInstanceDecl.class);
+    }
+
+    public ParseTree parse(String input, String rule) {
+        ANTLRInputStream is = new ANTLRInputStream(input);
+        ClockRDLLexer lexer = new ClockRDLLexer(is);
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        Parser parser = new ClockRDLParser(tokens);
+
+        //TODO define a clear error handling strategy for Parsing
+
+        try {
+            Method mtd = parser.getClass().getMethod(rule);
+            ParseTree pt = (ParseTree) mtd.invoke(parser);
+            return pt;
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            System.err.println("no matching method for rule: " + rule);
+            return null;
+        }
+    }
+
 
     public void assertString(String libraryString) {
         RepositoryDecl sys = ClockRDLCompiler.compile(libraryString);

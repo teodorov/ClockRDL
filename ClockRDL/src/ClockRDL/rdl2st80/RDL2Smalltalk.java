@@ -11,12 +11,10 @@ import ClockRDL.model.kernel.NamedDeclaration;
 import ClockRDL.model.kernel.Statement;
 import ClockRDL.model.statements.*;
 import ClockRDL.model.statements.util.StatementsSwitch;
-import javafx.scene.input.DataFormat;
 import org.eclipse.emf.ecore.EObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.Map;
 
@@ -25,8 +23,14 @@ import java.util.Map;
  */
 public class RDL2Smalltalk {
 
-    void convert(RepositoryDecl repositoryDecl) {
+    public void convert(RepositoryDecl repositoryDecl) {
         declarationTransformer.doSwitch(repositoryDecl);
+    }
+    public String convert(RelationInstanceDecl instanceDecl) {
+        String res;
+        String instance = (String)declarationTransformer.doSwitch(instanceDecl);
+        res = result + instance;
+        return res;
     }
 
     LiteralsSwitch literalTransformer = new LiteralsSwitch<String>() {
@@ -92,7 +96,7 @@ public class RDL2Smalltalk {
 
         @Override
         public String caseClockLiteral(ClockLiteral object) {
-            return "Clock named: #"+ object.getName();
+            return "(Clock named: #"+ object.getName() + ")";
         }
 
         @Override
@@ -317,6 +321,7 @@ public class RDL2Smalltalk {
     Map<NamedDeclaration, String> initialization = new IdentityHashMap<>();
     Map<NamedDeclaration, Boolean> visited = new IdentityHashMap<>();
     Map<AbstractRelationDecl, String> relationString = new IdentityHashMap<>();
+    public String result = "";
 
     DeclarationsSwitch declarationTransformer = new DeclarationsSwitch<String>() {
         int clockID = 1;
@@ -419,6 +424,11 @@ public class RDL2Smalltalk {
         @Override
         public String casePrimitiveRelationDecl(PrimitiveRelationDecl object) {
             String className = "Relation"+buildHierarchicalClassName(object);
+            if (visited.get(object) != null) return className;
+
+            varID = 1;
+            constID = 1;
+            clockID = 1;
 
             //TODO if one day we will have shared vars I need to handle the args
             String initializeCode = "";
@@ -470,10 +480,95 @@ public class RDL2Smalltalk {
             String classString = "''!\nRDLPrimitiveRelation subclass: #"+ className+"\n" +
                     "\tinstanceVariableNames: ''\n" +
                     "\tclassVariableNames: ''\n" +
-                    "\tcategory: 'RDL-RelationLibrary-Test'!\n\n";
+                    "\tcategory: '"+packageName+"'!\n\n";
 
             relationString.put(object, classString + annotateMethod(className, initializeCode) + functionBody + getterString + setterString + transitionMethods + annotateMethod(className, transitionCollection));
+            result += relationString.get(object) + "\n\n";
+            visited.put(object, true);
             return className;
+        }
+
+        @Override
+        public String caseCompositeRelationDecl(CompositeRelationDecl object) {
+            String className = "Relation"+buildHierarchicalClassName(object);
+            if (visited.get(object) != null) return className;
+            //TODO if one day we will have shared vars I need to handle the args
+
+            varID = 1;
+            constID = 1;
+            clockID = 1;
+
+            String initializeCode = "";
+            String setterString = "";
+            String getterString = "";
+            String functionBody = "";
+
+            for (NamedDeclaration cR : object.getDeclarations()) {
+                if (cR instanceof ClockDecl) {
+                    doSwitch(cR);
+                    setterString += annotateMethod(className, setters.get(cR)) + "\n";
+                    getterString += annotateMethod(className, getters.get(cR)) + "\n";
+                    continue;
+                }
+                if (cR instanceof FunctionDecl) {
+                    functionBody += annotateMethod(className, doSwitch(cR));
+                    continue;
+                }
+                doSwitch(cR);
+                if (initialization.get(cR) != null) {
+                    initializeCode += initialization.get(cR) + "\n";
+                }
+                setterString += annotateMethod(className,setters.get(cR)) + "\n";
+                getterString += annotateMethod(className,getters.get(cR)) + "\n";
+            }
+
+            for (ClockDecl cD : object.getInternalClocks()) {
+                doSwitch(cD);
+                setterString += annotateMethod(className, setters.get(cD)) + "\n";
+                getterString += annotateMethod(className, getters.get(cD)) + "\n";
+                if (initialization.get(cD) != null) {
+                    initializeCode += initialization.get(cD) + "\n";
+                }
+            }
+
+            initializeCode = "initialize\n" +
+                    "\tsuper initialize.\n" +
+                    "\tclocks := Array new: " + (clockID-1) + ".\n" +
+                    "\tvariables := Array new: " + (varID-1) + ".\n" +
+                    "\tconstants := Array new: " + (constID-1) + ".\n" +
+                    initializeCode;
+
+            String instanceCode = "instances\n\t|instances|\n\tinstances:=OrderedCollection new.\n\t";
+            for (RelationInstanceDecl instanceDecl : object.getInstances()) {
+                instanceCode += "instances add: (" + doSwitch(instanceDecl) + ").\n\t";
+            }
+            instanceCode += "^instances\n";
+
+            String classString = "''!\nRDLCompositeRelation subclass: #"+ className+"\n" +
+                    "\tinstanceVariableNames: ''\n" +
+                    "\tclassVariableNames: ''\n" +
+                    "\tcategory: '"+packageName+"'!\n\n";
+
+            relationString.put(object, classString + annotateMethod(className, initializeCode) + functionBody + getterString + setterString + annotateMethod(className, instanceCode));
+            result += relationString.get(object) + "\n\n";
+            visited.put(object, true);
+            return className;
+        }
+
+        int instanceID = 1;
+        @Override
+        public String caseRelationInstanceDecl(RelationInstanceDecl object) {
+            String name = object.getName() != null ? object.getName() : "i"+ instanceID;
+            String relationInstanceString = "(" + doSwitch(object.getRelation()) + " instanceNamed: #i"+(instanceID ++ )+")\n\t\t";
+            boolean isFirst = true;
+            for (Map.Entry<String, Expression> entry : object.getArgumentMap()) {
+                if (!isFirst) {
+                    relationInstanceString += ";\n\t\t";
+                }
+                relationInstanceString += entry.getKey() + ": " + expressionTransformer.doSwitch(entry.getValue());
+                isFirst = false;
+            }
+            return relationInstanceString;
         }
 
         public String annotateMethod(String className, String body) {
@@ -499,4 +594,6 @@ public class RDL2Smalltalk {
             return result;
         }
     };
+
+    String packageName = "RDL-RelationLibrary-Test";
 }
