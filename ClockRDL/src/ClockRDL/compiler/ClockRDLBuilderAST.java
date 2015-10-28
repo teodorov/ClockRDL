@@ -828,3 +828,5 @@ public class ClockRDLBuilderAST extends ClockRDLBaseListener {
         setValue(ctx, decl);
     }
 }
+
+//TODO add the possibility to specify the negation of clocks in the vector
