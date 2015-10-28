@@ -44,8 +44,8 @@ public class RDL2SmalltalkTests {
         String lib = "library kernel {\n" +
                 "\trelation filtering\n" +
                 "\t\tclock baseClock filtered;\n" +
-                "\t\tvar state := 0; //I think that the filtering clock starts at 0\n" +
                 "\t\tconst binaryWord offset;\n" +
+                "\t\tvar state := 0; //I think that the filtering clock starts at 0\n" +
                 "\t\n" +
                 "\t\tdef doesFilteredTicks {\n" +
                 "\t\t\tif state + 1 <= binaryWord.size() & binaryWord[state+1] = 1 {\n" +
@@ -80,8 +80,8 @@ public class RDL2SmalltalkTests {
         String sched = "library mocos {\n" +
                 "\trelation scheduler4\n" +
                 "\t\tclock schedule1 schedule2 schedule3 schedule4 execute1 execute2 execute3 execute4 block1 block2 block3 block4 stop1 stop2 stop3 stop4;\n" +
-                "\t\tvar isExecuting := false queue := {||} eID := 0;\n" +
                 "\t\tconst isPreemptive := false;\n" +
+                "\t\tvar isExecuting := false queue := {||} eID := 0;\n" +
                 "\n" +
                 "\t{\n" +
                 "\t    //schedule tasks that are ready\n" +
@@ -181,7 +181,7 @@ public class RDL2SmalltalkTests {
     }
 
     @Test
-    public void testSimpleInstance() {
+    public void testAlternates() {
         String definition = "import \"file:///Users/ciprian/Playfield/repositories/plugmc-java/ClockSystem/ClockRDL/examples/ccsl-kernel.crd\"\n" +
                 "library simple {\n" +
                 "\n" +
@@ -197,14 +197,9 @@ public class RDL2SmalltalkTests {
                 "}\n" +
                 "simple.alternates(\n" +
                 "    a: clock[x] \n" +
-                "    b:clock[y]\n" +
+                "    b: clock[y]\n" +
                 ")";
         assertString(definition);
-
-
-        //TODO fix the next line -- maybe I can remove the constants in relations and have initialized arguments
-        // maybe I can keep both?
-        assertEquals("This assertion fails because I have a problem with delay... remove args use constants", false, true);
     }
 
     public String transformInstance(String blockCode, String libraryString) {

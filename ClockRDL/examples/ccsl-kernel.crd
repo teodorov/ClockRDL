@@ -81,8 +81,8 @@ library kernel {
 	//the following relation implements precedence, strict precedence, and bounded precedence
 	relation precedence
 		clock a b;
-		var state := 0;
 		const bound := -1 isStrict := false;
+		var state := 0;
 	{
 		[! isStrict] {a b}; //the precedence allows coincidence always
 		[(bound<0 | bound > state) & state=0] { a } [ state += 1];
@@ -93,8 +93,9 @@ library kernel {
 	}
 
 	//the awaiting clock expression a^n ticks in coincidence with the next nth strictly future tick of a, and then dies
-	relation awaits(n)
+	relation awaits
 		clock a c;
+		const n;
 		var state := n;
 	{
 		[ state=0 ] { a }; //this says that this relation does not stop clock a from ticking
@@ -104,8 +105,8 @@ library kernel {
 
 	relation filtering
 		clock baseClock filtered;
-		var state := 0; //I think that the filtering clock starts at 0
 		const binaryWord offset;
+		var state := 0; //I think that the filtering clock starts at 0
 	
 		def doesFilteredTicks {
 			if state + 1 <= binaryWord.size() & binaryWord[state+1] = 1 {
@@ -292,13 +293,13 @@ library kernel {
 	}
 
 	//after n ticks of the base clock, the base clock and the delayed one become synchronous forever 
-	relation delay(n)
+	relation delay
 		clock base delayed;
+		const n;
 		var countdown := n;
-
 	{
 		[countdown<1] { base delayed };
-		[countdown>1] { base } [ countdown -= 1];
+		[countdown>=1] { base } [ countdown -= 1];
 	}
 
 	// this is a clock that is never allowed to tick

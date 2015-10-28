@@ -324,7 +324,6 @@ public class RDL2Smalltalk {
 
     Map<NamedDeclaration, String> getters = new IdentityHashMap<>();
     Map<NamedDeclaration, String> setters = new IdentityHashMap<>();
-    Map<NamedDeclaration, String> initialization = new IdentityHashMap<>();
     Map<NamedDeclaration, Boolean> visited = new IdentityHashMap<>();
     Map<AbstractRelationDecl, String> relationString = new IdentityHashMap<>();
     public String result = "";
@@ -334,8 +333,16 @@ public class RDL2Smalltalk {
         int varID = 1;
         int constID = 1;
 
-        String getter(String name, String listName, int idx) {
-            return name + "\n\t^" + listName + " at: " + idx;
+        String getter(String name, String initial, String listName, int idx) {
+            String elementAccess = listName + " at: " + idx;
+            String result = name + "\n\t";
+            if (initial != null) {
+                result += "<RDLInitialization>\n\t";
+                result += "(" + elementAccess + ") ifNil: [" + elementAccess + " put: " + initial + "].\n\t";
+            }
+            result += "^"+elementAccess;
+
+            return result;
         }
 
         String setter(String name, String listName, int idx) {
@@ -345,10 +352,10 @@ public class RDL2Smalltalk {
         @Override
         public String caseClockDecl(ClockDecl object) {
             if (visited.get(object) != null) return object.getName();
-            getters.put(object, getter(object.getName(), "clocks", clockID));
+
+            String initial = object.getInitial() != null ? ( "(" + expressionTransformer.doSwitch(object.getInitial()) + " internal: "+(object.getInitial().isIsInternal()?"true" : "false")+")" ) : null;
+            getters.put(object, getter(object.getName(), initial, "clocks", clockID));
             setters.put(object, setter(object.getName(), "clocks", clockID));
-            if (object.getInitial() != null)
-                initialization.put(object, "\tclocks at: " + clockID + " put: " + expressionTransformer.doSwitch(object.getInitial()) +".\n");
             clockID++;
             visited.put(object, true);
             return object.getName();
@@ -357,10 +364,9 @@ public class RDL2Smalltalk {
         @Override
         public String caseVariableDecl(VariableDecl object) {
             if (visited.get(object) != null) return object.getName();
-            getters.put(object, getter(object.getName(), "variables", varID));
+            String initial = object.getInitial() != null ? expressionTransformer.doSwitch(object.getInitial()) : null;
+            getters.put(object, getter(object.getName(), initial, "variables", varID));
             setters.put(object, setter(object.getName(), "variables", varID));
-            if (object.getInitial() != null)
-                initialization.put(object, "\tvariables at: " + varID + " put: " + expressionTransformer.doSwitch(object.getInitial()) +".\n");
             varID++;
             visited.put(object, true);
             return object.getName();
@@ -369,10 +375,9 @@ public class RDL2Smalltalk {
         @Override
         public String caseConstantDecl(ConstantDecl object) {
             if (visited.get(object) != null) return object.getName();
-            getters.put(object, getter(object.getName(), "constants", constID));
+            String initial = object.getInitial() != null ? expressionTransformer.doSwitch(object.getInitial()) : null;
+            getters.put(object, getter(object.getName(), initial, "constants", constID));
             setters.put(object, setter(object.getName(), "constants", constID));
-            if (object.getInitial() != null)
-                initialization.put(object, "\tconstants at: " + constID + " put: " + expressionTransformer.doSwitch(object.getInitial()) +".\n");
             constID++;
             visited.put(object, true);
             return object.getName();
@@ -437,16 +442,17 @@ public class RDL2Smalltalk {
             clockID = 1;
 
             //TODO if one day we will have shared vars I need to handle the args
-            String initializeCode = "";
             String setterString = "";
             String getterString = "";
             String functionBody = "";
+            String selectors = "";
 
             for (NamedDeclaration cR : object.getDeclarations()) {
                 if (cR instanceof ClockDecl) {
                     doSwitch(cR);
                     setterString += annotateMethod(className, setters.get(cR)) + "\n";
                     getterString += annotateMethod(className, getters.get(cR)) + "\n";
+                    selectors += "#" + cR.getName();
                     continue;
                 }
                 if (cR instanceof FunctionDecl) {
@@ -454,19 +460,17 @@ public class RDL2Smalltalk {
                     continue;
                 }
                 doSwitch(cR);
-                if (initialization.get(cR) != null) {
-                    initializeCode += initialization.get(cR) + "\n";
-                }
+
                 setterString += annotateMethod(className,setters.get(cR)) + "\n";
                 getterString += annotateMethod(className,getters.get(cR)) + "\n";
+                selectors += "#" + cR.getName();
             }
 
-            initializeCode = "initialize\n" +
+            String initializeCode = "initialize\n" +
                     "\tsuper initialize.\n" +
                     "\tclocks := Array new: " + (clockID-1) + ".\n" +
                     "\tvariables := Array new: " + (varID-1) + ".\n" +
-                    "\tconstants := Array new: " + (constID-1) + ".\n" +
-                    initializeCode;
+                    "\tconstants := Array new: " + (constID-1) + ".\n";
 
             String transitionCollection = "transitions\n" +
                     "\t|transitions t|\n" +
@@ -504,7 +508,6 @@ public class RDL2Smalltalk {
             constID = 1;
             clockID = 1;
 
-            String initializeCode = "";
             String setterString = "";
             String getterString = "";
             String functionBody = "";
@@ -521,9 +524,6 @@ public class RDL2Smalltalk {
                     continue;
                 }
                 doSwitch(cR);
-                if (initialization.get(cR) != null) {
-                    initializeCode += initialization.get(cR) + "\n";
-                }
                 setterString += annotateMethod(className,setters.get(cR)) + "\n";
                 getterString += annotateMethod(className,getters.get(cR)) + "\n";
             }
@@ -532,17 +532,13 @@ public class RDL2Smalltalk {
                 doSwitch(cD);
                 setterString += annotateMethod(className, setters.get(cD)) + "\n";
                 getterString += annotateMethod(className, getters.get(cD)) + "\n";
-                if (initialization.get(cD) != null) {
-                    initializeCode += initialization.get(cD) + "\n";
-                }
             }
 
-            initializeCode = "initialize\n" +
+            String initializeCode = "initialize\n" +
                     "\tsuper initialize.\n" +
                     "\tclocks := Array new: " + (clockID-1) + ".\n" +
                     "\tvariables := Array new: " + (varID-1) + ".\n" +
-                    "\tconstants := Array new: " + (constID-1) + ".\n" +
-                    initializeCode;
+                    "\tconstants := Array new: " + (constID-1) + ".\n";
 
             String instanceCode = "instances\n\t|instances|\n\tinstances:=OrderedCollection new.\n\t";
             for (RelationInstanceDecl instanceDecl : object.getInstances()) {

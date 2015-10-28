@@ -3,8 +3,8 @@ library PAM_SDF {
     library sdf {
         relation link
             clock read write;
-            var size;
             const outRate inRate capacity;
+            var size;
         {
             [size >= inRate] { read } [ size -= inRate ];
             [capacity < 0 | capacity - size > outRate] { write } [ size += outRate ];

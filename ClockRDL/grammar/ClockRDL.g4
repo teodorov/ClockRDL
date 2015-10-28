@@ -14,7 +14,7 @@ libraryItem : relationDecl
     | libraryDecl
     ;
 
-relationDecl: RELATION IDENTIFIER argumentDecl? clockDecl? variableDecl? constantDecl? functionDecl* LCURLY (primitiveRelationBody | compositeRelationBody) RCURLY;
+relationDecl: RELATION IDENTIFIER argumentDecl? clockDecl? constantDecl? variableDecl? functionDecl* LCURLY (primitiveRelationBody | compositeRelationBody) RCURLY;
 
 argumentDecl : LPAREN IDENTIFIER+ RPAREN;
 clockDecl : CLOCK initializedIdentifier+ SEMICOLON;

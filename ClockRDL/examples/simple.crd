@@ -13,5 +13,5 @@ library simple {
 }
 simple.alternates(
     a: clock[x]
-    b:clock[y]
+    b: clock[y]
 )

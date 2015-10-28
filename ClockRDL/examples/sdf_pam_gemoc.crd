@@ -3,8 +3,8 @@ library sdf_pam {
     library sdf {
         relation actor
             clock start execute stop;
-            var current:=0;
             const cycles;
+            var current:=0;
         {
             [current = -1] { start } [ current += 1 ];
             [current != -1 & current < cycles] { execute } [ current += 1 ];
@@ -14,20 +14,20 @@ library sdf_pam {
 
         relation link
             clock read write;
-            var size;
             const outRate inRate capacity;
+            var size;
         {
             [size >= inRate] { read } [ size -= inRate ];
             [capacity < 0 | capacity - size > outRate] { write } [ size += outRate ];
         }
     }
 
-    relation link(initial)
+    relation link
         clock from to start stop;
-        const outRate inRate capacity size := initial; // size is a constant here due to pass by value
+        const outRate inRate capacity initial; // size is a constant here due to pass by value
     {
         sdf.link
-            (write: from read: to outRate: outRate size: size inRate: inRate capacity: capacity)
+            (write: from read: to outRate: outRate size: initial inRate: inRate capacity: capacity)
         kernel.coincidence(stop from)
         kernel.coincidence(start to)
     }

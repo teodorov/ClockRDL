@@ -278,12 +278,12 @@
       </transitions>
     </libraries>
     <libraries xsi:type="declarations:PrimitiveRelationDecl" name="awaits">
-      <arguments name="n"/>
       <declarations xsi:type="declarations:ClockDecl" name="a"/>
       <declarations xsi:type="declarations:ClockDecl" name="c"/>
       <declarations xsi:type="declarations:VariableDecl" name="state">
-        <initial xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.11/@arguments.0"/>
+        <initial xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.11/@declarations.3"/>
       </declarations>
+      <declarations xsi:type="declarations:ConstantDecl" name="n"/>
       <transitions>
         <guard xsi:type="expressions:BinaryExp" operator="BEQ">
           <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.11/@declarations.2"/>
@@ -1213,12 +1213,12 @@
       </transitions>
     </libraries>
     <libraries xsi:type="declarations:PrimitiveRelationDecl" name="delay">
-      <arguments name="n"/>
       <declarations xsi:type="declarations:ClockDecl" name="base"/>
       <declarations xsi:type="declarations:ClockDecl" name="delayed"/>
       <declarations xsi:type="declarations:VariableDecl" name="countdown">
-        <initial xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.23/@arguments.0"/>
+        <initial xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.23/@declarations.3"/>
       </declarations>
+      <declarations xsi:type="declarations:ConstantDecl" name="n"/>
       <transitions>
         <guard xsi:type="expressions:BinaryExp" operator="BLT">
           <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.23/@declarations.2"/>
@@ -1228,7 +1228,7 @@
         <vector ref="//@libraries.0/@libraries.23/@declarations.1"/>
       </transitions>
       <transitions>
-        <guard xsi:type="expressions:BinaryExp" operator="BGT">
+        <guard xsi:type="expressions:BinaryExp" operator="BGE">
           <lhs xsi:type="expressions:ReferenceExp" ref="//@libraries.0/@libraries.23/@declarations.2"/>
           <rhs xsi:type="literals:IntegerLiteral" value="1"/>
         </guard>

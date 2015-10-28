@@ -699,7 +699,10 @@ public class ClockRDLBuilderAST extends ClockRDLBaseListener {
         decl.setName(name);
 
         List<ArgumentDecl> arguments = getValue(ctx.argumentDecl(), List.class);
-        if (arguments != null) decl.getArguments().addAll(arguments);
+        if (arguments != null) {
+            decl.getArguments().addAll(arguments);
+            throw new RuntimeException("Relation with argument '"+name+"' not supported yet! ( variable sharing is not yet implemented )");
+        }
 
         List<ClockDecl> clocks = getValue(ctx.clockDecl(), List.class);
         if (clocks != null) decl.getDeclarations().addAll(clocks);

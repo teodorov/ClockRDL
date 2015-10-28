@@ -2,8 +2,8 @@ library mocos {
 
 	relation task
 		clock ready execute block unblock stop;
-		var state := 0;
 		const start := 0 waiting := 1 executing := 2 pending := 3;
+		var state := 0;
 	{
 		[state = start] { ready } [ state := waiting];
 		[state = waiting] { execute } [ state := executing ];
@@ -26,9 +26,8 @@ library mocos {
 
 	relation scheduler2
 		clock schedule1 schedule2 execute1 execute2 block1 block2 stop1 stop2;
-		var isExecuting := false queue := {||} eID := 0;
 		const isPreemptive := false;
-
+		var isExecuting := false queue := {||} eID := 0;
 	{
 	    //schedule tasks that are ready
 		[!isExecuting] { schedule1 } [queue.add(1)];
