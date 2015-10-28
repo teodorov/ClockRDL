@@ -177,7 +177,7 @@ public class RDL2Smalltalk {
 
             switch (object.getOperator()) {
                 //boolean
-                case BAND: return "(" + lhs + " & " + rhs + ")";
+                case BAND: return "(" + lhs + " and: [ " + rhs + " ])"; //shortcut for and, does not evaluate RHS
                 case BOR:  return "(" + lhs + " | " + rhs + ")";
                 case BNOR: return "((" + lhs + " | " + rhs + ") & ((" + lhs + " & " + rhs + ") not))";
                 case BXOR: return "((" + lhs + " | " + rhs + ") not)";
@@ -189,7 +189,7 @@ public class RDL2Smalltalk {
                 case BGT: return "(" + lhs + " > " + rhs + ")";
                 case BGE: return "(" + lhs + " >= " + rhs + ")";
                 case BLT: return "(" + lhs + " < " + rhs + ")";
-                case BLE: return "(" + lhs + " < " + rhs + ")";
+                case BLE: return "(" + lhs + " <= " + rhs + ")";
                 //arithmetic
                 case BDIV: return "(" + lhs + " // " + rhs + ")";
                 case BMINUS: return "(" + lhs + " - " + rhs + ")";
@@ -580,18 +580,16 @@ public class RDL2Smalltalk {
 
         @Override
         public String caseLibraryDecl(LibraryDecl object) {
-            String result = "";
             for (LibraryItemDecl libItem : object.getLibraries()) {
-                result += doSwitch(libItem);
+                doSwitch(libItem);
             }
             return result;
         }
 
         @Override
         public String caseRepositoryDecl(RepositoryDecl object) {
-            String result = "";
             for (LibraryItemDecl libItem : object.getLibraries()) {
-                result += doSwitch(libItem);
+                doSwitch(libItem);
             }
             return result;
         }

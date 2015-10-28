@@ -15,6 +15,8 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.junit.Test;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -200,6 +202,23 @@ public class RDL2SmalltalkTests {
                 "    b: clock[y]\n" +
                 ")";
         assertString(definition);
+    }
+
+    @Test
+    public void testProducerConsumer() {
+        try {
+            RepositoryDecl repo =  ClockRDLCompiler.compile(new File("examples/producer_consumer.crd"));
+
+            RDL2Smalltalk transformer = new RDL2Smalltalk();
+
+            String result = transformer.convert(repo);
+
+            assertNotNull(result);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public String transformInstance(String blockCode, String libraryString) {

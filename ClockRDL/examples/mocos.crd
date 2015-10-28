@@ -7,9 +7,9 @@ library mocos {
 	{
 		[state = start] { ready } [ state := waiting];
 		[state = waiting] { execute } [ state := executing ];
-		[state = executing] { execute } [ state := executing ];
+		[state = executing] { execute };
 		[state = executing] { execute block } [ state := pending ];
-		[state = executing] { execute stop } [ state := start ];
+		[state = executing] { stop } [ state := start ];
 		[state = pending] { unblock } [ state := start ];
 	}
 
