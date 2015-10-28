@@ -1,0 +1,52 @@
+library mocos {
+
+	relation task
+		clock ready start execute block unblock stop;
+		const begin := 0 waiting := 1 executing := 2 pending := 3;
+		var state := 0;
+	{
+		[state = begin] { ready } [ state := waiting];
+		[state = waiting] { start } [ state := executing ];
+		[state = executing] { execute };
+		[state = executing] { execute block } [ state := pending ];
+		[state = executing] { stop } [ state := begin ];
+		[state = pending] { unblock } [ state := begin ];
+	}
+
+	relation semaphore
+		clock down up block unblock;
+		var count := 0 queue := {||};
+	{
+		[count > 0] { down } [ count -= 1 ];
+		[count > 0] { up } [ count += 1 ];
+		[count <= 0 ] { down block } [ queue.add(1) ];
+		[count <= 0 & queue.isEmpty()] { up } [ count += 1 ];
+		[count <= 0 & queue.isNotEmpty()] { up unblock /*[queue first]*/ } [ {count += 1 queue.removeFirst()} ];
+	}
+
+    //This scheduler integrates the modification wanted by Jerome
+    //(the scheduler does not synchronize with the task execution)
+    //Also the tasks can register themselves as ready at any time -- no precondition
+	relation scheduler2
+		clock schedule1 schedule2 execute1 execute2 block1 block2 stop1 stop2;
+		const isPreemptive := false;
+		var isExecuting := false queue := {||} eID := 0;
+	{
+	    //schedule tasks that are ready
+		{ schedule1 } [queue.add(1)];
+		{ schedule2 } [queue.add(2)];
+
+		//start the task at the beginning of the queue
+		[!isExecuting & queue.isNotEmpty() & queue.first() = 1] { execute1 } [{ isExecuting := true eID := queue.removeFirst() }];
+		[!isExecuting & queue.isNotEmpty() & queue.first() = 2] { execute2 } [{ isExecuting := true eID := queue.removeFirst() }];
+
+		//if the executing task blocks, go back to not isExecuting
+		//if the task executing is not controlled by the scheduler the executing clock would disappear
+		[isExecuting & eID = 1] { block1 } [{ isExecuting := false eID := 0 }];
+		[isExecuting & eID = 2] { block2 } [{ isExecuting := false eID := 0 }];
+
+		//if the scheduler is preemptive and the queue is not empty then it can decide to stop the executing task at any time
+		[isExecuting & eID = 1 & isPreemptive & queue.isNotEmpty() ] { stop1 } [{ isExecuting := false eID := 0 }];
+		[isExecuting & eID = 2 & isPreemptive & queue.isNotEmpty() ] { stop2 } [{ isExecuting := false eID := 0 }];
+	}
+}

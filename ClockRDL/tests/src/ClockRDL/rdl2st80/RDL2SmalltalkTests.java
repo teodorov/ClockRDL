@@ -221,6 +221,23 @@ public class RDL2SmalltalkTests {
 
     }
 
+    @Test
+    public void testProducerConsumerV1() {
+        try {
+            RepositoryDecl repo =  ClockRDLCompiler.compile(new File("examples/producer_consumer_v1.crd"));
+
+            RDL2Smalltalk transformer = new RDL2Smalltalk();
+
+            String result = transformer.convert(repo);
+
+            assertNotNull(result);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     public String transformInstance(String blockCode, String libraryString) {
         RelationInstanceDecl instance = compile(blockCode, libraryString);
 
