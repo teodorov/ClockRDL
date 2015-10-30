@@ -190,11 +190,11 @@ public class RDL2SmalltalkTests {
                 "    relation alternates\n" +
                 "        clock a b;\n" +
                 "    {\n" +
-                "        clock c := internal clock[delay]; // c is an internal clock due to the delay expression\n" +
+                "        internal clock[delay] // c is an internal clock due to the delay expression\n" +
                 "\n" +
                 "        kernel.precedence (isStrict: true a: a b: b)\n" +
-                "        kernel.delay (n: 1 base: a delayed: c)\n" +
-                "        kernel.precedence (isStrict: true a: b b: c)\n" +
+                "        kernel.delay (n: 1 base: a delayed: delay)\n" +
+                "        kernel.precedence (isStrict: true a: b b: delay)\n" +
                 "    }\n" +
                 "}\n" +
                 "simple.alternates(\n" +
@@ -235,7 +235,22 @@ public class RDL2SmalltalkTests {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
+    @Test
+    public void testDate2015() {
+        try {
+            RepositoryDecl repo =  ClockRDLCompiler.compile(new File("examples/date2015.crd"));
+
+            RDL2Smalltalk transformer = new RDL2Smalltalk();
+
+            String result = transformer.convert(repo);
+
+            assertNotNull(result);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public String transformInstance(String blockCode, String libraryString) {

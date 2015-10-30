@@ -4,11 +4,11 @@ library simple {
     relation alternates
         clock a b;
     {
-        clock c := internal clock[delay]; // c is an internal clock due to the delay expression
+        internal clock[delay] // c is an internal clock due to the delay expression
 
         kernel.precedence (isStrict: true a: a b: b)
-        kernel.delay (n: 1 base: a delayed: c)
-        kernel.precedence (isStrict: true a: b b: c)
+        kernel.delay (n: 1 base: a delayed: delay)
+        kernel.precedence (isStrict: true a: b b: delay)
     }
 }
 simple.alternates(

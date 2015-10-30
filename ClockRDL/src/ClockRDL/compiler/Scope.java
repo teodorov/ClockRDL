@@ -29,11 +29,14 @@ public class Scope<T> {
     }
 
     public void define(String sym, T value) {
-        T previous;
-        if ((previous = symbols.get(sym)) != null) {
-            throw new RuntimeException("Illegal redefinition of " + sym + "[" + previous.getClass().getSimpleName() + "] as " + value.getClass().getSimpleName());
+        T previous = null;
+        try {
+            previous = resolve(sym);
+        } catch (RuntimeException e) {
+            symbols.put(sym, value);
+            return;
         }
-        symbols.put(sym, value);
+        throw new RuntimeException("Illegal redefinition of " + sym + "[" + previous.getClass().getSimpleName() + "] as " + value.getClass().getSimpleName());
     }
 
     public T resolve(String name) {

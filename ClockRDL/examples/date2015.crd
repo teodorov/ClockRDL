@@ -1,0 +1,56 @@
+library PAM_SDF {
+    library sdf {
+        relation channel
+            clock read write;
+            const outRate inRate capacity;
+            var size;
+        {
+            [size >= inRate] { read } [ size -= inRate ];
+            //when the capacity is smaller than 0 we have an infinite buffer size case
+            [capacity < 0 | capacity - size >= outRate] { write } [ size += outRate ];
+        }
+    }
+
+    relation pam2cycle
+    {
+        clock[block1] clock[block2]
+
+        //the first channel has an initial token to start the cycle
+        sdf.channel (write: block1 read: block2 inRate: 1 outRate: 1 capacity: 2 size: 1)
+        sdf.channel (write: block2 read: block1 inRate: 1 outRate: 1 capacity: 1 size: 1)
+    }
+
+    relation pam2proc
+        clock producer := clock[producer];
+    {
+        clock[consumer]
+
+        sdf.channel (write: producer read: consumer inRate: 1 outRate: 1 capacity: 1 size: 0)
+    }
+
+    relation edge
+        clock from to;
+        const outRate initial inRate capacity;
+    {
+        sdf.channel (write: from read: to inRate: inRate outRate: outRate capacity: capacity size: initial)
+    }
+
+    relation pam4date
+    {
+        clock[signalProvider]
+        clock[display1]
+        clock[fft]
+        clock[average]
+        clock[threshold]
+        clock[display2]
+
+        edge(from: signalProvider   to: display1    outRate:  1 initial:  0 inRate:  1 capacity:  1)
+        edge(from: signalProvider   to: fft         outRate:  1 initial:  0 inRate: 16 capacity: 16)
+        edge(from: fft              to: average     outRate: 16 initial: 16 inRate:  8 capacity: 16)
+        edge(from: average          to: fft         outRate:  8 initial:  0 inRate: 16 capacity: 16)
+        edge(from: fft              to: threshold   outRate: 16 initial:  0 inRate:  4 capacity: 16)
+        edge(from: threshold        to: display2    outRate:  1 initial:  0 inRate:  1 capacity:  1)
+    }
+}
+
+PAM_SDF.pam2cycle

@@ -598,7 +598,22 @@ public class RDL2Smalltalk {
         public String caseSystemDecl(SystemDecl object) {
             if (object.getRoot()!=null) {
                 String instanceString = doSwitch(object.getRoot());
-                return result + instanceString;
+
+                SimpleDateFormat dataFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm");
+                String rootMethod = "''!\nObject subclass: #RDLRelationInstance\n" +
+                        "\tinstanceVariableNames: ''\n" +
+                        "\tclassVariableNames: ''\n" +
+                        "\tcategory: '"+packageName+"'!\n\n!\n";
+
+                rootMethod +="RDLRelationInstance class\n" +
+                        "\tinstanceVariableNames: ''!\n" +
+                        "\n" +
+                        "!RDLRelationInstance class methodsFor: 'generated' stamp: 'CiprianTeodorov " + dataFormat.format(new Date()) + "'!\n";
+                rootMethod += "root\n\t|instance|\n\tinstance:=" + instanceString + ".\n\t";
+                rootMethod += "^ (ClockSystem named: #rdl) fromRDL: instance! !";
+
+
+                return result + "\n\n\n" + rootMethod;
             }
             return result;
         }

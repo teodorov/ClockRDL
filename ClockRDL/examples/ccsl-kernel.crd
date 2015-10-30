@@ -318,7 +318,8 @@ library kernel {
 	//the concatenation relation makes sense only if we consider clock death
 	//primitive relation concatenation
 
-	//TODO:1 add shared variable support
+	//DONE:0 internal clocks does not need the clock, we can declare them with clock[name] instead of x := clock[name]
+	//TODO:1 add shared variable support, what about using 'ref' instead of the argument list?
 	//TODO:2 add possibility to specify clock negation in clock vector
 	//TODO:3 what happens when no clocks? maybe I we can offer a choice to the user. In this case ClockSystem does 3(a)
 	//TODO:     3(a) everything without clocks executes in the same step (x,y)

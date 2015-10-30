@@ -30,7 +30,7 @@ guard: '[' expression ']';
 vector: '{' IDENTIFIER* '}';
 action: '[' statement ']';
 
-compositeRelationBody : clockDecl? instanceDecl+;
+compositeRelationBody : clockLiteral* instanceDecl+;
 instanceDecl: (IDENTIFIER COLON)? qualifiedName (LPAREN formalToActual* RPAREN)?;
 formalToActual: (IDENTIFIER ':')? expression;
 qualifiedName : IDENTIFIER ('.' IDENTIFIER)*;

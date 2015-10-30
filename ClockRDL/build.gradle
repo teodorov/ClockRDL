@@ -25,3 +25,7 @@ task generateEcore(type: org.ensta.Ecore2JavaGenerationTask)
 
 sourceSets.main.java.srcDir 'generated'
 compileJava.dependsOn generateAntlr4Parser, generateEcore
+
+clean << {
+    project.delete "tmp"
+}

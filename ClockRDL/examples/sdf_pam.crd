@@ -7,7 +7,8 @@ library PAM_SDF {
             var size;
         {
             [size >= inRate] { read } [ size -= inRate ];
-            [capacity < 0 | capacity - size > outRate] { write } [ size += outRate ];
+            //when the capacity is smaller than 0 we have an infinite buffer size case
+            [capacity < 0 | capacity - size >= outRate] { write } [ size += outRate ];
         }
     }
 
@@ -46,8 +47,9 @@ library PAM_SDF {
     }
 
     relation PAM1_sequentialPlatform
-        clock signalProvider displayIn nFFT avg threshold displayOut;
+        clock displayIn := clock[displayIn] nFFT avg threshold displayOut;
     {
+        clock[signalProvider]
         kernel.exclusion6
             (signalProvider displayIn nFFT avg threshold displayOut)
 

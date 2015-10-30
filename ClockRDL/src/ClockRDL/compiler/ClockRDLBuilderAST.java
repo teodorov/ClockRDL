@@ -662,17 +662,31 @@ public class ClockRDLBuilderAST extends ClockRDLBaseListener {
         //create a scope for internal clocks and set it as current for the children
         Scope<NamedDeclaration> internalClocksScope = new Scope<>("internal clocks scope", currentScope);
         currentScope = internalClocksScope;
+
+        for (ClockRDLParser.ClockLiteralContext clockLiteralContext : ctx.clockLiteral()) {
+            ClockDecl clockDecl = declFact.createClockDecl();
+
+            String name = clockLiteralContext.IDENTIFIER().getText();
+            clockDecl.setName(name);
+            //add this clock to the current scope
+            currentScope.define(name, clockDecl);
+        }
     }
 
     @Override
     public void exitCompositeRelationBody(ClockRDLParser.CompositeRelationBodyContext ctx) {
+        List<ClockDecl> internalClocks = new ArrayList<>();
+        for (ClockRDLParser.ClockLiteralContext clockLiteralCtx : ctx.clockLiteral()) {
+            ClockLiteral cL = getValue(clockLiteralCtx, ClockLiteral.class);
+            ClockDecl clockDecl = (ClockDecl)currentScope.resolve(cL.getName());
+
+            clockDecl.setInitial(cL);
+
+            internalClocks.add(clockDecl);
+        }
         //reset the scope
         currentScope = currentScope.getEnclosingScope();
 
-        List<ClockDecl> internalClocks = null;
-        if (ctx.clockDecl() != null) {
-            internalClocks = getValue(ctx.clockDecl(), List.class);
-        }
         List<RelationInstanceDecl> instances = new ArrayList(ctx.instanceDecl().size());
         for (ClockRDLParser.InstanceDeclContext instCtx : ctx.instanceDecl()) {
             RelationInstanceDecl instance = getValue(instCtx, RelationInstanceDecl.class);

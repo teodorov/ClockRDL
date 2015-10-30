@@ -62,11 +62,11 @@ public class ClockRDLCompilerTests {
     public void testXMIGeneration() {
         try {
             RepositoryDecl lib = ClockRDLCompiler.compile(new File("examples/ccsl-kernel.crd"));
-            URI uri = ClockRDLCompiler.generateModelXMI(lib, "examples/ccsl-kernel.xmi");
+            URI uri = ClockRDLCompiler.generateModelXMI(lib, "tmp/ccsl-kernel.xmi");
             System.out.println("XMI saved in: " + uri + "\n");
 
             lib = ClockRDLCompiler.compile(new File("examples/sdf_pam.crd"));
-			uri = ClockRDLCompiler.generateModelXMI(lib, "examples/sdf_pam.xmi");
+			uri = ClockRDLCompiler.generateModelXMI(lib, "tmp/sdf_pam.xmi");
             System.out.println("XMI saved in: " + uri+ "\n");
         } catch (IOException e) {
             e.printStackTrace();

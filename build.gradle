@@ -150,7 +150,7 @@ jar.dependsOn external
 jar {
   baseName = 'ClockRDL'
   manifest {
-    attributes 'Main-Class': 'plug.examples.PlugExamples'
+    attributes 'Main-Class': 'ClockRDL.rdl2st80.ClockRDL2Smalltalk'
     attributes 'Class-Path': externalDependencies().collect {it.name}.join(' ')
   }
   
