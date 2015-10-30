@@ -623,7 +623,6 @@ public class ClockRDLBuilderAST extends ClockRDLBaseListener {
             decl.setName(instanceName);
         }
 
-        //TODO do I need to do a relation lookup here?
         List<String> qualifiedName = getValue(ctx.qualifiedName(), List.class);
         decl.getQualifiedName().addAll(qualifiedName);
         decl.setRelation(lookup(qualifiedName, AbstractRelationDecl.class));
@@ -632,7 +631,6 @@ public class ClockRDLBuilderAST extends ClockRDLBaseListener {
         int id = 0;
         for (ClockRDLParser.FormalToActualContext entryCtx : ctx.formalToActual()) {
             Map.Entry<String, Expression> entry = getValue(entryCtx, Map.Entry.class);
-            //TODO do I need to do a lookup for formals here in the relation found earlier?
             String formalName = entry.getKey();
             Expression actualExp = entry.getValue();
 
@@ -842,5 +840,3 @@ public class ClockRDLBuilderAST extends ClockRDLBaseListener {
         setValue(ctx, decl);
     }
 }
-
-//TODO add the possibility to specify the negation of clocks in the vector

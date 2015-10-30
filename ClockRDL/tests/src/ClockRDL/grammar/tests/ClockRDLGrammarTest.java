@@ -274,7 +274,6 @@ public class ClockRDLGrammarTest {
 		Parser 				parser 	= new ClockRDLParser(tokens);
 		NoErrorsForTest  	errorL  = new NoErrorsForTest();
 
-        //TODO define a clear error handling strategy for Parsing
 		parser.removeErrorListeners();
 		parser.addErrorListener(errorL);
 

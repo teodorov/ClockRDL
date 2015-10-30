@@ -26,6 +26,10 @@ public class GlobalScope extends Scope {
             fct = DeclarationsFactory.eINSTANCE.createPrimitiveFunctionDecl();
             fct.setName("print");
             this.put("print", fct);
+
+            fct = DeclarationsFactory.eINSTANCE.createPrimitiveFunctionDecl();
+            fct.setName("array");
+            this.put("array", fct);
         }};
     }
 }

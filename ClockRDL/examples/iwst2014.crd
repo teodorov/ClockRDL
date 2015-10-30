@@ -1,0 +1,72 @@
+import "file:///Users/ciprian/Playfield/repositories/plugmc-java/ClockSystem/ClockRDL/examples/ccsl-kernel.crd"
+library iwst {
+    library sdf {
+        relation period
+            clock base filtered;
+            const period tickAtEnd := true;
+            def binaryPeriod {
+                var
+                    result := array(period)
+                    i := !tickAtEnd ? 1 : 0
+                ;
+                if !tickAtEnd {
+                    result[0] := 1
+                }
+                while i<period {
+                    result[i] := 0
+                }
+                if tickAtEnd {
+                    result[period-1] := 1
+                }
+                return result
+            }
+        {
+            kernel.filtering(base: base filtered: filtered binaryWord: binaryPeriod() offset: 0)
+        }
+        relation input
+            clock actor read;
+            const rate;
+        {
+            clock[filtered]
+            period(base: read filtered: filtered period: rate)
+            kernel.precedence(a: filtered b: actor isStrict: true)
+        }
+
+        relation output
+            clock actor write;
+            const rate;
+        {
+            clock[filtered]
+            period(base: write filtered: filtered period: rate tickAtEnd: false)
+            kernel.coincidence(a: write b: filtered)
+        }
+
+        relation tokens
+            clock write read;
+            const initialTokens;
+        {
+            clock[delayed]
+            kernel.delay(base: read delayed: delayed n: initialTokens)
+            kernel.precedence(a: write b: delayed isStrict: true)
+        }
+
+        relation edge
+            clock source target;
+            const outRate initial inRate;
+        {
+            clock[read] clock[write]
+            output(actor: source write: write rate: outRate)
+            tokens(write: write read: read)
+            input(actor: target read: read rate: inRate)
+        }
+    }
+
+    relation sdf3
+    {
+        clock[a] clock[b] clock[c]
+        sdf.edge(source: a target: b outRate: 1 initial:0 inRate: 2)
+        sdf.edge(source: b target: c outRate: 2 initial:0 inRate: 1)
+        sdf.edge(source: c target: b outRate: 1 initial:2 inRate: 2)
+    }
+}
+i:iwst.sdf3

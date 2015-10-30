@@ -285,8 +285,6 @@ public class RDL2SmalltalkTests {
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         Parser parser = new ClockRDLParser(tokens);
 
-        //TODO define a clear error handling strategy for Parsing
-
         try {
             Method mtd = parser.getClass().getMethod(rule);
             ParseTree pt = (ParseTree) mtd.invoke(parser);

@@ -285,13 +285,6 @@ library kernel {
 		[! alive] { b };
 	}
 
-	relation forceOne
-		clock one;
-		var alive := true;
-	{
-		[alive] { one } [ alive := ! alive ]; //the clock dies
-	}
-
 	//after n ticks of the base clock, the base clock and the delayed one become synchronous forever 
 	relation delay
 		clock base delayed;
@@ -301,30 +294,4 @@ library kernel {
 		[countdown<1] { base delayed };
 		[countdown>=1] { base } [ countdown -= 1];
 	}
-
-	//this is a clock that is never allowed to tick
-	//primitive clock never
-	/**
-	 * relation never
-	 *		clock clk;
-	 * {
-	 *		{ !clk };
-	 * }
-	 **/
-	// this is a clock is always tick no matter what
-	//primitive clock always 
-	//the forceZero clock makes sense only if we consider concatenation
-	//primitive clock forceZero
-	//the concatenation relation makes sense only if we consider clock death
-	//primitive relation concatenation
-
-	//DONE:0 internal clocks does not need the clock, we can declare them with clock[name] instead of x := clock[name]
-	//TODO:1 add shared variable support, what about using 'ref' instead of the argument list?
-	//TODO:2 add possibility to specify clock negation in clock vector
-	//TODO:3 what happens when no clocks? maybe I we can offer a choice to the user. In this case ClockSystem does 3(a)
-	//TODO:     3(a) everything without clocks executes in the same step (x,y)
-	//TODO:     3(b) asynchronous interleaving (x,-) (-,y)
-	//TODO:     3(c) all possibilities (-,-) (x,-) (-,y) (x,y)
-	//TODO:4 add primitive always
-
 }

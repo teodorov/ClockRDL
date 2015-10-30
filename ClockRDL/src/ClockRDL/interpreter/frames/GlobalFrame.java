@@ -2,8 +2,7 @@ package ClockRDL.interpreter.frames;
 
 import ClockRDL.interpreter.Memory;
 import ClockRDL.interpreter.Value;
-import ClockRDL.interpreter.values.BooleanValue;
-import ClockRDL.interpreter.values.PrimitiveFunctionValue;
+import ClockRDL.interpreter.values.*;
 import ClockRDL.model.declarations.PrimitiveFunctionDecl;
 import ClockRDL.model.kernel.NamedDeclaration;
 
@@ -19,6 +18,7 @@ public class GlobalFrame extends TemporaryFrame {
     public static Map<String, PrimitiveFunctionValue> primitives = new HashMap<String, PrimitiveFunctionValue>() {{
         put("assert", new PrimitiveFunctionValue("assert", v -> primAssert((List<Value>)v)));
         put("print", new PrimitiveFunctionValue("print", v->primPrint((List<Value>)v)));
+        put("array", new PrimitiveFunctionValue("array", v->primArray( (List<Value>)v ) ));
     }};
 
     public static Value primAssert(List<Value> value) {
@@ -39,6 +39,19 @@ public class GlobalFrame extends TemporaryFrame {
         return BooleanValue.TRUE;
     }
 
+    public static Value primArray(List<Value> value) {
+        if (value.size() != 1) throw new RuntimeException("Function array expects one argument but was called with " + value.size() + " arguments");
+        int size = ((IntegerValue)(value.get(0))).data;
+        ArrayValue array = new ArrayValue();
+        array.data = new Value[size];
+
+        for (int i=0; i<size; i++) {
+            array.data[i] = NullValue.uniqueInstance;
+        }
+
+        return array;
+    }
+
     public GlobalFrame() {
         super("Global", null);
     }
@@ -54,13 +67,4 @@ public class GlobalFrame extends TemporaryFrame {
         }
         return super.lookup(decl, memory);
     }
-
-//    @Override
-//    public Value lookup(String name, Memory memory) {
-//        Value result = primitives.get(name);
-//        if (result != null) return result;
-//
-//        return super.lookup(name, memory);
-//    }
-
 }
