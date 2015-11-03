@@ -5,7 +5,6 @@ import ClockRDL.compiler.ClockRDLCompiler;
 import ClockRDL.compiler.GlobalScope;
 import ClockRDL.grammar.ClockRDLLexer;
 import ClockRDL.grammar.ClockRDLParser;
-import ClockRDL.interpreter.Environment;
 import ClockRDL.model.declarations.RelationInstanceDecl;
 import ClockRDL.model.declarations.RepositoryDecl;
 import org.antlr.v4.runtime.ANTLRInputStream;

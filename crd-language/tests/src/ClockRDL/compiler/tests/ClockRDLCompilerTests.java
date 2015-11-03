@@ -61,11 +61,11 @@ public class ClockRDLCompilerTests {
     @Test
     public void testXMIGeneration() {
         try {
-            RepositoryDecl lib = ClockRDLCompiler.compile(new File("examples/ccsl-kernel.crd"));
+            RepositoryDecl lib = ClockRDLCompiler.compile(new File("../examples/ccsl-kernel.crd"));
             URI uri = ClockRDLCompiler.generateModelXMI(lib, "tmp/ccsl-kernel.xmi");
             System.out.println("XMI saved in: " + uri + "\n");
 
-            lib = ClockRDLCompiler.compile(new File("examples/sdf_pam.crd"));
+            lib = ClockRDLCompiler.compile(new File("../examples/sdf_pam.crd"));
 			uri = ClockRDLCompiler.generateModelXMI(lib, "tmp/sdf_pam.xmi");
             System.out.println("XMI saved in: " + uri+ "\n");
         } catch (IOException e) {
@@ -75,12 +75,12 @@ public class ClockRDLCompilerTests {
 
 	@Test
 	public void testBSystem() {
-		assertFile("examples/ccsl-kernel.crd");
+		assertFile("../examples/ccsl-kernel.crd");
 	}
 	
 	@Test
 	public void testExamples() {
-		File testDir = new File("examples/");
+		File testDir = new File("../examples/");
 		
 		list(testDir);
 	}

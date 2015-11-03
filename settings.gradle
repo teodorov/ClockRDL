@@ -1,3 +1,4 @@
 include \
-	  "ClockRDL" \
+	  "crd-language" \
+	, "crd-interpreter" \
 

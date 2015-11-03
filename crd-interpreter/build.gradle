@@ -1,0 +1,9 @@
+configurations { antlr4 }
+dependencies {
+	compile project(':crd-language')
+	testCompile project (path: ":crd-language", configuration: 'tests')
+}
+
+clean << {
+    project.delete "tmp"
+}

@@ -231,7 +231,7 @@ public class ClockRDLGrammarTest {
 
 	@Test
 	public void testExamples() {
-		File testDir = new File("examples/");
+		File testDir = new File("../examples/");
 		System.out.println(new File(".").getAbsolutePath());
 		
 		list(testDir);
