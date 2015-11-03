@@ -1,3 +1,17 @@
+buildscript {
+    repositories {
+        maven {
+        	mavenCentral()
+            url "https://dl.bintray.com/ciprian-teodorov/CipT-artefacts/"
+        }
+    }
+    dependencies {
+        classpath group: 'org.ensta', name: 'ecore2java',
+                  version: '1.0'
+    }
+}
+apply plugin: 'org.ensta.ecore2java'
+
 configurations { antlr4 }
 dependencies {
 	antlr4  "org.antlr:antlr4:4.5.1"
@@ -21,10 +35,8 @@ task generateAntlr4Parser(type: JavaExec) {
 		, antlr4OutputPath("generated/ClockRDL")]
 }
 
-task generateEcore(type: org.ensta.Ecore2JavaGenerationTask)
-
 sourceSets.main.java.srcDir 'generated'
-compileJava.dependsOn generateAntlr4Parser, generateEcore
+compileJava.dependsOn generateAntlr4Parser, ecore2java
 
 clean << {
     project.delete "tmp"
