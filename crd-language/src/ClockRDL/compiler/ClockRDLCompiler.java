@@ -55,11 +55,7 @@ public class ClockRDLCompiler {
         if (libPaths == null) {
             libPaths = new ArrayList<>();
         }
-        try {
-            libPaths.add(new java.net.URI("file://" + System.getProperty("user.dir") + "/"));
-        } catch (URISyntaxException e) {
-            return null;
-        }
+        libPaths.add((new File(System.getProperty("user.dir"))).toURI());
 
         ClockRDLBuilderAST builder = new ClockRDLBuilderAST(new GlobalScope(), libPaths);
 

@@ -40,13 +40,13 @@ public class ClockRDL2Smalltalk {
                 String paths = args[i];
                 StringTokenizer sT = new StringTokenizer(paths, "|");
                 while (sT.hasMoreElements()) {
-                    try {
-                        String path = sT.nextToken();
-                        path = path.replaceAll("\"","");
-                        libPaths.add(new URI(path));
-                    } catch (URISyntaxException e) {
-                        System.err.println("Invalid URI: " + e.getMessage());
-                        throw new RuntimeException("Invalid URI: " + e.getMessage());
+                    String path = sT.nextToken();
+                    path = path.replaceAll("\"","");
+                    File f = new File(path);
+                    libPaths.add(f.toURI());
+                    if (!f.exists()) {
+                        System.err.println("Invalid URI: " + path);
+                        throw new RuntimeException("Invalid URI: " + path);
                     }
                 }
             }
