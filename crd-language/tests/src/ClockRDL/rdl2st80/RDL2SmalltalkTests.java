@@ -183,7 +183,7 @@ public class RDL2SmalltalkTests {
 
     @Test
     public void testAlternates() {
-        String definition = "import \"file:///Users/ciprian/Playfield/repositories/plugmc-java/ClockSystem/ClockRDL/examples/ccsl-kernel.crd\"\n" +
+        String definition = "import \"file:///Users/ciprian/Playfield/repositories/ClockRDL/examples/ccsl-kernel.crd\"\n" +
                 "library simple {\n" +
                 "\n" +
                 "    relation alternates\n" +
@@ -206,7 +206,7 @@ public class RDL2SmalltalkTests {
     @Test
     public void testProducerConsumer() {
         try {
-            RepositoryDecl repo =  ClockRDLCompiler.compile(new File("examples/producer_consumer.crd"));
+            RepositoryDecl repo =  ClockRDLCompiler.compile(new File("../examples/producer_consumer.crd"));
 
             RDL2Smalltalk transformer = new RDL2Smalltalk();
 
@@ -223,7 +223,7 @@ public class RDL2SmalltalkTests {
     @Test
     public void testProducerConsumerV1() {
         try {
-            RepositoryDecl repo =  ClockRDLCompiler.compile(new File("examples/producer_consumer_v1.crd"));
+            RepositoryDecl repo =  ClockRDLCompiler.compile(new File("../examples/producer_consumer_v1.crd"));
 
             RDL2Smalltalk transformer = new RDL2Smalltalk();
 
@@ -239,7 +239,7 @@ public class RDL2SmalltalkTests {
     @Test
     public void testDate2015() {
         try {
-            RepositoryDecl repo =  ClockRDLCompiler.compile(new File("examples/date2015.crd"));
+            RepositoryDecl repo =  ClockRDLCompiler.compile(new File("../examples/date2015.crd"));
 
             RDL2Smalltalk transformer = new RDL2Smalltalk();
 

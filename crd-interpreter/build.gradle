@@ -7,3 +7,8 @@ dependencies {
 clean << {
     project.delete "tmp"
 }
+
+
+test {
+    outputs.upToDateWhen { false }
+}

@@ -172,7 +172,7 @@ task buildBatch(dependsOn: jar) << {
 
     copy {
         from file("$buildDir/libs")
-        include '**/ClockLanguage*.jar'
+        include '**/ClockRDL*.jar'
         into file("$targetPath/jars")
     }
 
@@ -186,11 +186,11 @@ task buildBatch(dependsOn: jar) << {
 task buildDistribution(dependsOn: [buildBatch])
 
 task zipBatchDistribution(type: Zip, dependsOn: buildBatch) {
-    baseName="OBP"
+    baseName="ClockRDL"
     version="$version"
-    classifier="batch"
+    classifier=""
     from("$buildDir/batch")
-    into "ClockLanguage-${version}_batch"
+    into "ClockRDL-${version}"
     destinationDir file("$buildDir/distributions")
 }
 
