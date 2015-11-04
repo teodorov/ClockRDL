@@ -272,12 +272,8 @@ public class RDL2SmalltalkTests {
         ParseTree tree = parse(libraryString, "libraryDecl");
         ParseTreeWalker walker = new ParseTreeWalker();
         List<URI> libPath = new ArrayList<>();
-        try {
-            libPath.add(new URI("file:///Users/ciprian/Playfield/repositories/ClockRDL/"));
-            libPath.add(new URI("file://" + System.getProperty("user.dir") + "/"));
-        } catch (URISyntaxException e) {
-            return null;
-        }
+        libPath.add(new File(System.getProperty("user.dir")).toURI());
+
         ClockRDLBuilderAST builder = new ClockRDLBuilderAST(scope, libPath);
 
         walker.walk(builder, tree);
