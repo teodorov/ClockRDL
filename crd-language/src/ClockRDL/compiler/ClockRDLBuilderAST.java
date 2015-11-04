@@ -810,6 +810,7 @@ public class ClockRDLBuilderAST extends ClockRDLBaseListener {
             }
 
             if (inputStream == null) {
+                System.err.println("Library named " + ctx.STRING().getText() + " could not be found in Path" + libraryPaths.toString());
                 throw new RuntimeException("Library named " + ctx.STRING().getText() + " could not be found in Path" + libraryPaths.toString());
             }
 

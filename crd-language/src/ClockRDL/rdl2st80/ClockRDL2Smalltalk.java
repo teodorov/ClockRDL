@@ -14,7 +14,7 @@ import java.util.StringTokenizer;
  * Created by ciprian on 29/10/15.
  */
 public class ClockRDL2Smalltalk {
-    static String usage = "usage: ClockRDL2Smalltalk [-libraryPath <':' separated list of filepaths>] -in <.crd filename> -out <.st filename>\n";
+    static String usage = "usage: ClockRDL2Smalltalk [-libraryPath <'|' separated list of filepaths>] -in <.crd filename> -out <.st filename>\n";
     public static void main(String[] args) {
         File inFile = null;
         File outFile = null;
@@ -38,11 +38,14 @@ public class ClockRDL2Smalltalk {
             else if (args[i].equals("-libraryPath")) {
                 i++;
                 String paths = args[i];
-                StringTokenizer sT = new StringTokenizer(paths, ":");
+                StringTokenizer sT = new StringTokenizer(paths, "|");
                 while (sT.hasMoreElements()) {
                     try {
-                        libPaths.add(new URI(sT.nextToken()));
+                        String path = sT.nextToken();
+                        path = path.replaceAll("\"","");
+                        libPaths.add(new URI(path));
                     } catch (URISyntaxException e) {
+                        System.err.println("Invalid URI: " + e.getMessage());
                         throw new RuntimeException("Invalid URI: " + e.getMessage());
                     }
                 }
