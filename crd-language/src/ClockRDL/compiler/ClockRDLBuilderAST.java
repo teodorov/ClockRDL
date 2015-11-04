@@ -1,6 +1,7 @@
 package ClockRDL.compiler;
 
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -32,9 +33,11 @@ public class ClockRDLBuilderAST extends ClockRDLBaseListener {
     public ParseTreeProperty<Object> values = new ParseTreeProperty<>();
 
     Scope<NamedDeclaration> currentScope;
+    List<URI> libraryPaths;
 
-    public ClockRDLBuilderAST(Scope<NamedDeclaration> globalScope) {
+    public ClockRDLBuilderAST(Scope<NamedDeclaration> globalScope, List<URI> libraryPaths) {
         this.currentScope = globalScope;
+        this.libraryPaths = libraryPaths;
     }
 
     //this is needed only for binding relation instances to their library definitions
@@ -791,7 +794,25 @@ public class ClockRDLBuilderAST extends ClockRDLBaseListener {
             String uriString = ctx.STRING().getText().replaceAll("\"", "");
             URI uri = new URI(uriString);
 
-            InputStream inputStream = uri.toURL().openStream();
+            InputStream inputStream = null;
+            if (uri.isAbsolute()) {
+                inputStream = uri.toURL().openStream();
+            }
+            else {
+                for (URI baseURI : libraryPaths) {
+                    URI resolved = baseURI.resolve(uriString);
+                    File file = new File(resolved);
+                    if (file.exists()) {
+                        inputStream = resolved.toURL().openStream();
+                        break;
+                    }
+                }
+            }
+
+            if (inputStream == null) {
+                throw new RuntimeException("Library named " + ctx.STRING().getText() + " could not be found in Path" + libraryPaths.toString());
+            }
+
             ANTLRInputStream is = new ANTLRInputStream(inputStream);
             ClockRDLLexer lexer = new ClockRDLLexer(is);
             CommonTokenStream tokens = new CommonTokenStream(lexer);

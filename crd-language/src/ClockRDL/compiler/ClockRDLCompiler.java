@@ -16,7 +16,10 @@ import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by ciprian on 14/10/15.
@@ -25,29 +28,40 @@ public class ClockRDLCompiler {
 
     private static ClockRDLCompiler instance = new ClockRDLCompiler();
 
-    public static RepositoryDecl compile(File file) throws IOException {
+    public static RepositoryDecl compile(File file, List<java.net.URI> libraryPaths) throws IOException {
         ANTLRFileStream fs = new ANTLRFileStream(file.getAbsolutePath());
 
-        return instance.compile(fs);
+        return instance.compile(fs, libraryPaths);
     }
 
-    public static RepositoryDecl compile(String program) {
+    public static RepositoryDecl compile(String program, List<java.net.URI> libraryPaths) {
         ANTLRInputStream is = new ANTLRInputStream(program);
 
-        return instance.compile(is);
+        return instance.compile(is, libraryPaths);
     }
 
     public static URI generateModelXMI(RepositoryDecl lib, String fileName) throws IOException {
         return instance.saveXMI(lib, fileName);
     }
 
-    public RepositoryDecl compile(ANTLRInputStream is) {
+    public RepositoryDecl compile(ANTLRInputStream is, List<java.net.URI> libraryPaths) {
         ClockRDLLexer lexer = new ClockRDLLexer(is);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         ClockRDLParser parser = new ClockRDLParser(tokens);
         ParseTree tree = parser.systemDecl();
         ParseTreeWalker walker = new ParseTreeWalker();
-        ClockRDLBuilderAST builder = new ClockRDLBuilderAST(new GlobalScope());
+
+        List<java.net.URI> libPaths = libraryPaths;
+        if (libPaths == null) {
+            libPaths = new ArrayList<>();
+        }
+        try {
+            libPaths.add(new java.net.URI("file://" + System.getProperty("user.dir") + "/"));
+        } catch (URISyntaxException e) {
+            return null;
+        }
+
+        ClockRDLBuilderAST builder = new ClockRDLBuilderAST(new GlobalScope(), libPaths);
 
         //TODO define a clear error handling strategy for Parsing
         parser.removeErrorListeners();

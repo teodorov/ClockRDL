@@ -18,6 +18,10 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -183,7 +187,7 @@ public class RDL2SmalltalkTests {
 
     @Test
     public void testAlternates() {
-        String definition = "import \"file:///Users/ciprian/Playfield/repositories/ClockRDL/examples/ccsl-kernel.crd\"\n" +
+        String definition = "import \"../examples/ccsl-kernel.crd\"\n" +
                 "library simple {\n" +
                 "\n" +
                 "    relation alternates\n" +
@@ -206,7 +210,7 @@ public class RDL2SmalltalkTests {
     @Test
     public void testProducerConsumer() {
         try {
-            RepositoryDecl repo =  ClockRDLCompiler.compile(new File("../examples/producer_consumer.crd"));
+            RepositoryDecl repo =  ClockRDLCompiler.compile(new File("../examples/producer_consumer.crd"), null);
 
             RDL2Smalltalk transformer = new RDL2Smalltalk();
 
@@ -223,7 +227,7 @@ public class RDL2SmalltalkTests {
     @Test
     public void testProducerConsumerV1() {
         try {
-            RepositoryDecl repo =  ClockRDLCompiler.compile(new File("../examples/producer_consumer_v1.crd"));
+            RepositoryDecl repo =  ClockRDLCompiler.compile(new File("../examples/producer_consumer_v1.crd"), null);
 
             RDL2Smalltalk transformer = new RDL2Smalltalk();
 
@@ -239,7 +243,7 @@ public class RDL2SmalltalkTests {
     @Test
     public void testDate2015() {
         try {
-            RepositoryDecl repo =  ClockRDLCompiler.compile(new File("../examples/date2015.crd"));
+            RepositoryDecl repo =  ClockRDLCompiler.compile(new File("../examples/date2015.crd"), null);
 
             RDL2Smalltalk transformer = new RDL2Smalltalk();
 
@@ -267,7 +271,14 @@ public class RDL2SmalltalkTests {
         //parse the library
         ParseTree tree = parse(libraryString, "libraryDecl");
         ParseTreeWalker walker = new ParseTreeWalker();
-        ClockRDLBuilderAST builder = new ClockRDLBuilderAST(scope);
+        List<URI> libPath = new ArrayList<>();
+        try {
+            libPath.add(new URI("file:///Users/ciprian/Playfield/repositories/ClockRDL/"));
+            libPath.add(new URI("file://" + System.getProperty("user.dir") + "/"));
+        } catch (URISyntaxException e) {
+            return null;
+        }
+        ClockRDLBuilderAST builder = new ClockRDLBuilderAST(scope, libPath);
 
         walker.walk(builder, tree);
 
@@ -296,7 +307,7 @@ public class RDL2SmalltalkTests {
 
 
     public void assertString(String libraryString) {
-        RepositoryDecl sys = ClockRDLCompiler.compile(libraryString);
+        RepositoryDecl sys = ClockRDLCompiler.compile(libraryString, null);
         RDL2Smalltalk transformer = new RDL2Smalltalk();
 
         String result = transformer.convert(sys);

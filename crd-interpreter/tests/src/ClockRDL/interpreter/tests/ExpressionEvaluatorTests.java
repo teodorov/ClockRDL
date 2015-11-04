@@ -296,7 +296,7 @@ public class ExpressionEvaluatorTests {
         ClockRDLParser parser = new ClockRDLParser(tokens);
         ParseTree tree = parser.expression();
         ParseTreeWalker walker = new ParseTreeWalker();
-        ClockRDLBuilderAST builder = new ClockRDLBuilderAST(new GlobalScope());
+        ClockRDLBuilderAST builder = new ClockRDLBuilderAST(new GlobalScope(), null);
         parser.addErrorListener(new ClockRDLGrammarTest.NoErrorsForTest());
 
         walker.walk(builder, tree);

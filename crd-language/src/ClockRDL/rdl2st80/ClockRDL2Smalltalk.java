@@ -4,17 +4,24 @@ import ClockRDL.compiler.ClockRDLCompiler;
 import ClockRDL.model.declarations.RepositoryDecl;
 
 import java.io.*;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
 
 /**
  * Created by ciprian on 29/10/15.
  */
 public class ClockRDL2Smalltalk {
+    static String usage = "usage: ClockRDL2Smalltalk [-libraryPath <':' separated list of filepaths>] -in <.crd filename> -out <.st filename>\n";
     public static void main(String[] args) {
         File inFile = null;
         File outFile = null;
+        List<URI> libPaths = new ArrayList<>();
 
         if (args.length < 4) {
-            System.err.println("usage: ClockRDL2Smalltalk -in <.crd filename> -out <.st filename>\n");
+            System.err.println(usage);
             return;
         }
 
@@ -28,8 +35,20 @@ public class ClockRDL2Smalltalk {
                 i++;
                 outFile = new File(args[i]);
             }
+            else if (args[i].equals("-libraryPath")) {
+                i++;
+                String paths = args[i];
+                StringTokenizer sT = new StringTokenizer(paths, ":");
+                while (sT.hasMoreElements()) {
+                    try {
+                        libPaths.add(new URI(sT.nextToken()));
+                    } catch (URISyntaxException e) {
+                        throw new RuntimeException("Invalid URI: " + e.getMessage());
+                    }
+                }
+            }
             else {
-                System.err.println("usage: ClockRDL2Smalltalk -in <.crd filename> -out <.st filename>\n");
+                System.err.println(usage);
                 return;
             }
             i++;
@@ -39,12 +58,12 @@ public class ClockRDL2Smalltalk {
             System.err.println("ERROR: could not get the inputfile or the outputfile\n");
         }
         ClockRDL2Smalltalk instance = new ClockRDL2Smalltalk();
-        instance.generateSmalltalk(inFile, outFile);
+        instance.generateSmalltalk(inFile, outFile, libPaths);
     }
 
-    public void generateSmalltalk(File inFile, File outFile) {
+    public void generateSmalltalk(File inFile, File outFile, List<URI> libPaths) {
         try {
-            RepositoryDecl repo = ClockRDLCompiler.compile(inFile);
+            RepositoryDecl repo = ClockRDLCompiler.compile(inFile, libPaths);
 
             RDL2Smalltalk transformer = new RDL2Smalltalk();
 

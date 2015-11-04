@@ -90,7 +90,7 @@ public class StatementEvaluatorTest {
         ClockRDLParser parser = new ClockRDLParser(tokens);
         ParseTree tree = parser.blockStmt();
         ParseTreeWalker walker = new ParseTreeWalker();
-        ClockRDLBuilderAST builder = new ClockRDLBuilderAST(new GlobalScope());
+        ClockRDLBuilderAST builder = new ClockRDLBuilderAST(new GlobalScope(), null);
 
         //TODO define a clear error handling strategy for Parsing
         //parser.addErrorListener(new ClockRDLGrammarTest.NoErrorsForTest());

@@ -182,7 +182,7 @@ public class InterpreterTests {
         //parse the library
         ParseTree tree = parse(libraryString, "libraryDecl");
         ParseTreeWalker walker = new ParseTreeWalker();
-        ClockRDLBuilderAST builder = new ClockRDLBuilderAST(scope);
+        ClockRDLBuilderAST builder = new ClockRDLBuilderAST(scope, null);
 
         walker.walk(builder, tree);
 
