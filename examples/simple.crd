@@ -1,4 +1,4 @@
-import "file:///Users/ciprian/Playfield/repositories/ClockRDL/examples/ccsl-kernel.crd"
+import "../examples/ccsl-kernel.crd"
 library simple {
 
     relation alternates
