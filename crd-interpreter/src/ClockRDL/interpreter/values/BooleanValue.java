@@ -1,11 +1,12 @@
 package ClockRDL.interpreter.values;
 
+import ClockRDL.interpreter.StateValue;
 import ClockRDL.interpreter.Value;
 /**
  * Created by ciprian on 20/10/15.
  */
-public class BooleanValue extends Value {
-    public boolean data;
+public class BooleanValue extends StateValue {
+    private boolean data;
 
     public final static BooleanValue TRUE = new BooleanValue(true);
     public final static BooleanValue FALSE = new BooleanValue(false);
@@ -18,6 +19,10 @@ public class BooleanValue extends Value {
         data = value;
     }
 
+    public boolean getData() {
+        return data;
+    }
+
     @Override
     public boolean isAssignmentCompatible(Value value) {
         return value.isBooleanValue();
@@ -26,6 +31,11 @@ public class BooleanValue extends Value {
     @Override
     public boolean isBooleanValue() {
         return true;
+    }
+
+    @Override
+    public StateValue deepCopy() {
+        return this;
     }
 
     @Override

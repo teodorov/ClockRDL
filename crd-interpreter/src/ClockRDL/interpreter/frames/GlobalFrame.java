@@ -1,6 +1,7 @@
 package ClockRDL.interpreter.frames;
 
 import ClockRDL.interpreter.Memory;
+import ClockRDL.interpreter.StateValue;
 import ClockRDL.interpreter.Value;
 import ClockRDL.interpreter.values.*;
 import ClockRDL.model.declarations.PrimitiveFunctionDecl;
@@ -41,9 +42,9 @@ public class GlobalFrame extends TemporaryFrame {
 
     public static Value primArray(List<Value> value) {
         if (value.size() != 1) throw new RuntimeException("Function array expects one argument but was called with " + value.size() + " arguments");
-        int size = ((IntegerValue)(value.get(0))).data;
+        int size = ((IntegerValue)(value.get(0))).getData();
         ArrayValue array = new ArrayValue();
-        array.data = new Value[size];
+        array.data = new StateValue[size];
 
         for (int i=0; i<size; i++) {
             array.data[i] = NullValue.uniqueInstance;

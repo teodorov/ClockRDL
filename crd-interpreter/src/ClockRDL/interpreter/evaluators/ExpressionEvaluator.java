@@ -46,9 +46,9 @@ public class ExpressionEvaluator extends ExpressionsSwitch<Value> {
         }
 
         if (prefix.isArrayValue()) {
-            return ((ArrayValue) prefix).data[((IntegerValue) index).data];
+            return ((ArrayValue) prefix).data[((IntegerValue) index).getData()];
         } else {
-            return ((QueueValue) prefix).data.get(((IntegerValue) index).data);
+            return ((QueueValue) prefix).data.get(((IntegerValue) index).getData());
         }
     }
 
@@ -140,19 +140,19 @@ public class ExpressionEvaluator extends ExpressionsSwitch<Value> {
                 if (!operand.isBooleanValue()) {
                     throw new RuntimeException("Negation expression expects a boolean operand but found " + operand.getClass().getSimpleName());
                 }
-                return BooleanValue.value(!((BooleanValue) operand).data);
+                return BooleanValue.value(!((BooleanValue) operand).getData());
             }
             case UMINUS: {
                 if (!operand.isIntegerValue()) {
                     throw new RuntimeException("Unary Minus expression expects an integer operand but found " + operand.getClass().getSimpleName());
                 }
-                return IntegerValue.value(-((IntegerValue) operand).data);
+                return IntegerValue.value(-((IntegerValue) operand).getData());
             }
             case UPLUS: {
                 if (!operand.isIntegerValue()) {
                     throw new RuntimeException("Unary Plus expression expects an integer operand but found " + operand.getClass().getSimpleName());
                 }
-                return IntegerValue.value(((IntegerValue) operand).data);
+                return IntegerValue.value(((IntegerValue) operand).getData());
             }
         }
         return null;
@@ -198,28 +198,28 @@ public class ExpressionEvaluator extends ExpressionsSwitch<Value> {
             case BAND: {
                 BooleanValue lhs = ((BooleanValue) lhsV);
                 BooleanValue rhs = ((BooleanValue) rhsV);
-                return BooleanValue.value(lhs.data && rhs.data);
+                return BooleanValue.value(lhs.getData() && rhs.getData());
             }
             case BOR: {
                 BooleanValue lhs = ((BooleanValue) lhsV);
                 BooleanValue rhs = ((BooleanValue) rhsV);
-                return BooleanValue.value(lhs.data || rhs.data);
+                return BooleanValue.value(lhs.getData() || rhs.getData());
             }
             case BNOR: {
                 BooleanValue lhs = ((BooleanValue) lhsV);
                 BooleanValue rhs = ((BooleanValue) rhsV);
-                return BooleanValue.value(!(lhs.data || rhs.data));
+                return BooleanValue.value(!(lhs.getData() || rhs.getData()));
             }
             case BXOR: {
                 BooleanValue lhs = ((BooleanValue) lhsV);
                 BooleanValue rhs = ((BooleanValue) rhsV);
-                return BooleanValue.value((lhs.data || rhs.data) && !(lhs.data && rhs.data));
+                return BooleanValue.value((lhs.getData() || rhs.getData()) && !(lhs.getData() && rhs.getData()));
 
             }
             case BNAND: {
                 BooleanValue lhs = ((BooleanValue) lhsV);
                 BooleanValue rhs = ((BooleanValue) rhsV);
-                return BooleanValue.value(!(lhs.data && rhs.data));
+                return BooleanValue.value(!(lhs.getData() && rhs.getData()));
 
             }
             //equality
@@ -235,56 +235,56 @@ public class ExpressionEvaluator extends ExpressionsSwitch<Value> {
             case BGT: {
                 IntegerValue lhs = ((IntegerValue) lhsV);
                 IntegerValue rhs = ((IntegerValue) rhsV);
-                return BooleanValue.value(lhs.data > rhs.data);
+                return BooleanValue.value(lhs.getData() > rhs.getData());
 
             }
             case BGE: {
                 IntegerValue lhs = ((IntegerValue) lhsV);
                 IntegerValue rhs = ((IntegerValue) rhsV);
-                return BooleanValue.value(lhs.data >= rhs.data);
+                return BooleanValue.value(lhs.getData() >= rhs.getData());
 
             }
             case BLT: {
                 IntegerValue lhs = ((IntegerValue) lhsV);
                 IntegerValue rhs = ((IntegerValue) rhsV);
-                return BooleanValue.value(lhs.data < rhs.data);
+                return BooleanValue.value(lhs.getData() < rhs.getData());
 
             }
             case BLE: {
                 IntegerValue lhs = ((IntegerValue) lhsV);
                 IntegerValue rhs = ((IntegerValue) rhsV);
-                return BooleanValue.value(lhs.data <= rhs.data);
+                return BooleanValue.value(lhs.getData() <= rhs.getData());
 
             }
             //arithmetic
             case BDIV: {
                 IntegerValue lhs = ((IntegerValue) lhsV);
                 IntegerValue rhs = ((IntegerValue) rhsV);
-                return IntegerValue.value(lhs.data / rhs.data);
+                return IntegerValue.value(lhs.getData() / rhs.getData());
 
             }
             case BMINUS: {
                 IntegerValue lhs = ((IntegerValue) lhsV);
                 IntegerValue rhs = ((IntegerValue) rhsV);
-                return IntegerValue.value(lhs.data - rhs.data);
+                return IntegerValue.value(lhs.getData() - rhs.getData());
 
             }
             case BMOD: {
                 IntegerValue lhs = ((IntegerValue) lhsV);
                 IntegerValue rhs = ((IntegerValue) rhsV);
-                return IntegerValue.value(lhs.data % rhs.data);
+                return IntegerValue.value(lhs.getData() % rhs.getData());
 
             }
             case BMUL: {
                 IntegerValue lhs = ((IntegerValue) lhsV);
                 IntegerValue rhs = ((IntegerValue) rhsV);
-                return IntegerValue.value(lhs.data * rhs.data);
+                return IntegerValue.value(lhs.getData() * rhs.getData());
 
             }
             case BPLUS: {
                 IntegerValue lhs = ((IntegerValue) lhsV);
                 IntegerValue rhs = ((IntegerValue) rhsV);
-                return IntegerValue.value(lhs.data + rhs.data);
+                return IntegerValue.value(lhs.getData() + rhs.getData());
             }
         }
 
@@ -300,7 +300,7 @@ public class ExpressionEvaluator extends ExpressionsSwitch<Value> {
         }
         BooleanValue booleanCondition = (BooleanValue) condition;
         Value returnValue;
-        if (booleanCondition.data) {
+        if (booleanCondition.getData()) {
             returnValue = doSwitch(object.getTrueBranch());
         } else {
             returnValue = doSwitch(object.getFalseBranch());

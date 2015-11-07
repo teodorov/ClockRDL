@@ -10,11 +10,11 @@ public class Memory {
     //the constants list holds the values of the constants and of the functions
     List<Value> constants = new ArrayList<>();
     //the variables list holds the values of the variables
-    List<Value> variables = new ArrayList<>();
+    public List<StateValue> variables = new ArrayList<>();
 
     public int allocateVariable(Value initialValue) {
         int address = variables.size();
-        variables.add(initialValue);
+        variables.add((StateValue)initialValue);
         return address;
     }
     public int allocateConstant(Value initialValue) {
@@ -35,6 +35,6 @@ public class Memory {
         if (!variables.get(address).isAssignmentCompatible(value)) {
             throw new RuntimeException("Incompatible assignment of " + value.getClass().getSimpleName() + " to a variable of " + variables.get(address).getClass().getSimpleName());
         }
-        variables.set(address, value);
+        variables.set(address, (StateValue)value);
     }
 }

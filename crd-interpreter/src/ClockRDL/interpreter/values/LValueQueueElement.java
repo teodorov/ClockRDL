@@ -1,6 +1,7 @@
 package ClockRDL.interpreter.values;
 
 import ClockRDL.interpreter.Environment;
+import ClockRDL.interpreter.StateValue;
 import ClockRDL.interpreter.Value;
 
 /**
@@ -15,8 +16,8 @@ public class LValueQueueElement extends LValue {
     }
 
     @Override
-    public void assign(Value value, Environment env) {
-        prefix.data.set(index.data, value);
+    public void assign(StateValue value, Environment env) {
+        prefix.data.set(index.getData(), value);
     }
 
     @Override

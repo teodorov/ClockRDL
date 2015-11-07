@@ -1,6 +1,7 @@
 package ClockRDL.interpreter.values;
 
 import ClockRDL.interpreter.Environment;
+import ClockRDL.interpreter.StateValue;
 import ClockRDL.interpreter.Value;
 import ClockRDL.model.kernel.NamedDeclaration;
 
@@ -14,7 +15,7 @@ public class LValueReference extends LValue {
         lvalue=decl;
     }
 
-    public void assign(Value value, Environment env) {
+    public void assign(StateValue value, Environment env) {
         env.update(lvalue, value);
     }
 

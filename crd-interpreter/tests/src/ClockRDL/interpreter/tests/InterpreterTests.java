@@ -69,7 +69,7 @@ public class InterpreterTests {
         AbstractFrame instanceFrame = (AbstractFrame) env.lookup("j");
 
         IntegerValue valueX = (IntegerValue) instanceFrame.lookup("x", env.getMemory());
-        assertEquals(8, valueX.data);
+        assertEquals(8, valueX.getData());
     }
 
     @Test
@@ -85,7 +85,7 @@ public class InterpreterTests {
         AbstractFrame instanceFrame = (AbstractFrame) env.lookup("i");
 
         IntegerValue valueX = (IntegerValue) instanceFrame.lookup("x", env.getMemory());
-        assertEquals(2, valueX.data);
+        assertEquals(2, valueX.getData());
     }
 
     @Test
@@ -97,7 +97,7 @@ public class InterpreterTests {
         for (int i = 1; i < 11; i++) {
 
             IntegerValue valueX = (IntegerValue) instanceFrame.lookup("x", env.getMemory());
-            assertEquals(i, valueX.data);
+            assertEquals(i, valueX.getData());
 
             Set<FireableTransition> fireable = evaluator.fireableTransitions(instance, env);
             for (FireableTransition transition : fireable) {
@@ -115,7 +115,7 @@ public class InterpreterTests {
         for (int i = 1; i < 30; i++) {
 
             IntegerValue valueX = (IntegerValue) instanceFrame.lookup("x", env.getMemory());
-            assertEquals(i % 11, valueX.data);
+            assertEquals(i % 11, valueX.getData());
 
             Set<FireableTransition> fireable = evaluator.fireableTransitions(instance, env);
             for (FireableTransition transition : fireable) {
@@ -140,7 +140,7 @@ public class InterpreterTests {
         assertNotNull(instanceFrame);
 
         IntegerValue initialX = (IntegerValue) instanceFrame.lookup("x", env.getMemory());
-        assertEquals(1, initialX.data);
+        assertEquals(1, initialX.getData());
 
         Value initialA = instanceFrame.lookup("a", env.getMemory());
         assertEquals(NullValue.uniqueInstance, initialA);
@@ -157,7 +157,7 @@ public class InterpreterTests {
         assertNotNull(instanceFrame);
 
         IntegerValue initialX = (IntegerValue) instanceFrame.lookup("x", env.getMemory());
-        assertEquals(1, initialX.data);
+        assertEquals(1, initialX.getData());
 
         Value initialA = instanceFrame.lookup("a", env.getMemory());
         assertEquals("x", ((ClockValue)initialA).toString());

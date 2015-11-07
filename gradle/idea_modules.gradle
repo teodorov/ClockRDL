@@ -5,10 +5,12 @@ public void generateModulesFile(File mfile, Set<Project> subprojects) {
     def footer = '</modules></component></project>'
 	modulesFile.text = header + '\n'
 	
+	evaluationDependsOnChildren()
+
  	subprojects.each { subproject -> 
 		def imlPath = subproject.getProjectDir().getAbsolutePath() + '/' + subproject.name + '.iml'
 		if (!subproject.name.equals('jenkins')) {
-        	modulesFile.text += '<module fileurl="file://'+imlPath+'" filepath="'+imlPath+'" />\n'
+        	modulesFile.text += '<module fileurl="file://'+imlPath+'" filepath="'+imlPath+'" group="'+subproject.ideaGroupName+'"/>\n'
         }
 	}
 

@@ -2,6 +2,7 @@ package ClockRDL.interpreter.evaluators;
 
 import ClockRDL.interpreter.Environment;
 import ClockRDL.interpreter.Interpreter;
+import ClockRDL.interpreter.StateValue;
 import ClockRDL.interpreter.Value;
 import ClockRDL.interpreter.values.*;
 import ClockRDL.model.expressions.literals.*;
@@ -38,10 +39,10 @@ public class LiteralEvaluator extends LiteralsSwitch<Value> {
         ArrayValue aV = new ArrayValue();
 
         List<Expression> exps = object.getValue();
-        aV.data = new Value[exps.size()];
+        aV.data = new StateValue[exps.size()];
 
         for (int i = 0; i < exps.size(); i++) {
-            aV.data[i] = doSwitch(exps.get(i));
+            aV.data[i] = (StateValue)doSwitch(exps.get(i));
         }
 
         return aV;
@@ -54,7 +55,7 @@ public class LiteralEvaluator extends LiteralsSwitch<Value> {
         qV.data = new LinkedList<>();
 
         for (Expression exp : exps) {
-            Value v = doSwitch(exp);
+            StateValue v = (StateValue)doSwitch(exp);
             qV.data.add(v);
         }
 
@@ -69,7 +70,7 @@ public class LiteralEvaluator extends LiteralsSwitch<Value> {
         rV.data = new HashMap<>(items.size());
 
         for (FieldLiteral field : items) {
-            Value v = doSwitch(field.getValue());
+            StateValue v = (StateValue)doSwitch(field.getValue());
             rV.data.put(field.getName(), v);
         }
 

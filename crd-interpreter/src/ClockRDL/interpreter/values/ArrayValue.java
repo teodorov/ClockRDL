@@ -1,5 +1,6 @@
 package ClockRDL.interpreter.values;
 
+import ClockRDL.interpreter.StateValue;
 import ClockRDL.interpreter.Value;
 
 import java.util.Arrays;
@@ -8,8 +9,8 @@ import java.util.HashMap;
 /**
  * Created by ciprian on 20/10/15.
  */
-public class ArrayValue extends Value {
-    public Value data[];
+public class ArrayValue extends StateValue {
+    public StateValue data[];
 
     public ArrayValue() {
         primitives = new HashMap<String, PrimitiveFunctionValue>() {{
@@ -30,6 +31,17 @@ public class ArrayValue extends Value {
     @Override
     public boolean isArrayValue() {
         return true;
+    }
+
+    @Override
+    public StateValue deepCopy() {
+        ArrayValue newValue = new ArrayValue();
+        StateValue newData[] = new StateValue[data.length];
+        for (int i = 0; i<data.length; i++) {
+            newData[i] = data[i].deepCopy();
+        }
+        newValue.data = newData;
+        return newValue;
     }
 
     @Override

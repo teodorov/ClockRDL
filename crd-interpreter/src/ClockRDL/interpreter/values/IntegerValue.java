@@ -1,5 +1,6 @@
 package ClockRDL.interpreter.values;
 
+import ClockRDL.interpreter.StateValue;
 import ClockRDL.interpreter.Value;
 
 import java.util.HashMap;
@@ -8,8 +9,8 @@ import java.util.Map;
 /**
  * Created by ciprian on 20/10/15.
  */
-public class IntegerValue extends Value {
-    public int data;
+public class IntegerValue extends StateValue {
+    private int data;
 
     public final static Map<Integer, IntegerValue> flyweight = new HashMap<>();
 
@@ -27,6 +28,10 @@ public class IntegerValue extends Value {
         data = value;
     }
 
+    public int getData() {
+        return data;
+    }
+
     @Override
     public boolean isAssignmentCompatible(Value value) {
         return value.isIntegerValue();
@@ -36,6 +41,12 @@ public class IntegerValue extends Value {
     public boolean isIntegerValue() {
         return true;
     }
+
+    @Override
+    public StateValue deepCopy() {
+        return this;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (! ( obj instanceof IntegerValue ) ) return false;

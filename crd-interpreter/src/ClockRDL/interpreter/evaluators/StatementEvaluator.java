@@ -2,6 +2,7 @@ package ClockRDL.interpreter.evaluators;
 
 import ClockRDL.interpreter.Environment;
 import ClockRDL.interpreter.Interpreter;
+import ClockRDL.interpreter.StateValue;
 import ClockRDL.interpreter.Value;
 import ClockRDL.interpreter.frames.TemporaryFrame;
 import ClockRDL.interpreter.values.BooleanValue;
@@ -29,9 +30,9 @@ public class StatementEvaluator extends StatementsSwitch<Boolean> {
     @Override
     public Boolean caseAssignmentStmt(AssignmentStmt object) {
 
-        Value rhs = interpreter.evaluate(object.getRhs(), environment);
+        StateValue rhs = (StateValue) interpreter.evaluate(object.getRhs(), environment);
         LValue lhs = interpreter.lvalue(object.getLhs(), environment);
-        Value result = NullValue.uniqueInstance;
+        StateValue result = NullValue.uniqueInstance;
         Value lhsV;
 
         switch (object.getOperator()) {
@@ -43,49 +44,49 @@ public class StatementEvaluator extends StatementsSwitch<Boolean> {
                 if (!(rhs.isBooleanValue() && lhsV.isBooleanValue())) {
                     throw new RuntimeException("Cannot &= non boolean values");
                 }
-                result = BooleanValue.value(((BooleanValue)lhsV).data && ((BooleanValue)rhs).data);
+                result = BooleanValue.value(((BooleanValue)lhsV).getData() && ((BooleanValue)rhs).getData());
                 break;
             case ORASSIGN:
                 lhsV = interpreter.evaluate(object.getLhs(), environment);
                 if (!(rhs.isBooleanValue() && lhsV.isBooleanValue())) {
                     throw new RuntimeException("Cannot |= non boolean values");
                 }
-                result = BooleanValue.value(((BooleanValue)lhsV).data || ((BooleanValue)rhs).data);
+                result = BooleanValue.value(((BooleanValue)lhsV).getData() || ((BooleanValue)rhs).getData());
                 break;
             case DIVASSIGN:
                 lhsV = interpreter.evaluate(object.getLhs(), environment);
                 if (!(rhs.isIntegerValue() && lhsV.isIntegerValue())) {
                     throw new RuntimeException("Cannot /= non integer values");
                 }
-                result = IntegerValue.value(((IntegerValue) lhsV).data / ((IntegerValue) rhs).data);
+                result = IntegerValue.value(((IntegerValue) lhsV).getData() / ((IntegerValue) rhs).getData());
                 break;
             case MINUSASSIGN:
                 lhsV = interpreter.evaluate(object.getLhs(), environment);
                 if (!(rhs.isIntegerValue() && lhsV.isIntegerValue())) {
                     throw new RuntimeException("Cannot -= non integer values");
                 }
-                result = IntegerValue.value(((IntegerValue) lhsV).data - ((IntegerValue) rhs).data);
+                result = IntegerValue.value(((IntegerValue) lhsV).getData() - ((IntegerValue) rhs).getData());
                 break;
             case MODASSIGN:
                 lhsV = interpreter.evaluate(object.getLhs(), environment);
                 if (!(rhs.isIntegerValue() && lhsV.isIntegerValue())) {
                     throw new RuntimeException("Cannot %= non integer values");
                 }
-                result = IntegerValue.value(((IntegerValue) lhsV).data % ((IntegerValue) rhs).data);
+                result = IntegerValue.value(((IntegerValue) lhsV).getData() % ((IntegerValue) rhs).getData());
                 break;
             case MULTASSIGN:
                 lhsV = interpreter.evaluate(object.getLhs(), environment);
                 if (!(rhs.isIntegerValue() && lhsV.isIntegerValue())) {
                     throw new RuntimeException("Cannot *= non integer values");
                 }
-                result = IntegerValue.value(((IntegerValue) lhsV).data * ((IntegerValue) rhs).data);
+                result = IntegerValue.value(((IntegerValue) lhsV).getData() * ((IntegerValue) rhs).getData());
                 break;
             case PLUSASSIGN:
                 lhsV = interpreter.evaluate(object.getLhs(), environment);
                 if (!(rhs.isIntegerValue() && lhsV.isIntegerValue())) {
                     throw new RuntimeException("Cannot += non integer values");
                 }
-                result = IntegerValue.value(((IntegerValue) lhsV).data + ((IntegerValue) rhs).data);
+                result = IntegerValue.value(((IntegerValue) lhsV).getData() + ((IntegerValue) rhs).getData());
                 break;
 
         }
@@ -99,7 +100,7 @@ public class StatementEvaluator extends StatementsSwitch<Boolean> {
     public Boolean caseConditionalStmt(ConditionalStmt object) {
         BooleanValue condition = interpreter.evaluate(object.getCondition(), environment, BooleanValue.class);
 
-        if (condition.data == true) {
+        if (condition.getData() == true) {
             //the execution stops if a return is hit in the branch
             return doSwitch(object.getTrueBranch());
         }
@@ -111,7 +112,7 @@ public class StatementEvaluator extends StatementsSwitch<Boolean> {
     public Boolean caseLoopStmt(LoopStmt object) {
         BooleanValue condition = interpreter.evaluate(object.getCondition(), environment, BooleanValue.class);
 
-        while (condition.data == true) {
+        while (condition.getData() == true) {
             if (!doSwitch(object.getBody())) return false;
             condition = interpreter.evaluate(object.getCondition(), environment, BooleanValue.class);
         }

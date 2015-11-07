@@ -36,7 +36,7 @@ public class TransitionCollector extends DeclarationsSwitch<Set<FireableTransiti
         Set<FireableTransition> fireable = Collections.newSetFromMap(new IdentityHashMap<>());
         for (TransitionDecl transitionDecl : object.getTransitions()) {
             BooleanValue guard = interpreter.evaluate(transitionDecl.getGuard(), environment, BooleanValue.class);
-            if (guard.data) {
+            if (guard.getData()) {
                 fireable.add(new FireableTransition(environment.currentFrame(), transitionDecl));
             }
         }

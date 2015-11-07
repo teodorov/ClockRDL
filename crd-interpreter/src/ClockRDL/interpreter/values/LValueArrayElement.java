@@ -1,6 +1,7 @@
 package ClockRDL.interpreter.values;
 
 import ClockRDL.interpreter.Environment;
+import ClockRDL.interpreter.StateValue;
 import ClockRDL.interpreter.Value;
 
 /**
@@ -16,8 +17,8 @@ public class LValueArrayElement extends LValue {
     }
 
     @Override
-    public void assign(Value value, Environment env) {
-        prefix.data[index.data] = value;
+    public void assign(StateValue value, Environment env) {
+        prefix.data[index.getData()] = value;
     }
 
     @Override

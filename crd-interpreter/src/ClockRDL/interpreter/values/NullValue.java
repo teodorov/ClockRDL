@@ -1,11 +1,12 @@
 package ClockRDL.interpreter.values;
 
+import ClockRDL.interpreter.StateValue;
 import ClockRDL.interpreter.Value;
 
 /**
  * Created by ciprian on 20/10/15.
  */
-public class NullValue extends Value {
+public class NullValue extends StateValue {
     public final static NullValue uniqueInstance = new NullValue();
     private NullValue() {}
 
@@ -22,5 +23,10 @@ public class NullValue extends Value {
     @Override
     public String toString() {
         return "null";
+    }
+
+    @Override
+    public StateValue deepCopy() {
+        return uniqueInstance;
     }
 }

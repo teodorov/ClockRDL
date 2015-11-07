@@ -1,5 +1,6 @@
 package ClockRDL.interpreter.values;
 
+import ClockRDL.interpreter.StateValue;
 import ClockRDL.interpreter.Value;
 
 import java.util.HashMap;
@@ -9,8 +10,8 @@ import java.util.List;
 /**
  * Created by ciprian on 20/10/15.
  */
-public class QueueValue extends Value {
-    public LinkedList<Value> data;
+public class QueueValue extends StateValue {
+    public LinkedList<StateValue> data;
 
     public QueueValue() {
         primitives = new HashMap<String, PrimitiveFunctionValue>() {{
@@ -20,19 +21,19 @@ public class QueueValue extends Value {
             ));
 
             put("add", new PrimitiveFunctionValue("add", (value) ->
-                    BooleanValue.value(data.add(((List<Value>) value).get(0)))
+                    BooleanValue.value(data.add(((List<StateValue>) value).get(0)))
             ));
 
             put("addFirst", new PrimitiveFunctionValue("addFirst", (value) -> {
                 int before = data.size();
-                data.addFirst(((List<Value>) value).get(0));
+                data.addFirst(((List<StateValue>) value).get(0));
                 return BooleanValue.value(data.size() == before + 1);
             }
             ));
 
             put("addLast", new PrimitiveFunctionValue("addLast", (value) -> {
                 int before = data.size();
-                data.addLast(((List<Value>) value).get(0));
+                data.addLast(((List<StateValue>) value).get(0));
                 return BooleanValue.value(data.size() == before + 1);
             }
             ));
@@ -72,6 +73,18 @@ public class QueueValue extends Value {
     public boolean isQueueValue() {
         return true;
     }
+
+    @Override
+    public StateValue deepCopy() {
+        QueueValue newValue = new QueueValue();
+        LinkedList<StateValue> newData = new LinkedList<>();
+        for (int i = 0; i<data.size(); i++) {
+            newData.add(i, data.get(i).deepCopy());
+        }
+        newValue.data = newData;
+        return newValue;
+    }
+
 
     @Override
     public boolean equals(Object obj) {
