@@ -13,7 +13,7 @@ import java.util.Set;
 /**
  * Created by ciprian on 25/10/15.
  */
-public class PersistentFrame extends AbstractFrame {
+public abstract class PersistentFrame extends AbstractFrame {
     Map<NamedDeclaration, Integer> mapping = new IdentityHashMap<>();
 
     public PersistentFrame(String name, AbstractFrame env) {

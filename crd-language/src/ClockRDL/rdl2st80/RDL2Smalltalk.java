@@ -100,6 +100,7 @@ public class RDL2Smalltalk {
             return str;
         }
 
+        //FIXME: due to how internal clocks should behave wrt instantiation probably hierarchical names are a safe bet
         @Override
         public String caseClockLiteral(ClockLiteral object) {
             return "(Clock named: #"+ object.getName() + ")";
@@ -528,6 +529,7 @@ public class RDL2Smalltalk {
                 getterString += annotateMethod(className,getters.get(cR)) + "\n";
             }
 
+            //FIXME: For the internal clocks I need to generate a hierarchical name.
             for (ClockDecl cD : object.getInternalClocks()) {
                 doSwitch(cD);
                 setterString += annotateMethod(className, setters.get(cD)) + "\n";

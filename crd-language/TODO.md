@@ -1,20 +1,30 @@
 
 
+####Initialized Clocks and Internal Clocks
+If one clock in a relation is not mapped at instantiation there are two possible interpretations:
+- if the clock does not have a default value, an error is thrown
+- if the clock has a default value a new clock is created. If the relation is intantiated N times, there will be N such clocks.
 
+A clock internal to a relation will contribute **one clock** for each instantiation of a relation. These clocks are different, independent, and constrained only by the relations to which they are passed as argument.
+
+While this feature is nice it posses some challenges for:
+- naming the clocks, they should have a fully qualified name with respect to the instantiation hierarchy
+- for finding the clocks, we should be able to follow a hierarchical name down the instantiation hierarchy
 
 ####TODO
 - [x] internal clocks does not need the clock, we can declare them with clock[name] instead of x := clock[name]
-- [] implement support for assert, print, array, and other global functions in ClockSystem[Smalltalk]
+- [ ] check that multiple instances with default and internal clocks do not share these clocks in ClockRDL2Smalltalk.
+- [ ] implement support for assert, print, array, and other global functions in ClockSystem[Smalltalk]
 - [20%] add shared variable support, what about using 'ref' instead of the argument list?
-- [] add possibility to specify clock negation in clock vector
-- [] what happens when no clocks? maybe I we can offer a choice to the user. In this case ClockSystem does 3(a)
+- [ ] add possibility to specify clock negation in clock vector
+- [ ] what happens when no clocks? maybe I we can offer a choice to the user. In this case ClockSystem does 3(a)
     - (a) everything without clocks executes in the same step (x,y)
     - (b) asynchronous interleaving (x,-) (-,y)
     - (c) all possibilities (-,-) (x,-) (-,y) (x,y)
-- [] add primitive always
-- [] Currently the library import is very shitty, I should reify the importDecl in the model, stop doing name resolution
+- [ ] add primitive always
+- [ ] Currently the library import is very shitty, I should reify the importDecl in the model, stop doing name resolution
  during AST creation but in an subsequent pass over the instantiated model, and use the symbol table to resolve stuff.
-- [] define a clear error handling strategy for Parsing 
+- [ ] define a clear error handling strategy for Parsing 
 
 ####Questions
 1. Do we need the possibility to convert arrays to queues?

@@ -5,6 +5,7 @@ import ClockRDL.interpreter.Value;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.WeakHashMap;
 
 /**
  * Created by ciprian on 20/10/15.
@@ -12,7 +13,7 @@ import java.util.Map;
 public class IntegerValue extends StateValue {
     private int data;
 
-    public final static Map<Integer, IntegerValue> flyweight = new HashMap<>();
+    public final static Map<Integer, IntegerValue> flyweight = new WeakHashMap<>();
 
     public static IntegerValue value(int value) {
         IntegerValue iV = flyweight.get((Integer)value);

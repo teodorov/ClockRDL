@@ -4,6 +4,7 @@ import ClockRDL.interpreter.evaluators.*;
 import ClockRDL.interpreter.values.LValue;
 import ClockRDL.model.declarations.RelationInstanceDecl;
 import ClockRDL.model.expressions.Literal;
+import ClockRDL.model.expressions.literals.ClockLiteral;
 import ClockRDL.model.kernel.Expression;
 import ClockRDL.model.kernel.NamedDeclaration;
 import ClockRDL.model.kernel.Statement;
@@ -62,10 +63,18 @@ public class Interpreter {
         evaluator.doSwitch(statement);
     }
 
-    public void initialize(RelationInstanceDecl instance,  Environment env) {
+    //returns the number of primitive relations
+    public int initialize(RelationInstanceDecl instance,  Environment env) {
         env.setMemory(new Memory());
         DeclarationEvaluator evaluator = new DeclarationEvaluator(this, env);
         env.bind(instance, evaluator.doSwitch(instance));
+        return evaluator.getPrimitiveRelationCount();
+    }
+
+    public Set<ClockLiteral>[] relationVocabularies(RelationInstanceDecl instance, Environment env, int numberOfRelations) {
+        VocabularyCollector collector = new VocabularyCollector(this, env, numberOfRelations);
+        collector.doSwitch(instance);
+        return collector.getVocabulary();
     }
 
     public Set<FireableTransition> fireableTransitions(RelationInstanceDecl instance,  Environment env) {

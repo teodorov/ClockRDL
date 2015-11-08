@@ -4,6 +4,7 @@ import ClockRDL.interpreter.Environment;
 import ClockRDL.interpreter.FireableTransition;
 import ClockRDL.interpreter.Interpreter;
 import ClockRDL.interpreter.frames.AbstractFrame;
+import ClockRDL.interpreter.frames.PrimitiveRelationFrame;
 import ClockRDL.interpreter.values.BooleanValue;
 import ClockRDL.model.declarations.CompositeRelationDecl;
 import ClockRDL.model.declarations.PrimitiveRelationDecl;
@@ -37,7 +38,7 @@ public class TransitionCollector extends DeclarationsSwitch<Set<FireableTransiti
         for (TransitionDecl transitionDecl : object.getTransitions()) {
             BooleanValue guard = interpreter.evaluate(transitionDecl.getGuard(), environment, BooleanValue.class);
             if (guard.getData()) {
-                fireable.add(new FireableTransition(environment.currentFrame(), transitionDecl));
+                fireable.add(new FireableTransition((PrimitiveRelationFrame) environment.currentFrame(), transitionDecl));
             }
         }
         return fireable;
@@ -55,10 +56,8 @@ public class TransitionCollector extends DeclarationsSwitch<Set<FireableTransiti
     @Override
     public Set<FireableTransition> caseRelationInstanceDecl(RelationInstanceDecl object) {
         Set<FireableTransition> fireable;
-        //currentEnvironment = (AbstractFrame) currentEnvironment.lookup(object);
         environment.push((AbstractFrame)environment.lookup(object));
         fireable = doSwitch(object.getRelation());
-        //currentEnvironment = currentEnvironment.getEnclosingEnvironment();
         environment.pop();
         return fireable;
     }
