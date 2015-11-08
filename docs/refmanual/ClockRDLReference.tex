@@ -1,0 +1,189 @@
+\documentclass[11pt, oneside]{article}   	% use "amsart" instead of "article" for AMSLaTeX format
+\usepackage{geometry}                		% See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   		% ... or a4paper or a5paper or ... 
+%\geometry{landscape}                		% Activate for for rotated page geometry
+%\usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}				% Use pdf, png, jpg, or eps§ with pdflatex; use eps in DVI mode
+								% TeX will automatically convert eps --> pdf in pdflatex		
+\usepackage{amssymb}
+\usepackage[names]{xcolor}
+\usepackage{listings}
+\usepackage{amssymb}
+\usepackage{algorithmicx}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{multirow}
+\usepackage{paralist}
+\usepackage[breaklinks]{hyperref}
+\usepackage{xspace}
+\usepackage{subfig}
+
+\title{ClockRDL: The Clock Relation Definition Language}
+\author{Ciprian Teodorov}
+\date{\today}							% Activate to display a given date or no date
+
+\begin{document}
+\maketitle
+%\section{}
+%\subsection{}
+\begin{abstract}
+
+This document describes ClockRDL, a textual specification language based on the [MoCCML](http://mocml) formalism.
+
+\end{abstract}
+
+\section{Introduction}
+ClockRDL is a constraint specification language based on the Leslie Lamport's `logical clocks` representation of time. It is used for specifying, executing, and analyzing the relations between interesting events in a system of interest.
+
+\subsection{Logical time constraints for system specification}
+Unlike traditional specification languages, which focus on describing how a system achieves a given task, ClockRDL specifications describe how the events of interest in a system are related to one another. From this perspective the relation between events, specified with ClockRDL, should be seen as an executable encoding of high-level requirements.
+
+**simple example*
+
+\subsection{Other Approaches}
+
+- Synchronous Languages
+- CCSL
+- MoCCML
+- ClockSystem
+
+\subsection{Applications}
+- Concurrency semantics
+- Timing constraints in critical systems
+
+
+\subsection{Features}
+- Automaton-based relation specification
+- Minimal, clear, and simple textual syntax
+
+\subsection{Design Goals}
+- ClockRDL should be a practical relation description language, which favors a clear human readable syntax.
+- ClockRDL should have a clear semantics 
+- The relations described with ClockRDL should be readable by anyone familiar with state-machines
+- The relations should be easy to explain and understand.
+- Besides the need for a `specialized clock constraints` execution engine, the implementation should not be overly complex
+- ClockRDL should be simple enough to enable experimentation with new features.
+
+\subsection{Audience}
+\textcolor{red}{
+This reference manual is intended to software professionals and language implementors. Through this manual we attempt to keep the descriptions simple and precise while providing numerous examples.
+Nonetheless, this manual is not a tutorial of ClockRDL nor is it a guide for using ClockRDL in various application scenarios.
+}
+
+\section{Language Reference}
+\subsection{Lexical Structure}
+\subsection{Values}
+\subsection{Types}
+\subsection{Statements and Expressions}
+\subsection{Declarations}
+\subsection{Relations}
+\subsection{Libraries}
+\section{Semantics}
+
+\subsection{Reachability Analysis}
+Formally, a ClockRDL relation R is a 4-tuple $\langle S, I, C, V, Pre, Eff, \rightarrow \rangle$ with:
+\begin{itemize}
+\itemsep0em
+\item[-] $S$ is a set of states;
+\item[-] $I$ is the initial state: $I \in S$;
+\item[-] $C$ is a set of clocks, known as the alphabet of the relation;
+\item[-] $V$ is a set of variables assuming values from finite domains;
+\item[-] $Pre$ is a set of preconditions;
+\item[-] $Eff$ is a set of effects (actions);
+\item[-] $\rightarrow \subseteq S \times clks \times Pre \cup \emptyset \times Eff \cup \emptyset \times S$ is a transition relation, where $clks \subseteq C \cup \emptyset$
+%\footnote{Sometimes $\rightarrow$ is considered a total relation and Act is extended with $\{\tau\}$ -- an internal hidden action}, we will also use $\mathbb{T} \subseteq S \times Act \times S$ when referring to the set of transitions of the LTS;
+%\item[-] $L$ is a function that associates a state-vector to each state $s \in S$: $L : S \rightarrow D_1 \times \ldots \times D_n$, where $D_i$ represents the domain of a parameter $i \in [1,n]$ from a given state vector $\langle d_1 : D_1, \ldots, d_n : D_n\rangle$.
+\end{itemize}
+
+
+A valuation $\alpha \in V^C$  satisfies a formula $\phi$, written $\alpha \models \phi$, iff $\phi$ evaluates to TRUE
+after replacing every variable $x \in \phi$ by $\alpha(x)$.
+
+\begin{algorithm}
+\caption{ClockRDL reachability algorithm}
+\label{alg:reachability}
+\begin{algorithmic}
+\Function{CSReach}{$\mathcal{C}$, $\mathcal{A}$}
+  \State $s_0 \gets \langle s_0^1 \ldots s_0^n \rangle$, where $s_0^a$ is the initial state of automaton $a \in \mathcal{A}$ 
+  \State {\bf let} the {\bf set} of configurations $K\gets \{s_0\}$
+  \State {\bf let} the {\bf queue} of configurations $Q\gets \{s_0\}$
+
+  \While{$Q \neq \emptyset$}
+    \State {\bf let} $s_i \gets first(Q)$
+    \State $Q \gets Q \setminus \{s_i\}$
+
+    \State $\{V^\mathcal{C}, F^T\} \gets clockValuations(\mathcal{C}, \mathcal{A}, s_i)$
+
+    \ForAll {$v \in V^C$}
+      \State $Actives \gets fireableWithClockValuation(F^T, v)$
+      \ForAll {$toFire \in \left( \times_{i=1}^{i \in \left\vert{Actives}\right\vert} Actives_i \right)  $}
+        \State $s_n \gets execute(toFire, s_i)$
+        \If {$s_n \notin K$}
+          \State $Q\gets Q \cup \{s_n\}$
+          \State $K \gets K \cup \{s_n\}$
+        \EndIf
+      \EndFor
+    \EndFor
+  \EndWhile
+\State\Return $K$
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+\paragraph{The function} $fireableWithClockValuation(F^T, v)$ selects for each automaton the transitions that can actually be fired given the current clocks valuation.
+
+\paragraph{The function} $execute(toFire, s_i)$ executes all the transitions from the toFire set against the configuration $s_i$ producing the next configurations. Two cases are considered in this function: 
+\begin{itemize}
+\item If there is no shared state between the transitions they are executed in an arbitrary order producing only one next configuration;
+\item If there is shared state between the transitions then all the possible interleavings are computed, potentially leading to the production of multiple next configurations.
+\end{itemize}
+
+\begin{algorithm}
+\caption{Clock Valuations Function}
+\label{alg:reachability}
+\begin{algorithmic}
+\Function{clockValuations}{$\mathcal{C}, \mathcal{A}, s_i$}
+  \State {\bf let} the {\bf set} of valuations $V^\mathcal{C}\gets \emptyset$
+  \ForAll {$a \in \mathcal{A}$}
+    \State {\bf let} the {\bf set} of fireable transitions $F^T_a \gets \emptyset$
+  \EndFor
+  \State {\bf let} $\phi \gets true$
+
+  \ForAll {$a \in A$}
+    \State $F^T_a \gets fireableTransitions(a, s_i)$ \textcolor{gray}{-- \em fanout with true precondition}
+    \State $\phi^a \gets formula4t(t_1, a) \lor \ldots \lor formula4t(t_n, a)$, forall $t_i \in F^T_a$
+    \State $\phi \gets \phi \land \phi^a$
+  \EndFor
+
+\State\Return $\{allSat(\phi), F^T\}$
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+
+\begin{algorithm}
+\caption{Boolean Function for a Transition}
+\label{alg:reachability}
+\begin{algorithmic}
+\Function{beq4t}{$t, a$}
+  \State {\bf let} the {\bf set} of stalled clocks $\mathcal{S} \gets alphabet(a) \setminus clocks(t)$
+  \State $\phi \gets \lnot s_1 \land \ldots \land \lnot s_n $, forall $s_i \in \mathcal{S}$  \textcolor{gray}{-- \em block stalled clocks}
+
+  \State $\phi^+ \gets c_1 \land \ldots \land c_n$, forall $c_i \in clocks(t)$ \textcolor{gray}{-- \em clocks do tick}
+  \If { $\lnot isAlways(a)$ }
+    \State $\phi^- \gets \lnot c_1 \land \ldots \land \lnot c_n$, forall $c_i \in clocks(t)$ \textcolor{gray}{-- \em clocks do not tick}
+  \EndIf
+
+\State\Return $\phi \land (\phi^+ \lor \phi^-)$
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+
+\section{CCSL Kernel Library}
+
+
+
+
+
+\end{document}  

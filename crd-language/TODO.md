@@ -12,19 +12,24 @@ While this feature is nice it posses some challenges for:
 - for finding the clocks, we should be able to follow a hierarchical name down the instantiation hierarchy
 
 ####TODO
-- [x] internal clocks does not need the clock, we can declare them with clock[name] instead of x := clock[name]
-- [ ] check that multiple instances with default and internal clocks do not share these clocks in ClockRDL2Smalltalk.
-- [ ] implement support for assert, print, array, and other global functions in ClockSystem[Smalltalk]
+- [x] internal clock does not need the clock, we can declare them with clock[name] instead of x := clock[name]
+- [] check that multiple instances with default and internal clocks do not share these clocks in ClockRDL2Smalltalk.
+- [] implement support for assert, print, array, and other global functions in ClockSystem[Smalltalk]
 - [20%] add shared variable support, what about using 'ref' instead of the argument list?
-- [ ] add possibility to specify clock negation in clock vector
-- [ ] what happens when no clocks? maybe I we can offer a choice to the user. In this case ClockSystem does 3(a)
+- [] add possibility to specify clock negation in clock vector
+- [] what happens when no clocks? maybe I we can offer a choice to the user. In this case ClockSystem does 3(a)
     - (a) everything without clocks executes in the same step (x,y)
     - (b) asynchronous interleaving (x,-) (-,y)
     - (c) all possibilities (-,-) (x,-) (-,y) (x,y)
-- [ ] add primitive always
-- [ ] Currently the library import is very shitty, I should reify the importDecl in the model, stop doing name resolution
+- [] add primitive always
+- [50%] add support for relative paths in import declarations
+- [20%] define a clear library import lookup strategy
+- [] Currently the library import is very shitty, I should reify the importDecl in the model, stop doing name resolution
  during AST creation but in an subsequent pass over the instantiated model, and use the symbol table to resolve stuff.
-- [ ] define a clear error handling strategy for Parsing 
+- [] define a clear error handling strategy for Parsing 
+- [20%] integration with Plug
+- [] write tutorial
+- [] write Language Spec
 
 ####Questions
 1. Do we need the possibility to convert arrays to queues?
@@ -92,6 +97,8 @@ Considering our automaton-based interpretation of CCSL one way to implement cloc
 - "the expression dies" can be interpreted as: when the dying clock is dead its containing relation does not constrain the system anymore
 - if the dead expression is the **currently active** one in a concatenation then the concatenation enables the next relation
 - if the dead expression is not part of a concatenation then it is ignored during the following steps in the composition
+
+**TODO** Look at automata sequential composition in general... may be B sequential composition
 
 The only requirement imposed by the *clock death* is that during the computation of the *ticking* clocks we should be able to say if the clock is dead or not.
 However the relation death might pose a problem in construction and interpretation of the system configuration.
