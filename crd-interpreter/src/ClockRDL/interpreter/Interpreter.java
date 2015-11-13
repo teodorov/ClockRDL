@@ -15,9 +15,26 @@ import java.util.Set;
  * Created by ciprian on 19/10/15.
  */
 public class Interpreter {
+    int relationCount;
+    private Environment environment;
+    Set<ClockLiteral> vocabularies[];
+    Set<ClockLiteral> allClocks;
+    Set<ClockLiteral> freeClocks; // here we keep the clocks that are not constrained by the relations
 
-    public <T extends Value> T evaluate(Expression exp, Environment env, Class<T> type) {
-        ExpressionEvaluator evaluator = new ExpressionEvaluator(this, env);
+    public Environment getEnvironment() {
+        return environment == null ? environment = new Environment() : environment;
+    }
+
+    public void setEnvironment(Environment environment) {
+        this.environment = environment;
+    }
+
+    public int getRelationCount() {
+        return relationCount;
+    }
+
+    public <T extends Value> T evaluate(Expression exp, Class<T> type) {
+        ExpressionEvaluator evaluator = new ExpressionEvaluator(this);
         Value value = evaluator.doSwitch(exp);
         if (type.isAssignableFrom(value.getClass())) {
             return type.cast(value);
@@ -25,12 +42,12 @@ public class Interpreter {
         throw new RuntimeException("Expected " + type.getSimpleName() + " but found " + value.getClass().getSimpleName());
     }
 
-    public Value evaluate(Expression exp, Environment env) {
-        return evaluate(exp, env, Value.class);
+    public Value evaluate(Expression exp) {
+        return evaluate(exp, Value.class);
     }
 
-    public <T extends Value> T evaluate(Literal exp, Environment env, Class<T> type) {
-        LiteralEvaluator evaluator = new LiteralEvaluator(this, env);
+    public <T extends Value> T evaluate(Literal exp, Class<T> type) {
+        LiteralEvaluator evaluator = new LiteralEvaluator(this);
         Value value = evaluator.doSwitch(exp);
         if (type.isAssignableFrom(value.getClass())) {
             return type.cast(value);
@@ -38,12 +55,12 @@ public class Interpreter {
         throw new RuntimeException("Expected " + type.getSimpleName() + " but found " + value.getClass().getSimpleName());
     }
 
-    public Value evaluate(Literal exp, Environment env) {
-        return evaluate(exp, env, Value.class);
+    public Value evaluate(Literal exp) {
+        return evaluate(exp, Value.class);
     }
 
-    public LValue lvalue(Expression exp, Environment env) {
-        ExpressionLValueEvaluator evaluator = new ExpressionLValueEvaluator(this, env);
+    public LValue lvalue(Expression exp) {
+        ExpressionLValueEvaluator evaluator = new ExpressionLValueEvaluator(this);
         Value value = evaluator.doSwitch(exp);
         if (value instanceof LValue) {
             return (LValue)value;
@@ -51,43 +68,66 @@ public class Interpreter {
         throw new RuntimeException("Expected an Lvalue but found " + value.getClass().getSimpleName());
     }
 
-    public Value evaluate(NamedDeclaration decl, Environment env) {
-        DeclarationEvaluator evaluator = new DeclarationEvaluator(this, env);
+    public Value evaluate(NamedDeclaration decl) {
+        DeclarationEvaluator evaluator = new DeclarationEvaluator(this);
 
         return evaluator.doSwitch(decl);
     }
 
-    public void evaluate(Statement statement, Environment env) {
-        StatementEvaluator evaluator = new StatementEvaluator(this, env);
+    public void evaluate(Statement statement) {
+        StatementEvaluator evaluator = new StatementEvaluator(this);
 
         evaluator.doSwitch(statement);
     }
 
     //returns the number of primitive relations
-    public int initialize(RelationInstanceDecl instance,  Environment env) {
-        env.setMemory(new Memory());
-        DeclarationEvaluator evaluator = new DeclarationEvaluator(this, env);
-        env.bind(instance, evaluator.doSwitch(instance));
-        return evaluator.getPrimitiveRelationCount();
+    public void initialize(RelationInstanceDecl instance) {
+        getEnvironment().setMemory(new Memory());
+        DeclarationEvaluator evaluator = new DeclarationEvaluator(this);
+        getEnvironment().bind(instance, evaluator.doSwitch(instance));
+        relationCount = evaluator.getPrimitiveRelationCount();
     }
 
-    public Set<ClockLiteral>[] relationVocabularies(RelationInstanceDecl instance, Environment env, int numberOfRelations) {
-        VocabularyCollector collector = new VocabularyCollector(this, env, numberOfRelations);
+    public void collectVocabularies(RelationInstanceDecl instance) {
+        VocabularyCollector collector = new VocabularyCollector(this, relationCount);
         collector.doSwitch(instance);
-        return collector.getVocabulary();
+
+        vocabularies = collector.getVocabulary();
+        allClocks = collector.getAllClocks();
+        freeClocks = collector.getFreeClocks();
     }
 
-    public Set<FireableTransition> fireableTransitions(RelationInstanceDecl instance,  Environment env) {
+    public Set<ClockLiteral>[] getVocabularies() {
+        return vocabularies;
+    }
+
+    public Set<ClockLiteral> getAllClocks() {
+        return allClocks;
+    }
+
+    public Set<ClockLiteral> getFreeClocks() {
+        return freeClocks;
+    }
+
+    public void reset() {
+        environment = null;
+        vocabularies = null;
+        allClocks = null;
+        freeClocks = null;
+    }
+
+
+    public Set<FireableTransition> fireableTransitions(RelationInstanceDecl instance) {
         TransitionCollector collector = new TransitionCollector();
-        return collector.collectTransitions(instance, env, this);
+        return collector.collectTransitions(instance, this);
     }
 
-    public void evaluate(FireableTransition fireableTransition, Environment env) {
+    public void evaluate(FireableTransition fireableTransition) {
         Statement action = fireableTransition.transition.getAction();
         if (action != null) {
-            env.push(fireableTransition.executionContext);
-            this.evaluate(fireableTransition.transition.getAction(), env);
-            env.pop();
+            getEnvironment().push(fireableTransition.executionContext);
+            this.evaluate(fireableTransition.transition.getAction());
+            getEnvironment().pop();
         }
     }
 

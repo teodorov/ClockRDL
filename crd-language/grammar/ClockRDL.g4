@@ -24,7 +24,7 @@ initializedIdentifier : IDENTIFIER (ASSIGN expression)?;
 
 functionDecl : DEFINE IDENTIFIER argumentDecl? blockStmt;
 
-primitiveRelationBody: transitionDecl+;
+primitiveRelationBody: transitionDecl*;
 transitionDecl: guard? vector action? SEMICOLON;
 guard: '[' expression ']';
 vector: '{' IDENTIFIER* '}';

@@ -23,6 +23,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 
+import org.junit.After;
 import org.junit.Test;
 
 import java.io.IOError;
@@ -36,10 +37,15 @@ import static junit.framework.Assert.*;
 public class ExpressionEvaluatorTests {
     Interpreter evaluator = new Interpreter();
 
+    @After
+    public void teardown() {
+        evaluator.reset();
+    }
+
     @Test
     public void testArithmetic2Plus3() {
         Expression exp = compileExp("2+3");
-        Value result = evaluator.evaluate(exp, null);
+        Value result = evaluator.evaluate(exp);
 
         assertEquals(true, result.isIntegerValue());
         assertEquals(5, ((IntegerValue) result).getData());
@@ -48,7 +54,7 @@ public class ExpressionEvaluatorTests {
     @Test
     public void testArithmetic2Minus3() {
         Expression exp = compileExp("2-3");
-        Value result = evaluator.evaluate(exp, null);
+        Value result = evaluator.evaluate(exp);
 
         assertEquals(true, result.isIntegerValue());
         assertEquals(-1, ((IntegerValue) result).getData());
@@ -57,7 +63,7 @@ public class ExpressionEvaluatorTests {
     @Test
     public void testArithmetic2Mult3() {
         Expression exp = compileExp("2*3");
-        Value result = evaluator.evaluate(exp, null);
+        Value result = evaluator.evaluate(exp);
 
         assertEquals(true, result.isIntegerValue());
         assertEquals(6, ((IntegerValue) result).getData());
@@ -66,7 +72,7 @@ public class ExpressionEvaluatorTests {
     @Test
     public void testArithmetic2Mod3() {
         Expression exp = compileExp("2%3");
-        Value result = evaluator.evaluate(exp, null);
+        Value result = evaluator.evaluate(exp);
 
         assertEquals(true, result.isIntegerValue());
         assertEquals(2, ((IntegerValue) result).getData());
@@ -75,7 +81,7 @@ public class ExpressionEvaluatorTests {
     @Test
     public void testArithmetic2Div3() {
         Expression exp = compileExp("2/3");
-        Value result = evaluator.evaluate(exp, null);
+        Value result = evaluator.evaluate(exp);
 
         assertEquals(true, result.isIntegerValue());
         assertEquals(0, ((IntegerValue) result).getData());
@@ -83,124 +89,124 @@ public class ExpressionEvaluatorTests {
 
     @Test
     public void testRelational() {
-        Value result = evaluator.evaluate(compileExp("2<3"), null);
+        Value result = evaluator.evaluate(compileExp("2<3"));
         assertEquals(true, result.isBooleanValue());
         assertEquals(BooleanValue.TRUE, result);
 
-        result = evaluator.evaluate(compileExp("2<=3"), null);
+        result = evaluator.evaluate(compileExp("2<=3"));
         assertEquals(true, result.isBooleanValue());
         assertEquals(BooleanValue.TRUE, result);
 
-        result = evaluator.evaluate(compileExp("3<=3"), null);
+        result = evaluator.evaluate(compileExp("3<=3"));
         assertEquals(true, result.isBooleanValue());
         assertEquals(BooleanValue.TRUE, result);
 
-        result = evaluator.evaluate(compileExp("3=3"), null);
+        result = evaluator.evaluate(compileExp("3=3"));
         assertEquals(true, result.isBooleanValue());
         assertEquals(BooleanValue.TRUE, result);
 
-        result = evaluator.evaluate(compileExp("2!=3"), null);
+        result = evaluator.evaluate(compileExp("2!=3"));
         assertEquals(true, result.isBooleanValue());
         assertEquals(true, ((BooleanValue) result).getData());
 
-        result = evaluator.evaluate(compileExp("3>2"), null);
+        result = evaluator.evaluate(compileExp("3>2"));
         assertEquals(true, result.isBooleanValue());
         assertEquals(BooleanValue.TRUE, result);
 
-        result = evaluator.evaluate(compileExp("3>=2"), null);
+        result = evaluator.evaluate(compileExp("3>=2"));
         assertEquals(true, result.isBooleanValue());
         assertEquals(BooleanValue.TRUE, result);
 
-        result = evaluator.evaluate(compileExp("3>=3"), null);
+        result = evaluator.evaluate(compileExp("3>=3"));
         assertEquals(true, result.isBooleanValue());
         assertEquals(BooleanValue.TRUE, result);
 
-        result = evaluator.evaluate(compileExp("2<3"), null);
+        result = evaluator.evaluate(compileExp("2<3"));
         assertEquals(true, result.isBooleanValue());
         assertEquals(BooleanValue.TRUE, result);
 
-        result = evaluator.evaluate(compileExp("2<=3"), null);
+        result = evaluator.evaluate(compileExp("2<=3"));
         assertEquals(true, result.isBooleanValue());
         assertEquals(BooleanValue.TRUE, result);
 
-        result = evaluator.evaluate(compileExp("3<=3"), null);
+        result = evaluator.evaluate(compileExp("3<=3"));
         assertEquals(true, result.isBooleanValue());
         assertEquals(BooleanValue.TRUE, result);
 
-        result = evaluator.evaluate(compileExp("3!=3"), null);
+        result = evaluator.evaluate(compileExp("3!=3"));
         assertEquals(true, result.isBooleanValue());
         assertEquals(BooleanValue.FALSE, result);
 
-        result = evaluator.evaluate(compileExp("2=3"), null);
+        result = evaluator.evaluate(compileExp("2=3"));
         assertEquals(true, result.isBooleanValue());
         assertEquals(BooleanValue.FALSE, result);
 
-        result = evaluator.evaluate(compileExp("3<2"), null);
+        result = evaluator.evaluate(compileExp("3<2"));
         assertEquals(true, result.isBooleanValue());
         assertEquals(BooleanValue.FALSE, result);
 
-        result = evaluator.evaluate(compileExp("3<=2"), null);
+        result = evaluator.evaluate(compileExp("3<=2"));
         assertEquals(true, result.isBooleanValue());
         assertEquals(BooleanValue.FALSE, result);
 
-        result = evaluator.evaluate(compileExp("3<=3"), null);
+        result = evaluator.evaluate(compileExp("3<=3"));
         assertEquals(true, result.isBooleanValue());
         assertEquals(BooleanValue.TRUE, result);
     }
 
     @Test
     public void testArrayLiteralIndex() {
-        Value result = evaluator.evaluate(compileExp("[1 2 3][0]"), null);
+        Value result = evaluator.evaluate(compileExp("[1 2 3][0]"));
         assertEquals(true, result.isIntegerValue());
         assertEquals(1, ((IntegerValue)result).getData());
 
-        result = evaluator.evaluate(compileExp("[1 2 3][1]"), null);
+        result = evaluator.evaluate(compileExp("[1 2 3][1]"));
         assertEquals(true, result.isIntegerValue());
         assertEquals(2, ((IntegerValue)result).getData());
 
-        result = evaluator.evaluate(compileExp("[1 2 3][2]"), null);
+        result = evaluator.evaluate(compileExp("[1 2 3][2]"));
         assertEquals(true, result.isIntegerValue());
         assertEquals(3, ((IntegerValue)result).getData());
     }
 
     @Test
     public void testArrayLiteralSize() {
-        Value result = evaluator.evaluate(compileExp("[1 2 3].size()"), null);
+        Value result = evaluator.evaluate(compileExp("[1 2 3].size()"));
         assertEquals(true, result.isIntegerValue());
         assertEquals(3, ((IntegerValue)result).getData());
     }
 
     @Test
     public void testArrayLiteralSizeAdd() {
-        Value result = evaluator.evaluate(compileExp("[1 2 3].size() + [1 2].size()"), null);
+        Value result = evaluator.evaluate(compileExp("[1 2 3].size() + [1 2].size()"));
         assertEquals(true, result.isIntegerValue());
         assertEquals(5, ((IntegerValue)result).getData());
     }
 
     @Test
     public void testQueueLiteralSize() {
-        Value result = evaluator.evaluate(compileExp("{|1 2 3|}.size()"), null);
+        Value result = evaluator.evaluate(compileExp("{|1 2 3|}.size()"));
         assertEquals(true, result.isIntegerValue());
         assertEquals(3, ((IntegerValue)result).getData());
     }
 
     @Test
     public void testQueueLiteralAdd() {
-        Value result = evaluator.evaluate(compileExp("{|1 2 3|}.add(5)"), null);
+        Value result = evaluator.evaluate(compileExp("{|1 2 3|}.add(5)"));
         assertEquals(true, result.isBooleanValue());
         assertEquals(BooleanValue.TRUE, result);
     }
 
     @Test
     public void testQueueLiteralAddFirst() {
-        Value result = evaluator.evaluate(compileExp("{|1 2 3|}.addFirst(5)"), null);
+        Value result = evaluator.evaluate(compileExp("{|1 2 3|}.addFirst(5)"));
         assertEquals(true, result.isBooleanValue());
         assertEquals(BooleanValue.TRUE, result);
     }
 
     @Test
     public void testQueueLiteralAddLast() {
-        Value result = evaluator.evaluate(compileExp("{|1 2 3|}.addLast(5)"), null);
+        Value result = evaluator.evaluate(compileExp("{|1 2 3|}.addLast(5)"));
         assertEquals(true, result.isBooleanValue());
         assertEquals(BooleanValue.TRUE, result);
     }
@@ -208,44 +214,44 @@ public class ExpressionEvaluatorTests {
 
     @Test
     public void testQueueLiteralRemove() {
-        Value result = evaluator.evaluate(compileExp("{|1 2 3|}.remove()"), null);
+        Value result = evaluator.evaluate(compileExp("{|1 2 3|}.remove()"));
         assertEquals(true, result.isIntegerValue());
         assertEquals(1, ((IntegerValue)result).getData());
 
-        result = evaluator.evaluate(compileExp("{| [1 2] 3|}.remove().size()"), null);
+        result = evaluator.evaluate(compileExp("{| [1 2] 3|}.remove().size()"));
         assertEquals(true, result.isIntegerValue());
         assertEquals(2, ((IntegerValue)result).getData());
     }
 
     @Test
     public void testQueueLiteralRemoveFirst() {
-        Value result = evaluator.evaluate(compileExp("{|1 2 3|}.removeFirst()"), null);
+        Value result = evaluator.evaluate(compileExp("{|1 2 3|}.removeFirst()"));
         assertEquals(true, result.isIntegerValue());
         assertEquals(1, ((IntegerValue)result).getData());
 
-        result = evaluator.evaluate(compileExp("{| [1 2] 3|}.removeFirst().size()"), null);
+        result = evaluator.evaluate(compileExp("{| [1 2] 3|}.removeFirst().size()"));
         assertEquals(true, result.isIntegerValue());
         assertEquals(2, ((IntegerValue)result).getData());
     }
 
     @Test
     public void testQueueLiteralRemoveLast() {
-        Value result = evaluator.evaluate(compileExp("{|1 2 3|}.removeLast()"), null);
+        Value result = evaluator.evaluate(compileExp("{|1 2 3|}.removeLast()"));
         assertEquals(true, result.isIntegerValue());
         assertEquals(3, ((IntegerValue)result).getData());
 
-        result = evaluator.evaluate(compileExp("{| 3 [1 2] |}.removeLast().size()"), null);
+        result = evaluator.evaluate(compileExp("{| 3 [1 2] |}.removeLast().size()"));
         assertEquals(true, result.isIntegerValue());
         assertEquals(2, ((IntegerValue)result).getData());
     }
 
     @Test
     public void testQueueLiteralFirst() {
-        Value result = evaluator.evaluate(compileExp("{|55 2 3|}.first()"), null);
+        Value result = evaluator.evaluate(compileExp("{|55 2 3|}.first()"));
         assertEquals(true, result.isIntegerValue());
         assertEquals(55, ((IntegerValue)result).getData());
 
-        result = evaluator.evaluate(compileExp("{| [1 2] 3|}.first()"), null);
+        result = evaluator.evaluate(compileExp("{| [1 2] 3|}.first()"));
         assertEquals(true, result.isArrayValue());
         assertEquals(2, ((ArrayValue)result).data.length);
         assertEquals(1, ((IntegerValue)((ArrayValue)result).data[0]).getData());
@@ -254,11 +260,11 @@ public class ExpressionEvaluatorTests {
 
     @Test
     public void testQueueLiteralLast() {
-        Value result = evaluator.evaluate(compileExp("{|55 2 3|}.last()"), null);
+        Value result = evaluator.evaluate(compileExp("{|55 2 3|}.last()"));
         assertEquals(true, result.isIntegerValue());
         assertEquals(3, ((IntegerValue)result).getData());
 
-        result = evaluator.evaluate(compileExp("{| 3 [1 2] |}.last()"), null);
+        result = evaluator.evaluate(compileExp("{| 3 [1 2] |}.last()"));
         assertEquals(true, result.isArrayValue());
         assertEquals(2, ((ArrayValue)result).data.length);
         assertEquals(1, ((IntegerValue)((ArrayValue)result).data[0]).getData());
@@ -267,22 +273,22 @@ public class ExpressionEvaluatorTests {
 
     @Test
     public void testQueueLiteralIsEmpty() {
-        Value result = evaluator.evaluate(compileExp("{|1 2 3|}.isEmpty()"), null);
+        Value result = evaluator.evaluate(compileExp("{|1 2 3|}.isEmpty()"));
         assertEquals(true, result.isBooleanValue());
         assertEquals(BooleanValue.FALSE, result);
 
-        result = evaluator.evaluate(compileExp("{||}.isEmpty()"), null);
+        result = evaluator.evaluate(compileExp("{||}.isEmpty()"));
         assertEquals(true, result.isBooleanValue());
         assertEquals(BooleanValue.TRUE, result);
     }
 
     @Test
     public void testQueueLiteralIsNotEmpty() {
-        Value result = evaluator.evaluate(compileExp("{|1 2 3|}.isNotEmpty()"), null);
+        Value result = evaluator.evaluate(compileExp("{|1 2 3|}.isNotEmpty()"));
         assertEquals(true, result.isBooleanValue());
         assertEquals(BooleanValue.TRUE, result);
 
-        result = evaluator.evaluate(compileExp("{||}.isNotEmpty()"), null);
+        result = evaluator.evaluate(compileExp("{||}.isNotEmpty()"));
         assertEquals(true, result.isBooleanValue());
         assertEquals(BooleanValue.FALSE, result);
     }

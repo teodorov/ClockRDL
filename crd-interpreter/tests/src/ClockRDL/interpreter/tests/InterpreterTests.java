@@ -15,6 +15,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.junit.After;
 import org.junit.Test;
 
 import java.lang.reflect.InvocationTargetException;
@@ -29,7 +30,7 @@ import static junit.framework.Assert.assertNotNull;
  */
 public class InterpreterTests {
 
-    Interpreter evaluator = new Interpreter();
+    Interpreter interpreter = new Interpreter();
 
     String simpleLib = "library simple {\n" +
             "\trelation counter10\n" +
@@ -58,12 +59,13 @@ public class InterpreterTests {
 
     @Test
     public void libWithFctExecutionOnce() {
-        Environment env = initialize(fctInstance, libWithFct);
+        initialize(fctInstance, libWithFct);
+        Environment env = interpreter.getEnvironment();
         RelationInstanceDecl instance = (RelationInstanceDecl)env.find("j");
-        Set<FireableTransition> fireable = evaluator.fireableTransitions(instance, env);
+        Set<FireableTransition> fireable = interpreter.fireableTransitions(instance);
 
         for (FireableTransition transition : fireable) {
-            evaluator.evaluate(transition, env);
+            interpreter.evaluate(transition);
         }
 
         AbstractFrame instanceFrame = (AbstractFrame) env.lookup("j");
@@ -74,12 +76,13 @@ public class InterpreterTests {
 
     @Test
     public void simpleRelationExecutionOnce() {
-        Environment env = initialize(simpleInstance, simpleLib);
+        initialize(simpleInstance, simpleLib);
+        Environment env = interpreter.getEnvironment();
         RelationInstanceDecl instance = (RelationInstanceDecl)env.find("i");
-        Set<FireableTransition> fireable = evaluator.fireableTransitions(instance, env);
+        Set<FireableTransition> fireable = interpreter.fireableTransitions(instance);
 
         for (FireableTransition transition : fireable) {
-            evaluator.evaluate(transition, env);
+            interpreter.evaluate(transition);
         }
 
         AbstractFrame instanceFrame = (AbstractFrame) env.lookup("i");
@@ -90,7 +93,8 @@ public class InterpreterTests {
 
     @Test
     public void simpleRelationExecution10() {
-        Environment env = initialize(simpleInstance, simpleLib);
+        initialize(simpleInstance, simpleLib);
+        Environment env = interpreter.getEnvironment();
         RelationInstanceDecl instance = (RelationInstanceDecl)env.find("i");
 
         AbstractFrame instanceFrame = (AbstractFrame) env.lookup("i");
@@ -99,16 +103,17 @@ public class InterpreterTests {
             IntegerValue valueX = (IntegerValue) instanceFrame.lookup("x", env.getMemory());
             assertEquals(i, valueX.getData());
 
-            Set<FireableTransition> fireable = evaluator.fireableTransitions(instance, env);
+            Set<FireableTransition> fireable = interpreter.fireableTransitions(instance);
             for (FireableTransition transition : fireable) {
-                evaluator.evaluate(transition, env);
+                interpreter.evaluate(transition);
             }
         }
     }
 
     @Test
     public void simpleRelationExecution30() {
-        Environment env = initialize(simpleInstance, simpleLib);
+        initialize(simpleInstance, simpleLib);
+        Environment env = interpreter.getEnvironment();
         RelationInstanceDecl instance = (RelationInstanceDecl)env.find("i");
 
         AbstractFrame instanceFrame = (AbstractFrame) env.lookup("i");
@@ -117,25 +122,26 @@ public class InterpreterTests {
             IntegerValue valueX = (IntegerValue) instanceFrame.lookup("x", env.getMemory());
             assertEquals(i % 11, valueX.getData());
 
-            Set<FireableTransition> fireable = evaluator.fireableTransitions(instance, env);
+            Set<FireableTransition> fireable = interpreter.fireableTransitions(instance);
             for (FireableTransition transition : fireable) {
-                evaluator.evaluate(transition, env);
+                interpreter.evaluate(transition);
             }
         }
     }
 
     @Test
     public void simpleRelationFireables() {
-        Environment env = initialize(simpleInstance, simpleLib);
-        RelationInstanceDecl instance = (RelationInstanceDecl)env.find("i");
-        Set<FireableTransition> fireable = evaluator.fireableTransitions(instance, env);
+        initialize(simpleInstance, simpleLib);
+        RelationInstanceDecl instance = (RelationInstanceDecl) interpreter.getEnvironment().find("i");
+        Set<FireableTransition> fireable = interpreter.fireableTransitions(instance);
 
         assertEquals(1, fireable.size());
     }
 
     @Test
     public void simpleRelationInitialization() {
-        Environment env = initialize(simpleInstance, simpleLib);
+        initialize(simpleInstance, simpleLib);
+        Environment env = interpreter.getEnvironment();
         AbstractFrame instanceFrame = (AbstractFrame) env.lookup("i");
         assertNotNull(instanceFrame);
 
@@ -152,7 +158,8 @@ public class InterpreterTests {
 
     @Test
     public void simpleRelationWithClocksInitialization() {
-        Environment env = initialize(simpleInstanceWithClocks, simpleLib);
+        initialize(simpleInstanceWithClocks, simpleLib);
+        Environment env = interpreter.getEnvironment();
         AbstractFrame instanceFrame = (AbstractFrame) env.lookup("i");
         assertNotNull(instanceFrame);
 
@@ -167,12 +174,15 @@ public class InterpreterTests {
 
     }
 
-    public Environment initialize(String blockCode, String libraryString) {
+    public void initialize(String blockCode, String libraryString) {
         RelationInstanceDecl instance = compile(blockCode, libraryString);
-        Environment env = new Environment();
 
-        evaluator.initialize(instance, env);
-        return env;
+        interpreter.initialize(instance);
+    }
+
+    @After
+    public void teardown() {
+        interpreter.reset();
     }
 
     public RelationInstanceDecl compile(String instanceString, String libraryString) {

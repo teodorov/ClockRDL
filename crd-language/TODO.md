@@ -29,7 +29,8 @@ While this feature is nice it posses some challenges for:
 - [] define a clear error handling strategy for Parsing 
 - [20%] integration with Plug
 - [] write tutorial
-- [] write Language Spec
+- [1%] write Language Spec
+- [] What about adding user defined data types. It should be possible using a specialized OO-like language that registers the classes in the scope. 
 
 ####Questions
 1. Do we need the possibility to convert arrays to queues?

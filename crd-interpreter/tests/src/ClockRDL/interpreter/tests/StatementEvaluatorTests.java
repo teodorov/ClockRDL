@@ -13,14 +13,20 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.junit.After;
 import org.junit.Test;
 
 /**
  * Created by ciprian on 22/10/15.
  */
-public class StatementEvaluatorTest {
+public class StatementEvaluatorTests {
 
     Interpreter evaluator = new Interpreter();
+
+    @After
+    public void teardown() {
+        evaluator.reset();
+    }
 
     @Test
     public void testAssignInBlock() {
@@ -80,7 +86,7 @@ public class StatementEvaluatorTest {
     }
 
     public void evaluate(String blockCode) {
-        evaluator.evaluate(compile(blockCode), new Environment());
+        evaluator.evaluate(compile(blockCode));
     }
 
     public BlockStmt compile(String expressionString) {

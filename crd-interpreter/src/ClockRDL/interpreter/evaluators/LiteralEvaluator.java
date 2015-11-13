@@ -18,10 +18,8 @@ import java.util.List;
  */
 public class LiteralEvaluator extends LiteralsSwitch<Value> {
     Interpreter interpreter;
-    Environment environment;
-    public LiteralEvaluator(Interpreter interpreter, Environment env) {
+    public LiteralEvaluator(Interpreter interpreter) {
         this.interpreter = interpreter;
-        this.environment = env;
     }
 
     @Override
@@ -84,6 +82,6 @@ public class LiteralEvaluator extends LiteralsSwitch<Value> {
 
     @Override
     public Value caseExpression(Expression object) {
-        return interpreter.evaluate(object, environment);
+        return interpreter.evaluate(object);
     }
 }

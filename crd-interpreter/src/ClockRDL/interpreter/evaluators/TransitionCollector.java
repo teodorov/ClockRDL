@@ -26,9 +26,9 @@ public class TransitionCollector extends DeclarationsSwitch<Set<FireableTransiti
     //Frame is first because it represents the execution context,
     // in the same execution context we cannot have two transitions with the same identity
     // in different execution contexts we can have two transitions with the same identity due to relation instantiation
-    public Set<FireableTransition> collectTransitions(RelationInstanceDecl instance, Environment env, Interpreter interpreter) {
+    public Set<FireableTransition> collectTransitions(RelationInstanceDecl instance, Interpreter interpreter) {
         this.interpreter = interpreter;
-        this.environment = env;
+        this.environment = interpreter.getEnvironment();
         return doSwitch(instance);
     }
 
@@ -36,7 +36,7 @@ public class TransitionCollector extends DeclarationsSwitch<Set<FireableTransiti
     public Set<FireableTransition> casePrimitiveRelationDecl(PrimitiveRelationDecl object) {
         Set<FireableTransition> fireable = Collections.newSetFromMap(new IdentityHashMap<>());
         for (TransitionDecl transitionDecl : object.getTransitions()) {
-            BooleanValue guard = interpreter.evaluate(transitionDecl.getGuard(), environment, BooleanValue.class);
+            BooleanValue guard = interpreter.evaluate(transitionDecl.getGuard(), BooleanValue.class);
             if (guard.getData()) {
                 fireable.add(new FireableTransition((PrimitiveRelationFrame) environment.currentFrame(), transitionDecl));
             }

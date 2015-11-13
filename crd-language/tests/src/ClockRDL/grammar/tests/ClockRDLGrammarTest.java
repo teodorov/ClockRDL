@@ -229,7 +229,14 @@ public class ClockRDLGrammarTest {
         assertParse("def x(a b c) {a := 3 if d < 3 { return 2 } else { return a } }");
     }
 
-	@Test
+    @Test
+    public void emptyPrimitiveRelation() {
+        setCurrentRule("relationDecl");
+        assertParse("relation r {}");
+    }
+
+
+    @Test
 	public void testExamples() {
 		File testDir = new File("../examples/");
 		System.out.println(new File(".").getAbsolutePath());

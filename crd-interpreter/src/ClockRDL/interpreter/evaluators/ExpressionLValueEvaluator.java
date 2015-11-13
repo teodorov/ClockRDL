@@ -13,8 +13,8 @@ import ClockRDL.model.expressions.SelectedExp;
  * Created by ciprian on 21/10/15.
  */
 public class ExpressionLValueEvaluator extends ExpressionEvaluator {
-    public ExpressionLValueEvaluator(Interpreter interpreter, Environment env) {
-        super(interpreter, env);
+    public ExpressionLValueEvaluator(Interpreter interpreter) {
+        super(interpreter);
     }
 
     @Override

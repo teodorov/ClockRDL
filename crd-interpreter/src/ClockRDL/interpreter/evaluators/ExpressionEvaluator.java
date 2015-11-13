@@ -22,9 +22,9 @@ public class ExpressionEvaluator extends ExpressionsSwitch<Value> {
     Interpreter interpreter;
     Environment environment;
 
-    public ExpressionEvaluator(Interpreter interpreter, Environment env) {
+    public ExpressionEvaluator(Interpreter interpreter) {
         this.interpreter = interpreter;
-        this.environment = env;
+        this.environment = interpreter.getEnvironment();
     }
 
     @Override
@@ -91,13 +91,13 @@ public class ExpressionEvaluator extends ExpressionsSwitch<Value> {
 
         if (opaqueValue.isFunctionValue()) {
             //interpret the functionDeclaration in the current environment extended with the functionFrame
-            return applyClosure(((FunctionValue) opaqueValue), environment, argList);
+            return applyClosure(((FunctionValue) opaqueValue), argList);
         }
         //primitive call
         return (Value) ((PrimitiveFunctionValue)opaqueValue).fct.apply(argList);
     }
 
-    public Value applyClosure(FunctionValue closure, Environment env, List<Value> argList) {
+    public Value applyClosure(FunctionValue closure, List<Value> argList) {
         AbstractFrame myFrame = new TemporaryFrame(closure.data.getName(), closure.declarationEnvironment);
         environment.push(myFrame); //the function should be interpreted in the context of the frame
 
@@ -112,7 +112,7 @@ public class ExpressionEvaluator extends ExpressionsSwitch<Value> {
             environment.bind(formalList.get(argIndex), argList.get(argIndex));
         }
 
-        interpreter.evaluate(closure.data.getBody(), environment);
+        interpreter.evaluate(closure.data.getBody());
 
         environment.pop();
 
@@ -310,6 +310,6 @@ public class ExpressionEvaluator extends ExpressionsSwitch<Value> {
 
     @Override
     public Value caseLiteral(Literal object) {
-        return interpreter.evaluate(object, environment);
+        return interpreter.evaluate(object);
     }
 }

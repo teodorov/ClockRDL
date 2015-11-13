@@ -22,16 +22,16 @@ public class StatementEvaluator extends StatementsSwitch<Boolean> {
     Interpreter interpreter;
     Environment environment;
 
-    public StatementEvaluator(Interpreter interpreter, Environment env) {
+    public StatementEvaluator(Interpreter interpreter) {
         this.interpreter = interpreter;
-        this.environment = env;
+        this.environment = interpreter.getEnvironment();
     }
 
     @Override
     public Boolean caseAssignmentStmt(AssignmentStmt object) {
 
-        StateValue rhs = (StateValue) interpreter.evaluate(object.getRhs(), environment);
-        LValue lhs = interpreter.lvalue(object.getLhs(), environment);
+        StateValue rhs = (StateValue) interpreter.evaluate(object.getRhs());
+        LValue lhs = interpreter.lvalue(object.getLhs());
         StateValue result = NullValue.uniqueInstance;
         Value lhsV;
 
@@ -40,49 +40,49 @@ public class StatementEvaluator extends StatementsSwitch<Boolean> {
                 result = rhs;
                 break;
             case ANDASSIGN:
-                lhsV = interpreter.evaluate(object.getLhs(), environment);
+                lhsV = interpreter.evaluate(object.getLhs());
                 if (!(rhs.isBooleanValue() && lhsV.isBooleanValue())) {
                     throw new RuntimeException("Cannot &= non boolean values");
                 }
                 result = BooleanValue.value(((BooleanValue)lhsV).getData() && ((BooleanValue)rhs).getData());
                 break;
             case ORASSIGN:
-                lhsV = interpreter.evaluate(object.getLhs(), environment);
+                lhsV = interpreter.evaluate(object.getLhs());
                 if (!(rhs.isBooleanValue() && lhsV.isBooleanValue())) {
                     throw new RuntimeException("Cannot |= non boolean values");
                 }
                 result = BooleanValue.value(((BooleanValue)lhsV).getData() || ((BooleanValue)rhs).getData());
                 break;
             case DIVASSIGN:
-                lhsV = interpreter.evaluate(object.getLhs(), environment);
+                lhsV = interpreter.evaluate(object.getLhs());
                 if (!(rhs.isIntegerValue() && lhsV.isIntegerValue())) {
                     throw new RuntimeException("Cannot /= non integer values");
                 }
                 result = IntegerValue.value(((IntegerValue) lhsV).getData() / ((IntegerValue) rhs).getData());
                 break;
             case MINUSASSIGN:
-                lhsV = interpreter.evaluate(object.getLhs(), environment);
+                lhsV = interpreter.evaluate(object.getLhs());
                 if (!(rhs.isIntegerValue() && lhsV.isIntegerValue())) {
                     throw new RuntimeException("Cannot -= non integer values");
                 }
                 result = IntegerValue.value(((IntegerValue) lhsV).getData() - ((IntegerValue) rhs).getData());
                 break;
             case MODASSIGN:
-                lhsV = interpreter.evaluate(object.getLhs(), environment);
+                lhsV = interpreter.evaluate(object.getLhs());
                 if (!(rhs.isIntegerValue() && lhsV.isIntegerValue())) {
                     throw new RuntimeException("Cannot %= non integer values");
                 }
                 result = IntegerValue.value(((IntegerValue) lhsV).getData() % ((IntegerValue) rhs).getData());
                 break;
             case MULTASSIGN:
-                lhsV = interpreter.evaluate(object.getLhs(), environment);
+                lhsV = interpreter.evaluate(object.getLhs());
                 if (!(rhs.isIntegerValue() && lhsV.isIntegerValue())) {
                     throw new RuntimeException("Cannot *= non integer values");
                 }
                 result = IntegerValue.value(((IntegerValue) lhsV).getData() * ((IntegerValue) rhs).getData());
                 break;
             case PLUSASSIGN:
-                lhsV = interpreter.evaluate(object.getLhs(), environment);
+                lhsV = interpreter.evaluate(object.getLhs());
                 if (!(rhs.isIntegerValue() && lhsV.isIntegerValue())) {
                     throw new RuntimeException("Cannot += non integer values");
                 }
@@ -98,7 +98,7 @@ public class StatementEvaluator extends StatementsSwitch<Boolean> {
 
     @Override
     public Boolean caseConditionalStmt(ConditionalStmt object) {
-        BooleanValue condition = interpreter.evaluate(object.getCondition(), environment, BooleanValue.class);
+        BooleanValue condition = interpreter.evaluate(object.getCondition(), BooleanValue.class);
 
         if (condition.getData() == true) {
             //the execution stops if a return is hit in the branch
@@ -110,18 +110,18 @@ public class StatementEvaluator extends StatementsSwitch<Boolean> {
 
     @Override
     public Boolean caseLoopStmt(LoopStmt object) {
-        BooleanValue condition = interpreter.evaluate(object.getCondition(), environment, BooleanValue.class);
+        BooleanValue condition = interpreter.evaluate(object.getCondition(), BooleanValue.class);
 
         while (condition.getData() == true) {
             if (!doSwitch(object.getBody())) return false;
-            condition = interpreter.evaluate(object.getCondition(), environment, BooleanValue.class);
+            condition = interpreter.evaluate(object.getCondition(), BooleanValue.class);
         }
         return true;
     }
 
     @Override
     public Boolean caseReturnStmt(ReturnStmt object) {
-        Value result = interpreter.evaluate(object.getExp(), environment);
+        Value result = interpreter.evaluate(object.getExp());
         environment.returnRegister = result;
         //returning false stops the execution of the block
         return false;
@@ -138,7 +138,7 @@ public class StatementEvaluator extends StatementsSwitch<Boolean> {
             environment.push(myFrame);
 
             for (NamedDeclaration decl : object.getDeclarations()) {
-                environment.bind(decl, interpreter.evaluate(decl, environment));
+                environment.bind(decl, interpreter.evaluate(decl));
             }
         }
 
@@ -161,7 +161,7 @@ public class StatementEvaluator extends StatementsSwitch<Boolean> {
 
     @Override
     public Boolean defaultCase(EObject object) {
-        KernelEvaluator ev = new KernelEvaluator(interpreter, environment);
+        KernelEvaluator ev = new KernelEvaluator(interpreter);
         ev.doSwitch(object);
         return true;
     }

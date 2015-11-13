@@ -24,9 +24,9 @@ public class DeclarationEvaluator extends DeclarationsSwitch<Value> {
     int currentPrimitiveID = 0;
     Map<String, ClockLiteral> clocks = new HashMap<>();
 
-    public DeclarationEvaluator(Interpreter interpreter, Environment env) {
+    public DeclarationEvaluator(Interpreter interpreter) {
         this.interpreter = interpreter;
-        this.environment = env;
+        this.environment = interpreter.getEnvironment();
     }
 
     public int getPrimitiveRelationCount() {
@@ -36,7 +36,7 @@ public class DeclarationEvaluator extends DeclarationsSwitch<Value> {
     @Override
     public Value caseClockDecl(ClockDecl object) {
         Value value = NullValue.uniqueInstance;
-        if (object.getInitial() != null)  value = interpreter.evaluate(object.getInitial(), environment);
+        if (object.getInitial() != null)  value = interpreter.evaluate(object.getInitial());
 //        if (value.isNulValue()) {
 //            throw new RuntimeException("Clock named '" + object.getName() + "' is not mapped");
 //        }
@@ -46,14 +46,14 @@ public class DeclarationEvaluator extends DeclarationsSwitch<Value> {
     @Override
     public Value caseVariableDecl(VariableDecl object) {
         Value value = NullValue.uniqueInstance;
-        if (object.getInitial() != null) value = interpreter.evaluate(object.getInitial(), environment);
+        if (object.getInitial() != null) value = interpreter.evaluate(object.getInitial());
         return value;
     }
 
     @Override
     public Value caseConstantDecl(ConstantDecl object) {
         Value value = NullValue.uniqueInstance;
-        if (object.getInitial() != null) value = interpreter.evaluate(object.getInitial(), environment);
+        if (object.getInitial() != null) value = interpreter.evaluate(object.getInitial());
         return value;
     }
 
@@ -82,7 +82,7 @@ public class DeclarationEvaluator extends DeclarationsSwitch<Value> {
         currentArgumentMap = new HashMap<>();
         //set the actuals in the a global currentArgumentMap, which is used by the relation to put the actual in the frame
         for (Map.Entry<String, Expression> entry :  object.getArgumentMap()) {
-            Value value = interpreter.evaluate(entry.getValue(), environment);
+            Value value = interpreter.evaluate(entry.getValue());
             currentArgumentMap.put(entry.getKey(), value);
         }
 
