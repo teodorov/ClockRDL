@@ -23,6 +23,22 @@ public class VocabularyCollectorTests {
     }
 
     @Test
+    public void oneUnconstrainedClock() {
+        String sys = "library l { relation r {  } relation r1 { clock[b] r() } } l.r1() }";
+        compile(sys);
+
+        Set<ClockLiteral> clocks = interpreter.getAllClocks();
+        Assert.assertEquals(1, clocks.size());
+
+        Set<ClockLiteral> free = interpreter.getFreeClocks();
+        Assert.assertEquals(1, free.size());
+
+        Set<ClockLiteral>[] vocabularies = interpreter.getVocabularies();
+        Assert.assertEquals(1, vocabularies.length);
+        Assert.assertEquals(0, vocabularies[0].size());
+    }
+
+    @Test
     public void oneConstrainedClock() {
         String sys = "library l { relation r clock a; {  } } l.r(a: clock[b]) }";
         compile(sys);

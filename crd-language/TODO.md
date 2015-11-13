@@ -14,6 +14,7 @@ While this feature is nice it posses some challenges for:
 ####TODO
 - [x] internal clock does not need the clock, we can declare them with clock[name] instead of x := clock[name]
 - [] check that multiple instances with default and internal clocks do not share these clocks in ClockRDL2Smalltalk.
+- [] what about using || as separator between relation instances? for coherence I might need to add it in primitive relations too.
 - [] implement support for assert, print, array, and other global functions in ClockSystem[Smalltalk]
 - [20%] add shared variable support, what about using 'ref' instead of the argument list?
 - [] add possibility to specify clock negation in clock vector
