@@ -21,9 +21,9 @@ import java.util.Set;
 public class VocabularyCollector extends DeclarationsSwitch<Boolean> {
     Interpreter interpreter;
     int currentPrimitiveID = 0;
-    Set<ClockLiteral> vocabulary[];
-    Set<ClockLiteral> allClocks;
-    Set<ClockLiteral> freeClocks; // here we keep the clocks that are not constrained by the relations
+    Set<ClockValue> vocabulary[];
+    Set<ClockValue> allClocks;
+    Set<ClockValue> freeClocks; // here we keep the clocks that are not constrained by the relations
 
     public VocabularyCollector(Interpreter interpreter, int numberOfRelations) {
         this.interpreter = interpreter;
@@ -35,15 +35,15 @@ public class VocabularyCollector extends DeclarationsSwitch<Boolean> {
         }
     }
 
-    public Set<ClockLiteral>[] getVocabulary() {
+    public Set<ClockValue>[] getVocabularies() {
         return vocabulary;
     }
 
-    public Set<ClockLiteral> getAllClocks() {
+    public Set<ClockValue> getAllClocks() {
         return allClocks;
     }
 
-    public Set<ClockLiteral> getFreeClocks() {
+    public Set<ClockValue> getFreeClocks() {
         return freeClocks;
     }
 
@@ -64,7 +64,7 @@ public class VocabularyCollector extends DeclarationsSwitch<Boolean> {
                 checkClockValue(object, decl, value);
 
                 processConstrainedClock(value);
-                vocabulary[currentPrimitiveID].add(((ClockValue)value).literal);
+                vocabulary[currentPrimitiveID].add((ClockValue)value);
             }
         }
         currentPrimitiveID++;
@@ -100,14 +100,14 @@ public class VocabularyCollector extends DeclarationsSwitch<Boolean> {
     }
 
     void processNewClock(Value clockValue) {
-        ClockLiteral clock = ((ClockValue)clockValue).literal;
+        ClockValue clock = (ClockValue)clockValue;
         if (allClocks.contains(clock)) return;
         allClocks.add(clock);
         freeClocks.add(clock);
     }
 
     void processConstrainedClock(Value clockValue) {
-        ClockLiteral clock = ((ClockValue)clockValue).literal;
+        ClockValue clock = (ClockValue)clockValue;
         if (allClocks.contains(clock)) {
             freeClocks.remove(clock);
             return;

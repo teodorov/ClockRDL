@@ -20,6 +20,7 @@ import org.junit.Test;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.time.Clock;
 import java.util.Set;
 
 import static junit.framework.Assert.assertEquals;
@@ -34,7 +35,7 @@ public class InterpreterTests {
 
     String simpleLib = "library simple {\n" +
             "\trelation counter10\n" +
-            "\t clock a b;\n" +
+            "\t clock a := clock[x] b := clock[y];\n" +
             "\t\tvar x:=1;\n" +
             "\t{\n" +
             "\t [x<10]{a b}[x +=1];\n" +
@@ -149,10 +150,10 @@ public class InterpreterTests {
         assertEquals(1, initialX.getData());
 
         Value initialA = instanceFrame.lookup("a", env.getMemory());
-        assertEquals(NullValue.uniqueInstance, initialA);
+        assertEquals("x", (initialA).toString());
 
         Value initialB = instanceFrame.lookup("b", env.getMemory());
-        assertEquals(NullValue.uniqueInstance, initialB);
+        assertEquals("y", (initialB).toString());
 
     }
 
@@ -167,10 +168,10 @@ public class InterpreterTests {
         assertEquals(1, initialX.getData());
 
         Value initialA = instanceFrame.lookup("a", env.getMemory());
-        assertEquals("x", ((ClockValue)initialA).toString());
+        assertEquals("x", (initialA).toString());
 
         Value initialB = instanceFrame.lookup("b", env.getMemory());
-        assertEquals("y", ((ClockValue)initialB).toString());
+        assertEquals("y", (initialB).toString());
 
     }
 

@@ -16,7 +16,7 @@ public class NullValue extends StateValue {
     }
 
     @Override
-    public boolean isNulValue() {
+    public boolean isNullValue() {
         return true;
     }
 

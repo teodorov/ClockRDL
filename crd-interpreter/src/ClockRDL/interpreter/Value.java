@@ -27,7 +27,7 @@ public abstract class Value {
     }
     public boolean isRecordValue() { return false; }
     public boolean isFunctionValue() { return false; }
-    public boolean isNulValue() {return false;}
+    public boolean isNullValue() {return false;}
     public boolean isPrimitiveFunctionValue() { return false; }
     public boolean isFrame() {return false; }
 }

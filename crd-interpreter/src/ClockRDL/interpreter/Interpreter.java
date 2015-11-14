@@ -1,14 +1,15 @@
 package ClockRDL.interpreter;
 
 import ClockRDL.interpreter.evaluators.*;
+import ClockRDL.interpreter.values.ClockValue;
 import ClockRDL.interpreter.values.LValue;
 import ClockRDL.model.declarations.RelationInstanceDecl;
 import ClockRDL.model.expressions.Literal;
-import ClockRDL.model.expressions.literals.ClockLiteral;
 import ClockRDL.model.kernel.Expression;
 import ClockRDL.model.kernel.NamedDeclaration;
 import ClockRDL.model.kernel.Statement;
 
+import java.util.Arrays;
 import java.util.Set;
 
 /**
@@ -17,9 +18,9 @@ import java.util.Set;
 public class Interpreter {
     int relationCount;
     private Environment environment;
-    Set<ClockLiteral> vocabularies[];
-    Set<ClockLiteral> allClocks;
-    Set<ClockLiteral> freeClocks; // here we keep the clocks that are not constrained by the relations
+    Set<ClockValue> vocabularies[];
+    Set<ClockValue> allClocks;
+    Set<ClockValue> freeClocks; // here we keep the clocks that are not constrained by the relations
 
     public Environment getEnvironment() {
         return environment == null ? environment = new Environment() : environment;
@@ -86,27 +87,44 @@ public class Interpreter {
         DeclarationEvaluator evaluator = new DeclarationEvaluator(this);
         getEnvironment().bind(instance, evaluator.doSwitch(instance));
         relationCount = evaluator.getPrimitiveRelationCount();
+        collectVocabularies(instance);
     }
 
-    public void collectVocabularies(RelationInstanceDecl instance) {
+    private void collectVocabularies(RelationInstanceDecl instance) {
         VocabularyCollector collector = new VocabularyCollector(this, relationCount);
         collector.doSwitch(instance);
 
-        vocabularies = collector.getVocabulary();
+
         allClocks = collector.getAllClocks();
         freeClocks = collector.getFreeClocks();
+        vocabularies = collector.getVocabularies();
+
+        int i = 0;
+        for (ClockValue clock : allClocks) {
+            clock.setID(i++);
+        }
     }
 
-    public Set<ClockLiteral>[] getVocabularies() {
+    public Set<ClockValue>[] getVocabularies() {
         return vocabularies;
     }
 
-    public Set<ClockLiteral> getAllClocks() {
+    public Set<ClockValue> getAllClocks() {
         return allClocks;
     }
 
-    public Set<ClockLiteral> getFreeClocks() {
+    public Set<ClockValue> getFreeClocks() {
         return freeClocks;
+    }
+
+    public int[] getRelationVocabulary(int relationID) {
+        int[] vocabulary = new int[vocabularies[relationID].size()];
+        int i = 0;
+        for (ClockValue clock : vocabularies[relationID]) {
+            vocabulary[i++] = clock.getID();
+        }
+        Arrays.sort(vocabulary);
+        return vocabulary;
     }
 
     public void reset() {
@@ -129,6 +147,10 @@ public class Interpreter {
             this.evaluate(fireableTransition.transition.getAction());
             getEnvironment().pop();
         }
+    }
+
+    public int getClockCount() {
+        return allClocks.size();
     }
 
     //TODO clarify the difference between the Scope computed during parsing and the execution Frame

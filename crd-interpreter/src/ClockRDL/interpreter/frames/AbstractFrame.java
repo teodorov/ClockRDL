@@ -60,4 +60,9 @@ public abstract class AbstractFrame extends Value {
     }
 
     public abstract void bind(NamedDeclaration decl, Value value, Memory memory);
+
+    @Override
+    public boolean isFrame() {
+        return true;
+    }
 }

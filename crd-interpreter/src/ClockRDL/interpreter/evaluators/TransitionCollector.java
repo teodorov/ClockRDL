@@ -38,7 +38,7 @@ public class TransitionCollector extends DeclarationsSwitch<Set<FireableTransiti
         for (TransitionDecl transitionDecl : object.getTransitions()) {
             BooleanValue guard = interpreter.evaluate(transitionDecl.getGuard(), BooleanValue.class);
             if (guard.getData()) {
-                fireable.add(new FireableTransition((PrimitiveRelationFrame) environment.currentFrame(), transitionDecl));
+                fireable.add(new FireableTransition(transitionDecl, (PrimitiveRelationFrame) environment.currentFrame(), interpreter.getEnvironment().getMemory()));
             }
         }
         return fireable;
