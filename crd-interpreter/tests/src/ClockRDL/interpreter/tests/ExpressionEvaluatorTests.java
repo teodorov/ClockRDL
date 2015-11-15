@@ -272,6 +272,21 @@ public class ExpressionEvaluatorTests {
     }
 
     @Test
+    public void testBooleanShortCircuit() {
+        Value result = evaluator.evaluate(compileExp("false & {||}.first()"));
+        assertEquals(BooleanValue.FALSE, result);
+
+        result = evaluator.evaluate(compileExp("true | {||}.first()"));
+        assertEquals(BooleanValue.TRUE, result);
+
+        result = evaluator.evaluate(compileExp("true nor {||}.first()"));
+        assertEquals(BooleanValue.FALSE, result);
+
+        result = evaluator.evaluate(compileExp("false nand {||}.first()"));
+        assertEquals(BooleanValue.TRUE, result);
+    }
+
+    @Test
     public void testQueueLiteralIsEmpty() {
         Value result = evaluator.evaluate(compileExp("{|1 2 3|}.isEmpty()"));
         assertEquals(true, result.isBooleanValue());

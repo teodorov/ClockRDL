@@ -39,6 +39,11 @@ public class BooleanValue extends StateValue {
     }
 
     @Override
+    public int hashCode() {
+        return Boolean.hashCode(data);
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (! ( obj instanceof BooleanValue ) ) return false;
         BooleanValue aV = (BooleanValue) obj;
@@ -49,5 +54,6 @@ public class BooleanValue extends StateValue {
     public String toString() {
         return Boolean.toString(data);
     }
+
 
 }

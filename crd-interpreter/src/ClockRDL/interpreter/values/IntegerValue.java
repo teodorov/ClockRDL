@@ -49,6 +49,11 @@ public class IntegerValue extends StateValue {
     }
 
     @Override
+    public int hashCode() {
+        return Integer.hashCode(data);
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (! ( obj instanceof IntegerValue ) ) return false;
         IntegerValue aV = (IntegerValue) obj;

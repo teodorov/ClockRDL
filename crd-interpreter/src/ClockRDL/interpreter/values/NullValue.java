@@ -29,4 +29,9 @@ public class NullValue extends StateValue {
     public StateValue deepCopy() {
         return uniqueInstance;
     }
+
+    @Override
+    public int hashCode() {
+        return uniqueInstance.hashCode();
+    }
 }

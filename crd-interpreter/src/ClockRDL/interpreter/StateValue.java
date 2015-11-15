@@ -5,4 +5,5 @@ package ClockRDL.interpreter;
  */
 public abstract class StateValue extends Value implements Cloneable {
     public abstract StateValue deepCopy();
+    public abstract int hashCode();
 }

@@ -158,131 +158,224 @@ public class ExpressionEvaluator extends ExpressionsSwitch<Value> {
         return null;
     }
 
+    private void checkBoolean(Value value) {
+        if (!value.isBooleanValue()) {
+            throw new RuntimeException("Expected boolean operand but found " + value.getClass().getSimpleName());
+        }
+    }
+
+    private void checkInteger(Value value) {
+        if (!value.isIntegerValue()) {
+            throw new RuntimeException("Expected integer operand but found " + value.getClass().getSimpleName());
+        }
+    }
+
     @Override
     public Value caseBinaryExp(BinaryExp object) {
-        Value lhsV = doSwitch(object.getLhs());
-        Value rhsV = doSwitch(object.getRhs());
         //need booleans
-        switch (object.getOperator()) {
-            //boolean
-            case BAND:
-            case BOR:
-            case BNOR:
-            case BXOR:
-            case BNAND:
-                if (!(lhsV.isBooleanValue() && rhsV.isBooleanValue())) {
-                    throw new RuntimeException("Expected boolean operands but found " + lhsV.getClass().getSimpleName() + " and " + rhsV.getClass().getSimpleName());
-                }
-        }
-
-        switch (object.getOperator()) {
-            //relational
-            case BGT:
-            case BGE:
-            case BLT:
-            case BLE:
-                //arithmetic
-            case BDIV:
-            case BMINUS:
-            case BMOD:
-            case BMUL:
-            case BPLUS:
-                if (!(lhsV.isIntegerValue() && rhsV.isIntegerValue())) {
-                    throw new RuntimeException("Expected integer operands but found " + lhsV.getClass().getSimpleName() + " and " + rhsV.getClass().getSimpleName());
-                }
-        }
+//        switch (object.getOperator()) {
+//            //boolean
+//            case BAND:
+//            case BOR:
+//            case BNOR:
+//            case BXOR:
+//            case BNAND:
+//                if (!(lhsV.isBooleanValue() && rhsV.isBooleanValue())) {
+//                    throw new RuntimeException("Expected boolean operands but found " + lhsV.getClass().getSimpleName() + " and " + rhsV.getClass().getSimpleName());
+//                }
+//        }
+//
+//        switch (object.getOperator()) {
+//            //relational
+//            case BGT:
+//            case BGE:
+//            case BLT:
+//            case BLE:
+//                //arithmetic
+//            case BDIV:
+//            case BMINUS:
+//            case BMOD:
+//            case BMUL:
+//            case BPLUS:
+//                if (!(lhsV.isIntegerValue() && rhsV.isIntegerValue())) {
+//                    throw new RuntimeException("Expected integer operands but found " + lhsV.getClass().getSimpleName() + " and " + rhsV.getClass().getSimpleName());
+//                }
+//        }
 
 
         switch (object.getOperator()) {
             //boolean
             case BAND: {
+                Value lhsV = doSwitch(object.getLhs());
+                checkBoolean(lhsV);
                 BooleanValue lhs = ((BooleanValue) lhsV);
+
+                if (!lhs.getData()) return BooleanValue.FALSE;
+
+                Value rhsV = doSwitch(object.getRhs());
+                checkBoolean(rhsV);
                 BooleanValue rhs = ((BooleanValue) rhsV);
-                return BooleanValue.value(lhs.getData() && rhs.getData());
+
+                return BooleanValue.value(rhs.getData());
             }
             case BOR: {
+                Value lhsV = doSwitch(object.getLhs());
+                checkBoolean(lhsV);
                 BooleanValue lhs = ((BooleanValue) lhsV);
+
+                if (lhs.getData()) return BooleanValue.TRUE;
+
+                Value rhsV = doSwitch(object.getRhs());
+                checkBoolean(rhsV);
                 BooleanValue rhs = ((BooleanValue) rhsV);
-                return BooleanValue.value(lhs.getData() || rhs.getData());
+                return rhs;
             }
             case BNOR: {
+                Value lhsV = doSwitch(object.getLhs());
+                checkBoolean(lhsV);
                 BooleanValue lhs = ((BooleanValue) lhsV);
+
+                if (lhs.getData()) return BooleanValue.FALSE;
+
+                Value rhsV = doSwitch(object.getRhs());
+                checkBoolean(rhsV);
                 BooleanValue rhs = ((BooleanValue) rhsV);
-                return BooleanValue.value(!(lhs.getData() || rhs.getData()));
+                return BooleanValue.value(!rhs.getData());
             }
             case BXOR: {
+                Value lhsV = doSwitch(object.getLhs());
+                checkBoolean(lhsV);
                 BooleanValue lhs = ((BooleanValue) lhsV);
-                BooleanValue rhs = ((BooleanValue) rhsV);
-                return BooleanValue.value((lhs.getData() || rhs.getData()) && !(lhs.getData() && rhs.getData()));
 
+                Value rhsV = doSwitch(object.getRhs());
+                checkBoolean(rhsV);
+                BooleanValue rhs = ((BooleanValue) rhsV);
+
+                return BooleanValue.value((lhs.getData() || rhs.getData()) && !(lhs.getData() && rhs.getData()));
             }
             case BNAND: {
+                Value lhsV = doSwitch(object.getLhs());
+                checkBoolean(lhsV);
                 BooleanValue lhs = ((BooleanValue) lhsV);
-                BooleanValue rhs = ((BooleanValue) rhsV);
-                return BooleanValue.value(!(lhs.getData() && rhs.getData()));
 
+                if (!lhs.getData()) return BooleanValue.TRUE;
+
+                Value rhsV = doSwitch(object.getRhs());
+                checkBoolean(rhsV);
+                BooleanValue rhs = ((BooleanValue) rhsV);
+
+                return BooleanValue.value(!rhs.getData());
             }
             //equality
             case BNE: {
+                Value lhsV = doSwitch(object.getLhs());
+                Value rhsV = doSwitch(object.getRhs());
                 return BooleanValue.value(!(lhsV.equals(rhsV)));
 
             }
             case BEQ: {
+                Value lhsV = doSwitch(object.getLhs());
+                Value rhsV = doSwitch(object.getRhs());
                 return BooleanValue.value(lhsV.equals(rhsV));
-
             }
             //relational
             case BGT: {
+                Value lhsV = doSwitch(object.getLhs());
+                checkInteger(lhsV);
                 IntegerValue lhs = ((IntegerValue) lhsV);
-                IntegerValue rhs = ((IntegerValue) rhsV);
-                return BooleanValue.value(lhs.getData() > rhs.getData());
 
+                Value rhsV = doSwitch(object.getRhs());
+                checkInteger(rhsV);
+                IntegerValue rhs = ((IntegerValue) rhsV);
+
+                return BooleanValue.value(lhs.getData() > rhs.getData());
             }
             case BGE: {
+                Value lhsV = doSwitch(object.getLhs());
+                checkInteger(lhsV);
                 IntegerValue lhs = ((IntegerValue) lhsV);
+
+                Value rhsV = doSwitch(object.getRhs());
+                checkInteger(rhsV);
                 IntegerValue rhs = ((IntegerValue) rhsV);
+
                 return BooleanValue.value(lhs.getData() >= rhs.getData());
 
             }
             case BLT: {
+                Value lhsV = doSwitch(object.getLhs());
+                checkInteger(lhsV);
                 IntegerValue lhs = ((IntegerValue) lhsV);
+
+                Value rhsV = doSwitch(object.getRhs());
+                checkInteger(rhsV);
                 IntegerValue rhs = ((IntegerValue) rhsV);
                 return BooleanValue.value(lhs.getData() < rhs.getData());
 
             }
             case BLE: {
+                Value lhsV = doSwitch(object.getLhs());
+                checkInteger(lhsV);
                 IntegerValue lhs = ((IntegerValue) lhsV);
+
+                Value rhsV = doSwitch(object.getRhs());
+                checkInteger(rhsV);
                 IntegerValue rhs = ((IntegerValue) rhsV);
                 return BooleanValue.value(lhs.getData() <= rhs.getData());
 
             }
             //arithmetic
             case BDIV: {
+                Value lhsV = doSwitch(object.getLhs());
+                checkInteger(lhsV);
                 IntegerValue lhs = ((IntegerValue) lhsV);
+
+                Value rhsV = doSwitch(object.getRhs());
+                checkInteger(rhsV);
                 IntegerValue rhs = ((IntegerValue) rhsV);
                 return IntegerValue.value(lhs.getData() / rhs.getData());
 
             }
             case BMINUS: {
+                Value lhsV = doSwitch(object.getLhs());
+                checkInteger(lhsV);
                 IntegerValue lhs = ((IntegerValue) lhsV);
+
+                Value rhsV = doSwitch(object.getRhs());
+                checkInteger(rhsV);
                 IntegerValue rhs = ((IntegerValue) rhsV);
                 return IntegerValue.value(lhs.getData() - rhs.getData());
 
             }
             case BMOD: {
+                Value lhsV = doSwitch(object.getLhs());
+                checkInteger(lhsV);
                 IntegerValue lhs = ((IntegerValue) lhsV);
+
+                Value rhsV = doSwitch(object.getRhs());
+                checkInteger(rhsV);
                 IntegerValue rhs = ((IntegerValue) rhsV);
                 return IntegerValue.value(lhs.getData() % rhs.getData());
 
             }
             case BMUL: {
+                Value lhsV = doSwitch(object.getLhs());
+                checkInteger(lhsV);
                 IntegerValue lhs = ((IntegerValue) lhsV);
+
+                Value rhsV = doSwitch(object.getRhs());
+                checkInteger(rhsV);
                 IntegerValue rhs = ((IntegerValue) rhsV);
                 return IntegerValue.value(lhs.getData() * rhs.getData());
 
             }
             case BPLUS: {
+                Value lhsV = doSwitch(object.getLhs());
+                checkInteger(lhsV);
                 IntegerValue lhs = ((IntegerValue) lhsV);
+
+                Value rhsV = doSwitch(object.getRhs());
+                checkInteger(rhsV);
                 IntegerValue rhs = ((IntegerValue) rhsV);
                 return IntegerValue.value(lhs.getData() + rhs.getData());
             }

@@ -51,6 +51,11 @@ public class RecordValue extends StateValue {
     }
 
     @Override
+    public int hashCode() {
+        return data.hashCode();
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (! (obj instanceof RecordValue) ) return false;
         RecordValue rV = (RecordValue)obj;

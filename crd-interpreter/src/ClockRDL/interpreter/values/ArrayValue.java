@@ -45,6 +45,11 @@ public class ArrayValue extends StateValue {
     }
 
     @Override
+    public int hashCode() {
+        return Arrays.hashCode(data);
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof ArrayValue)) return false;
         ArrayValue aV = (ArrayValue) obj;
