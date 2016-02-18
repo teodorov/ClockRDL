@@ -95,7 +95,7 @@ Considering our automaton-based interpretation of CCSL one way to implement cloc
 
 - define one clock in a relation as a clock that can *die*
 - define the conditions under which it dies, currently *CCSL* say something like "the clock ticks" and then the expression dies
-- when a clock is death it should not be used anymore when computing the *ticking* clocks
+- when a clock is dead it should not be used anymore when computing the *ticking* clocks
 - "the expression dies" can be interpreted as: when the dying clock is dead its containing relation does not constrain the system anymore
 - if the dead expression is the **currently active** one in a concatenation then the concatenation enables the next relation
 - if the dead expression is not part of a concatenation then it is ignored during the following steps in the composition
