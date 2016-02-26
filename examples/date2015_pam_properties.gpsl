@@ -1,0 +1,104 @@
+//globalement eventuellement event
+let
+	e = pam4date.fft
+in
+	G E e
+
+//after 16 signalProvider if not FFT no more signal provider anymore
+//if signalProvider after capacity of signalProvider reject if no FFT
+//the problem with the following syntax is that we need a 
+//property language that has operations on SUS language data types
+let 
+	sp = pam4date.signalProvider
+	fft = pam4date.fft
+	inRate = pam4date.{edge}1.inRate
+	v = 0
+in
+	[v<16] 	[sp] 	[v+=1];
+	[v>=16] [fft] 	[v-=inRate];
+	[v>=16] [sp] 	[reject];
+
+//if one of the input channels do not have enough tokens I cannot read from them
+//display1 case
+let
+	e1 = pam4date.display1
+	p1 = pam4date.{edge}0.i.size <= pam4date.{edge}0.inRate
+in
+	s0 [p1] s1
+	s1 [e1] reject
+	s1 [!p1] s0
+//fft case
+let
+	e1 = pam4date.fft
+	p1 = pam4date.{edge}1.i.size <= pam4date.{edge}1.inRate
+	p2 = pam4date.{edge}3.i.size <= pam4date.{edge}3.inRate
+in
+	s0 [p1 || p2] s1
+	s1 [e1] reject
+	s1 [!(p1 || p2)] s0
+//average case
+let
+	e1 = pam4date.average
+	p1 = pam4date.{edge}2.i.size <= pam4date.{edge}2.inRate
+in
+	s0 [p1] s1
+	s1 [e1] reject
+	s1 [!p1] s0
+//threshold case
+let
+	e1 = pam4date.threshold
+	p1 = pam4date.{edge}4.i.size <= pam4date.{edge}4.inRate
+in
+	s0 [p1] s1
+	s1 [e1] reject
+	s1 [!p1] s0
+//display2 case
+let
+	e1 = pam4date.display2
+	p1 = pam4date.{edge}5.i.size <= pam4date.{edge}5.inRate
+in
+	s0 [p1] s1
+	s1 [e1] reject
+	s1 [!p1] s0
+
+
+//if the one of the output channels does not have enough space i cannot write
+
+//signalProvider case
+let 
+	e1 = pam4date.signalProvider
+	p1 = pam4date.{edge}0.i.size + pam4date.{edge}0.outRate > pam4date.{edge}0.i.capacity
+	p2 = pam4date.{edge}1.i.size + pam4date.{edge}1.outRate > pam4date.{edge}1.i.capacity
+in
+	s0 [p1 || p2] s1
+	s1 [ e1 ] reject
+	s1 [!(p1 || p2)] s0
+
+
+//fft case
+let 
+	e1 = pam4date.fft
+	p1 = pam4date.{edge}2.i.size + pam4date.{edge}2.outRate > pam4date.{edge}2.i.capacity
+	p2 = pam4date.{edge}4.i.size + pam4date.{edge}4.outRate > pam4date.{edge}4.i.capacity
+in
+	s0 [p1 || p2] s1
+	s1 [ e1 ] reject
+	s1 [!(p1 || p2)] s0
+
+//average case
+let
+	e1 = pam4date.average
+	p1 = pam4date.{edge}3.i.size + pam4date.{edge}3.outRate > pam4date.{edge}3.i.capacity
+in
+	s [p1] s1
+	s1 [e1] reject
+	s1 [!p1] s0
+
+//threshold case
+let
+	e1 = pam4date.threshold
+	p1 = pam4date.{edge}5.i.size + pam4date.{edge}5.outRate > pam4date.{edge}5.i.capacity
+in
+	s [p1] s1
+	s1 [e1] reject
+	s1 [!p1] s0
