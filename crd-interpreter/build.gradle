@@ -1,6 +1,11 @@
+repositories {
+    maven {//needed by javabdd
+        url "https://breda.informatik.uni-mannheim.de/nexus/content/repositories/public"
+    }
+}
 configurations { antlr4 }
 dependencies {
-	compile project(':crd-language')
+	compile project(':crd-language'), project(':synchronization')
 	testCompile project (path: ":crd-language", configuration: 'tests')
 }
 

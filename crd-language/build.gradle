@@ -6,20 +6,20 @@ buildscript {
         }
     }
     dependencies {
-        classpath group: 'org.ensta', name: 'ecore2java',
-                  version: '1.0'
+        classpath group: 'org.ensta', name: 'ecore2java', version: '+'
     }
 }
 apply plugin: 'org.ensta.ecore2java'
 
 configurations { antlr4 }
 dependencies {
-	antlr4  "org.antlr:antlr4:4.5.1"
+	antlr4  group: 'org.antlr', name: 'antlr4' , version: '4.5.1'
 
-	compile "org.antlr:antlr4:4.5.1"
-	compile 'org.eclipse.emf:org.eclipse.emf.common:2.11.0-v20150123-0347'
-	compile 'org.eclipse.emf:org.eclipse.emf.ecore:2.11.0-v20150123-0347'
-	compile 'org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.11.0-v20150123-0347'
+	compile group: 'org.antlr', name: 'antlr4' , version: '4.5.1'
+
+    compile group: 'org.eclipse.emf', name: 'org.eclipse.emf.common',               version: '2.11.0-v20150123-0347'
+    compile group: 'org.eclipse.emf', name: 'org.eclipse.emf.ecore',                version: '2.11.0-v20150123-0347'
+    compile group: 'org.eclipse.emf', name: 'org.eclipse.emf.ecore.xmi',            version: '2.11.0-v20150123-0347'
 }
 
 apply from: '../gradle/antlr4.gradle'
