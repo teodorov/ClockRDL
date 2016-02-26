@@ -4,7 +4,7 @@ import ClockRDL.interpreter.frames.PrimitiveRelationFrame;
 import ClockRDL.interpreter.values.ClockValue;
 import ClockRDL.model.declarations.TransitionDecl;
 import ClockRDL.model.expressions.ClockReference;
-//import plug.modules.synchronization.byClocks.IClockedTransition;
+import plug.modules.synchronization.byClocks.IClockedTransition;
 
 import java.util.Arrays;
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by ciprian on 23/10/15.
  */
-public class FireableTransition /*implements IClockedTransition*/ {
+public class FireableTransition implements IClockedTransition {
     PrimitiveRelationFrame executionContext;
     TransitionDecl transition;
     int[] vector;
@@ -35,7 +35,7 @@ public class FireableTransition /*implements IClockedTransition*/ {
         return executionContext.getPrimitiveID();
     }
 
-    //@Override
+    @Override
     public int[] vector() {
         return vector;
     }

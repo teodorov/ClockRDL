@@ -1,5 +1,4 @@
 
-
 ####Initialized Clocks and Internal Clocks
 If one clock in a relation is not mapped at instantiation there are two possible interpretations:
 - if the clock does not have a default value, an error is thrown
