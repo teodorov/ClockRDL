@@ -55,7 +55,6 @@ public class ExpressionEvaluator extends ExpressionsSwitch<Value> {
     @Override
     public Value caseSelectedExp(SelectedExp object) {
         Value prefix = doSwitch(object.getPrefix());
-        //TODO it is not necessarily a record, can be the ramp for type specific functions
         if (!prefix.isRecordValue()) {
 
             PrimitiveFunctionValue primValue = prefix.primitives.get(object.getSelector());

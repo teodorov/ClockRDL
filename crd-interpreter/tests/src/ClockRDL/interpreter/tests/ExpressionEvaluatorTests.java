@@ -1,5 +1,6 @@
 package ClockRDL.interpreter.tests;
 
+import ClockRDL.compiler.ClockRDLParserConstants;
 import ClockRDL.compiler.ClockRDLBuilderAST;
 import ClockRDL.compiler.ClockRDLCompiler;
 import ClockRDL.compiler.GlobalScope;
@@ -7,7 +8,6 @@ import ClockRDL.compiler.Scope;
 import ClockRDL.grammar.ClockRDLLexer;
 import ClockRDL.grammar.ClockRDLParser;
 
-import ClockRDL.grammar.tests.ClockRDLGrammarTest;
 import ClockRDL.interpreter.Interpreter;
 import ClockRDL.interpreter.Value;
 import ClockRDL.interpreter.values.ArrayValue;
@@ -17,6 +17,7 @@ import ClockRDL.interpreter.values.IntegerValue;
 
 import ClockRDL.model.kernel.Expression;
 import ClockRDL.model.kernel.NamedDeclaration;
+import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -318,7 +319,7 @@ public class ExpressionEvaluatorTests {
         ParseTree tree = parser.expression();
         ParseTreeWalker walker = new ParseTreeWalker();
         ClockRDLBuilderAST builder = new ClockRDLBuilderAST(new GlobalScope(), null);
-        parser.addErrorListener(new ClockRDLGrammarTest.NoErrorsForTest());
+        parser.addErrorListener(new ClockRDLParserConstants.NoErrorsForTest());
 
         walker.walk(builder, tree);
         return builder.getValue(tree, Expression.class);

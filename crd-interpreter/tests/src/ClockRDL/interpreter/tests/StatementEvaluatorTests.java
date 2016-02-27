@@ -1,16 +1,15 @@
 package ClockRDL.interpreter.tests;
 
+import ClockRDL.compiler.ClockRDLParserConstants;
 import ClockRDL.compiler.ClockRDLBuilderAST;
 import ClockRDL.compiler.GlobalScope;
 import ClockRDL.grammar.ClockRDLLexer;
 import ClockRDL.grammar.ClockRDLParser;
-import ClockRDL.grammar.tests.ClockRDLGrammarTest;
 import ClockRDL.interpreter.Environment;
 import ClockRDL.interpreter.frames.GlobalFrame;
 import ClockRDL.interpreter.Interpreter;
 import ClockRDL.model.statements.BlockStmt;
-import org.antlr.v4.runtime.ANTLRInputStream;
-import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.junit.After;
@@ -91,7 +90,7 @@ public class StatementEvaluatorTests {
 
     public BlockStmt compile(String expressionString) {
         ANTLRInputStream is = new ANTLRInputStream(expressionString);
-        ClockRDLLexer lexer = new ClockRDLGrammarTest.ErrorThrowingLexer(is);
+        ClockRDLLexer lexer = new ClockRDLParserConstants.ErrorThrowingLexer(is);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         ClockRDLParser parser = new ClockRDLParser(tokens);
         ParseTree tree = parser.blockStmt();
@@ -101,7 +100,7 @@ public class StatementEvaluatorTests {
         //TODO define a clear error handling strategy for Parsing
         //parser.addErrorListener(new ClockRDLGrammarTest.NoErrorsForTest());
 
-        parser.setErrorHandler(new ClockRDLGrammarTest.ThrowErrorStrategy());
+        parser.setErrorHandler(new ClockRDLParserConstants.ThrowErrorStrategy());
 
         walker.walk(builder, tree);
         return builder.getValue(tree, BlockStmt.class);

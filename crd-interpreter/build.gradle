@@ -5,14 +5,13 @@ repositories {
 }
 configurations { antlr4 }
 dependencies {
-	compile project(':crd-language'), project(':synchronization')
-	testCompile project (path: ":crd-language", configuration: 'tests')
+	compile group: 'fr.ensta-bretagne', name: 'plug-synchronization', version: '+'
+	compile group: 'fr.ensta-bretagne', name: 'crd-language', version: '+'
 }
 
 clean << {
     project.delete "tmp"
 }
-
 
 test {
     outputs.upToDateWhen { false }
