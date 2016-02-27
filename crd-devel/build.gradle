@@ -1,0 +1,138 @@
+
+//configure the plugteam repository path
+def repoPath = file('../../plugTEAM/plug-repo').absolutePath
+
+//configure build path
+def buildPath = file('../crd-build').absolutePath
+buildDir = buildPath
+subprojects { buildDir = rootProject.buildDir }
+
+//configure group and version 
+group = 'fr.ensta-bretagne'
+version = '0.0.1'
+subprojects {
+	group = rootProject.group
+	version = rootProject.version
+}
+
+//java configuration and project layout
+subprojects {
+	apply plugin: 'java'
+    sourceSets {
+		main {
+			java { srcDir  'src' }
+            resources { srcDir 'resources'}
+            output.classesDir = "${output.classesDir}/${project.name}"
+		}
+		test {
+			java { srcDir 'tests/src' }
+			resources { srcDir 'tests/resources'}
+			output.classesDir = "${output.classesDir}/${project.name}"
+		}
+	}
+	testReportDirName = "tests-${name}"
+	compileJava { 
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+		options.encoding = "UTF-8" 
+	}
+
+	test {
+		maxParallelForks=4
+		ignoreFailures=true
+	}
+	//if a project has generated files in the 'generated' directory clean them
+    clean << {
+        project.delete "generated"
+    }
+}
+
+//injected dependencies
+subprojects {
+	repositories {
+		mavenCentral()
+        maven {
+            url repoPath
+        }
+	}
+
+    dependencies {
+        testCompile group: 'junit', name: 'junit', version: '4.+'
+    }
+}
+
+//eclipse configuration
+apply plugin: 'eclipse'
+cleanEclipse {
+    project.delete ".settings", "bin", "build.properties"
+}
+subprojects {
+	apply plugin: 'eclipse'
+
+    cleanEclipse {
+        project.delete ".settings", "bin", "build.properties"
+    }
+}
+
+//intellij configuration
+subprojects {
+    apply plugin: 'idea'
+}
+
+//publishing to maven
+subprojects {
+	apply plugin: 'maven-publish'
+	//generate sources jar
+	task sourceJar(type: Jar) {
+    	from sourceSets.main.allSource
+	}
+	//put the tests in a jar
+	task testsJar(type: Jar, dependsOn: testClasses) {
+    	from sourceSets.test.output
+	}
+
+	publishing {
+	    repositories {
+	        maven {
+	            url repoPath
+	        }
+	    }
+	    publications {
+	        mavenJava(MavenPublication) {
+	            from components.java
+	            artifact sourceJar {
+                	classifier "sources"
+            	}
+            	artifact testsJar {
+            		classifier "tests"
+            	}
+	        }
+    	}
+	}
+}
+
+//generate all dependencies
+subprojects { task allDeps(type: DependencyReportTask) {} }
+
+//dependency substitution
+subprojects {
+	configurations.all {
+	    resolutionStrategy.dependencySubstitution.all { DependencySubstitution dependency ->
+	    	//replace all dependencies from the 'fr.ensta-bretagne' group with local projects if they are available
+	        if (dependency.requested instanceof ModuleComponentSelector && dependency.requested.group == rootProject.group) {
+	            def targetProject = findProject(":${dependency.requested.module}")
+	            if (targetProject != null) {
+	                dependency.useTarget targetProject
+	            }
+	        }
+	    }
+	}
+}
+
+
+/*
+	TODO:
+	0)[done] dynamically generate the project according to the sources pressent in the hierarchy. If sources not present module dependency is added
+	1) generate eclipse projects disconnected from the source hierarchy -- one eclipse project per gradle project present
+	2) generate intelij projects disconnected from the source hierarchy -- one intellij project per gradle project present
+*/

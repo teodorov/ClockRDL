@@ -1,0 +1,14 @@
+def discoveredSubprojectsDo(addProjectClosure) {
+	def list = []
+	file("${rootDir}/..").eachDirRecurse { dir ->
+		def isNotTopLevel = dir.listFiles().findAll({it.name == 'settings.gradle'}).size() == 0
+		if (isNotTopLevel) {
+			dir.eachFileMatch({it == 'build.gradle'}, { addProjectClosure(dir) })
+		}
+	}
+}
+
+discoveredSubprojectsDo { projectFile ->
+	include projectFile.name
+	project (":${projectFile.name}").projectDir = projectFile
+}

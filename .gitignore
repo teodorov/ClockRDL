@@ -20,3 +20,5 @@ crd-language/tmp
 **/*.log
 **/*.out
 **/*.pdf
+crd-repo
+crd-build
