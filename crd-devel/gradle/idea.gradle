@@ -1,16 +1,16 @@
 //intellij configuration
 apply plugin: 'idea'
 cleanIdea {
-	project.delete "out", "plug-devel.iws", ".idea"
+	project.delete "out", ".idea"
 }
 subprojects {
     apply plugin: 'idea'
 
+    if (idea.project != null) {
+    	idea.project.jdkName = '1.8'
+    	idea.project.languageLevel = '1.8'
+    }
 	idea {
-		project {
-			jdkName = '1.8'
-    		languageLevel = '1.8'
-		}
 		module {
 			downloadJavadoc = true
 			downloadSources = true
