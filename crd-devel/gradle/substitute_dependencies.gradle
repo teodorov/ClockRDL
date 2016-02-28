@@ -1,0 +1,14 @@
+//dependency substitution
+subprojects {
+	configurations.all {
+	    resolutionStrategy.dependencySubstitution.all { DependencySubstitution dependency ->
+	    	//replace all dependencies from the 'fr.ensta-bretagne' group with local projects if they are available
+	        if (dependency.requested instanceof ModuleComponentSelector && dependency.requested.group == rootProject.group) {
+	            def targetProject = findProject(":${dependency.requested.module}")
+	            if (targetProject != null) {
+	                dependency.useTarget targetProject
+	            }
+	        }
+	    }
+	}
+}

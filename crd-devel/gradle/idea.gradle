@@ -1,0 +1,15 @@
+//intellij configuration
+apply plugin: 'idea'
+cleanIdea {
+	project.delete "out", "plug-devel.iws", ".idea"
+}
+subprojects {
+    apply plugin: 'idea'
+
+	idea {
+		module {
+			downloadJavadoc = true
+			downloadSources = true
+		}
+	}
+}
