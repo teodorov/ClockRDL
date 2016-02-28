@@ -1,15 +1,12 @@
 package ClockRDL.interpreter.tests;
 
-import ClockRDL.compiler.ClockRDLBuilderAST;
-import ClockRDL.compiler.GlobalScope;
-import ClockRDL.grammar.ClockRDLLexer;
-import ClockRDL.grammar.ClockRDLParser;
-import ClockRDL.interpreter.*;
-import ClockRDL.interpreter.frames.AbstractFrame;
-import ClockRDL.interpreter.values.ClockValue;
-import ClockRDL.interpreter.values.IntegerValue;
-import ClockRDL.interpreter.values.NullValue;
-import ClockRDL.model.declarations.RelationInstanceDecl;
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Set;
+
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Parser;
@@ -18,13 +15,17 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.junit.After;
 import org.junit.Test;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.time.Clock;
-import java.util.Set;
-
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
+import ClockRDL.compiler.ClockRDLBuilderAST;
+import ClockRDL.compiler.GlobalScope;
+import ClockRDL.grammar.ClockRDLLexer;
+import ClockRDL.grammar.ClockRDLParser;
+import ClockRDL.interpreter.Environment;
+import ClockRDL.interpreter.FireableTransition;
+import ClockRDL.interpreter.Interpreter;
+import ClockRDL.interpreter.Value;
+import ClockRDL.interpreter.frames.AbstractFrame;
+import ClockRDL.interpreter.values.IntegerValue;
+import ClockRDL.model.declarations.RelationInstanceDecl;
 
 /**
  * Created by ciprian on 23/10/15.
