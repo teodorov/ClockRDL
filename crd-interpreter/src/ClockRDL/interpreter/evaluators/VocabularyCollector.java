@@ -7,7 +7,6 @@ import ClockRDL.interpreter.values.ClockValue;
 import ClockRDL.interpreter.values.NullValue;
 import ClockRDL.model.declarations.*;
 import ClockRDL.model.declarations.util.DeclarationsSwitch;
-import ClockRDL.model.expressions.literals.ClockLiteral;
 import ClockRDL.model.kernel.NamedDeclaration;
 
 import java.util.Collections;

@@ -1,9 +1,7 @@
 package ClockRDL.interpreter.evaluators;
 
-import ClockRDL.interpreter.Environment;
 import ClockRDL.interpreter.Interpreter;
 import ClockRDL.interpreter.Value;
-import ClockRDL.interpreter.frames.AbstractFrame;
 import ClockRDL.interpreter.values.*;
 import ClockRDL.model.expressions.IndexedExp;
 import ClockRDL.model.expressions.ReferenceExp;

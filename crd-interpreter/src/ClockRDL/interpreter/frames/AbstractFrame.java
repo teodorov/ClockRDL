@@ -4,7 +4,6 @@ import ClockRDL.interpreter.Memory;
 import ClockRDL.interpreter.Value;
 import ClockRDL.model.kernel.NamedDeclaration;
 
-import java.util.Map;
 import java.util.Set;
 
 /**

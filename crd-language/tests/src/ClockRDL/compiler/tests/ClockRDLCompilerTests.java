@@ -1,14 +1,14 @@
 package ClockRDL.compiler.tests;
 
-import static org.junit.Assert.assertTrue;
-
-import java.io.File;
-import java.io.IOException;
-
 import ClockRDL.compiler.ClockRDLCompiler;
 import ClockRDL.model.declarations.RepositoryDecl;
 import org.eclipse.emf.common.util.URI;
 import org.junit.Test;
+
+import java.io.File;
+import java.io.IOException;
+
+import static org.junit.Assert.assertTrue;
 
 
 public class ClockRDLCompilerTests {

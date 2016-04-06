@@ -1,15 +1,14 @@
 package ClockRDL.interpreter.tests;
 
-import java.util.Set;
-
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Test;
-
 import ClockRDL.compiler.ClockRDLCompiler;
 import ClockRDL.interpreter.Interpreter;
 import ClockRDL.interpreter.values.ClockValue;
 import ClockRDL.model.declarations.SystemDecl;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Test;
+
+import java.util.Set;
 
 /**
  * Created by ciprian on 13/11/15.

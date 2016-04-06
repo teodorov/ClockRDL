@@ -2,12 +2,10 @@ package ClockRDL.compiler;
 
 import ClockRDL.grammar.ClockRDLLexer;
 import ClockRDL.grammar.ClockRDLParser;
-import ClockRDL.model.declarations.*;
-
+import ClockRDL.model.declarations.RepositoryDecl;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
-
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -16,7 +14,6 @@ import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

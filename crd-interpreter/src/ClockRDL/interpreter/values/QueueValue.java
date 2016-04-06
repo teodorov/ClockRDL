@@ -3,7 +3,6 @@ package ClockRDL.interpreter.values;
 import ClockRDL.interpreter.StateValue;
 import ClockRDL.interpreter.Value;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;

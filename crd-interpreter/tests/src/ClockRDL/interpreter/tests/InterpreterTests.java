@@ -1,20 +1,5 @@
 package ClockRDL.interpreter.tests;
 
-import static org.junit.Assert.assertEquals;
-import static  org.junit.Assert.assertNotNull;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Set;
-
-import org.antlr.v4.runtime.ANTLRInputStream;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.Parser;
-import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
-import org.junit.After;
-import org.junit.Test;
-
 import ClockRDL.compiler.ClockRDLBuilderAST;
 import ClockRDL.compiler.GlobalScope;
 import ClockRDL.grammar.ClockRDLLexer;
@@ -26,6 +11,20 @@ import ClockRDL.interpreter.Value;
 import ClockRDL.interpreter.frames.AbstractFrame;
 import ClockRDL.interpreter.values.IntegerValue;
 import ClockRDL.model.declarations.RelationInstanceDecl;
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.Parser;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.junit.After;
+import org.junit.Test;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Set;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Created by ciprian on 23/10/15.

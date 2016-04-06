@@ -2,10 +2,8 @@ package ClockRDL.interpreter;
 
 import ClockRDL.interpreter.frames.AbstractFrame;
 import ClockRDL.interpreter.frames.GlobalFrame;
-import ClockRDL.model.declarations.RelationInstanceDecl;
 import ClockRDL.model.kernel.NamedDeclaration;
 
-import javax.lang.model.element.Name;
 import java.util.Stack;
 
 /**

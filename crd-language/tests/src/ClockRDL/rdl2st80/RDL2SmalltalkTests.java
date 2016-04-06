@@ -22,7 +22,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Created by ciprian on 26/10/15.

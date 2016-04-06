@@ -3,9 +3,11 @@ package ClockRDL.rdl2st80;
 import ClockRDL.compiler.ClockRDLCompiler;
 import ClockRDL.model.declarations.RepositoryDecl;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;

@@ -1,14 +1,5 @@
 package ClockRDL.interpreter.tests;
 
-import static junit.framework.Assert.assertEquals;
-
-import org.antlr.v4.runtime.ANTLRInputStream;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
-import org.junit.After;
-import org.junit.Test;
-
 import ClockRDL.compiler.ClockRDLBuilderAST;
 import ClockRDL.compiler.ClockRDLParserConstants;
 import ClockRDL.compiler.GlobalScope;
@@ -20,6 +11,14 @@ import ClockRDL.interpreter.values.ArrayValue;
 import ClockRDL.interpreter.values.BooleanValue;
 import ClockRDL.interpreter.values.IntegerValue;
 import ClockRDL.model.kernel.Expression;
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.junit.After;
+import org.junit.Test;
+
+import static junit.framework.Assert.assertEquals;
 
 /**
  * Created by ciprian on 20/10/15.

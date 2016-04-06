@@ -2,8 +2,6 @@ package ClockRDL.interpreter.frames;
 
 import ClockRDL.interpreter.Memory;
 import ClockRDL.interpreter.Value;
-import ClockRDL.model.declarations.ArgumentDecl;
-import ClockRDL.model.declarations.ConstantDecl;
 import ClockRDL.model.declarations.VariableDecl;
 import ClockRDL.model.kernel.NamedDeclaration;
 

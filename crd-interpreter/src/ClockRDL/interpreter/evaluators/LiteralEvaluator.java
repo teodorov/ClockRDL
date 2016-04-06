@@ -1,6 +1,5 @@
 package ClockRDL.interpreter.evaluators;
 
-import ClockRDL.interpreter.Environment;
 import ClockRDL.interpreter.Interpreter;
 import ClockRDL.interpreter.StateValue;
 import ClockRDL.interpreter.Value;

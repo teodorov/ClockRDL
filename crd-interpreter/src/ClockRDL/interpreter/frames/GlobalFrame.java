@@ -10,7 +10,6 @@ import ClockRDL.model.kernel.NamedDeclaration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by ciprian on 22/10/15.

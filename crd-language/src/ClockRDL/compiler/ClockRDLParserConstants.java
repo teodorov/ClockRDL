@@ -1,14 +1,7 @@
 package ClockRDL.compiler;
 
-import java.io.File;
-import java.io.FilenameFilter;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
 import ClockRDL.grammar.ClockRDLLexer;
 import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.tree.ParseTree;
 
 public class ClockRDLParserConstants {
 	public static class ErrorThrowingLexer extends ClockRDLLexer {
