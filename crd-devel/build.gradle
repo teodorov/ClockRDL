@@ -1,6 +1,8 @@
 
 //configure the plugteam repository path
 project.ext.set("localRepositoryPath", file('../../plug-repo').absolutePath)
+//configure the local gradle scripts path
+def scriptsPath = '../../fr.ensta-bretagne.gradle_scripts'
 
 //configure build path
 def buildPath = file('../crd-build').absolutePath
@@ -15,12 +17,16 @@ subprojects {
 	version = rootProject.version
 }
 
-apply from: 'gradle/java.gradle'
-apply from: 'gradle/dependencies.gradle'
-apply from: 'gradle/eclipse.gradle'
-apply from: 'gradle/idea.gradle'
-apply from: 'gradle/publish.gradle'
-apply from: 'gradle/substitute_dependencies.gradle'
+//configure the online scripts URL
+def scriptsURL = 'http://mocs-artefacts.ensta-bretagne.fr/gradle'
+project.ext.set("gradleScriptsPath", gradle.startParameter.isOffline() ? scriptsPath : scriptsURL)
+
+apply from: "${gradleScriptsPath}/java.gradle"
+apply from: "${gradleScriptsPath}/dependencies.gradle"
+apply from: "${gradleScriptsPath}/eclipse.gradle"
+apply from: "${gradleScriptsPath}/idea.gradle"
+apply from: "${gradleScriptsPath}/publish.gradle"
+apply from: "${gradleScriptsPath}/substitute_dependencies.gradle"
 
 //generate all dependencies
 subprojects { task allDeps(type: DependencyReportTask) {} }
