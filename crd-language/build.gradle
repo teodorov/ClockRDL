@@ -38,9 +38,7 @@ task generateAntlr4Parser(type: JavaExec) {
 sourceSets.main.java.srcDir 'generated'
 compileJava.dependsOn generateAntlr4Parser, ecore2java
 
-clean << {
-    project.delete "tmp"
-}
+clean { doLast { project.delete "tmp" } }
 
 test {
     outputs.upToDateWhen { false }

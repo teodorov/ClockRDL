@@ -9,9 +9,7 @@ dependencies {
 	compile group: 'fr.ensta-bretagne', name: 'crd-language', version: '+'
 }
 
-clean << {
-    project.delete "tmp"
-}
+clean { doLast { project.delete "tmp" } }
 
 test {
     outputs.upToDateWhen { false }
