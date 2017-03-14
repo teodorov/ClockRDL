@@ -7,6 +7,7 @@ import ClockRDL.model.expressions.ClockReference;
 import plug.modules.synchronization.byClocks.IClockedTransition;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -35,6 +36,37 @@ public class FireableTransition implements IClockedTransition {
         return executionContext.getPrimitiveID();
     }
 
+    @Override
+    public int[] getSynchronizationVector() {
+        return vector;
+    }
+
+    @Override
+    public void setSynchronizationVector(int... id) {
+
+    }
+
+    @Override
+    public void addOutputBehaviors(Collection behaviors) {
+
+    }
+
+    @Override
+    public Collection getOutputBehaviors() {
+        return null;
+    }
+
+    @Override
+    public void addInputBehaviors(Collection behaviors) {
+
+    }
+
+    @Override
+    public Collection getInputBehaviors() {
+        return null;
+    }
+
+    @Deprecated
     @Override
     public int[] vector() {
         return vector;
