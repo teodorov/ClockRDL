@@ -1,6 +1,6 @@
 
 //configure the plugteam repository path
-project.ext.set("localRepositoryPath", file('../../plug-repo').absolutePath)
+project.ext.set("localRepositoryPath", file('../repository').absolutePath)
 //configure the local gradle scripts path
 def scriptsPath = '../../fr.ensta-bretagne.gradle_scripts'
 
