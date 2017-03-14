@@ -1,4 +1,4 @@
-import "/Users/ciprian/Playfield/repositories/plugTEAM/ClockRDL/examples/ccsl-kernel.crd"
+import "../examples/ccsl-kernel.crd"
 library iwst {
     library sdf {
         relation period
