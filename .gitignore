@@ -23,3 +23,5 @@ crd-language/tmp
 crd-repo
 crd-build
 repository
+crd-interpreter/out
+crd-language/out
