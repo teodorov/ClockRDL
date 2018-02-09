@@ -273,6 +273,7 @@ public class RDL2SmalltalkTests {
         List<URI> libPath = new ArrayList<>();
         libPath.add(new File(System.getProperty("user.dir")).toURI());
 
+        @SuppressWarnings( "unchecked" )
         ClockRDLBuilderAST builder = new ClockRDLBuilderAST(scope, libPath);
 
         walker.walk(builder, tree);
