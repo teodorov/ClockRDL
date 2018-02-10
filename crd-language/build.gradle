@@ -11,11 +11,12 @@ buildscript {
 }
 apply plugin: 'org.ensta.ecore2java'
 
-configurations { antlr4 }
+configurations {
+    antlr4
+    compile.extendsFrom antlr4
+}
 dependencies {
-	antlr4  group: 'org.antlr', name: 'antlr4' , version: '4.5.1'
-
-	compile group: 'org.antlr', name: 'antlr4' , version: '4.5.1'
+	antlr4  group: 'org.antlr', name: 'antlr4' , version: '4.5.+'
 
     compile group: 'org.eclipse.emf', name: 'org.eclipse.emf.common',               version: '2.11.0-v20150123-0347'
     compile group: 'org.eclipse.emf', name: 'org.eclipse.emf.ecore',                version: '2.11.0-v20150123-0347'
