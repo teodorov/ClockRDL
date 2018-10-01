@@ -1,4 +1,5 @@
 repositories {
+	jcenter()
     maven {//needed by javabdd
         url "https://breda.informatik.uni-mannheim.de/nexus/content/repositories/public"
     }

@@ -1,19 +1,21 @@
 buildscript {
     repositories {
+        mavenCentral()
         maven {
-        	mavenCentral()
             url "https://dl.bintray.com/ciprian-teodorov/CipT-artefacts/"
         }
     }
     dependencies {
-        classpath group: 'org.ensta', name: 'ecore2java', version: '+'
+        classpath group: 'fr.ensta', name: 'ecore2java', version: '1.5'
     }
 }
-apply plugin: 'org.ensta.ecore2java'
+apply plugin: 'fr.ensta.ecore2java'
 
 configurations {
     antlr4
+    ecore
     compile.extendsFrom antlr4
+    compile.extendsFrom ecore
 }
 dependencies {
 	antlr4  group: 'org.antlr', name: 'antlr4' , version: '4.5.+'
@@ -23,17 +25,28 @@ dependencies {
     compile group: 'org.eclipse.emf', name: 'org.eclipse.emf.ecore.xmi',            version: '2.11.0-v20150123-0347'
 }
 
-apply from: '../crd-devel/gradle/antlr4.gradle'
+
+String antlr4OutputPath(String path) {
+    if (System.properties['os.name'].replaceAll(' ', '').toLowerCase().contains('win')) {
+        return file(path + '/grammar')
+    }
+    return file(path)
+}
+def generatedPath = file('generated')
+generatedPath.mkdir()
 task generateAntlr4Parser(type: JavaExec) {
-	def generatedPath = file('generated')
-	generatedPath.mkdir()
-	classpath configurations.antlr4
-	main = "org.antlr.v4.Tool"
-	args = ["grammar/ClockRDL.g4"
-		, "-package"
-		, "ClockRDL.grammar"
-		, "-o"
-		, antlr4OutputPath("generated/ClockRDL")]
+    classpath configurations.antlr4
+    main = "org.antlr.v4.Tool"
+    args = ["grammar/ClockRDL.g4"
+        , "-package"
+        , "ClockRDL.grammar"
+        , "-o"
+        , antlr4OutputPath("generated/ClockRDL")]
+}
+
+ecore2java {
+    genModelPath = file('model/ClockRDL.genmodel')
+    outputDir = generatedPath
 }
 
 sourceSets.main.java.srcDir 'generated'
