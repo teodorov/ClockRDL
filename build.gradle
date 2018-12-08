@@ -4,7 +4,7 @@ buildscript {
         maven { url "https://dl.bintray.com/plug-obp/maven" }
     }
     dependencies {
-        classpath group: 'fr.ensta-bretagne', name: 'plug-plugin', version: '+'
+        classpath group: 'fr.ensta-bretagne', name: 'plug-plugin', version: '0.6'
     }
 }
 
